@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.IrisBICS.lonelysg"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -34,4 +34,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    implementation 'com.etebarian:meow-bottom-navigation-java:1.2.0'
 }

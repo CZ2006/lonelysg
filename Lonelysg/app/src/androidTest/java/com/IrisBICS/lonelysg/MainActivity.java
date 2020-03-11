@@ -1,4 +1,4 @@
-package com.IrisBICS.lonelysg;
+package com.example.lonelysg;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         meo.add(new MeowBottomNavigation.Model(3, R.drawable.chat_black));
         meo.add(new MeowBottomNavigation.Model(4, R.drawable.account_circle));
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new com.IrisBICS.lonelysg.FragmentAccount()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAccount()).commit();
 
         meo.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override
@@ -42,16 +42,16 @@ public class MainActivity extends AppCompatActivity {
                 Fragment select_fragment = null;
                 switch(item.getId()){
                     case ID_ACCOUNT:
-                        select_fragment = new com.IrisBICS.lonelysg.FragmentAccount();
+                        select_fragment = new FragmentAccount();
                         break;
                     case ID_CHAT:
-                        select_fragment = new com.IrisBICS.lonelysg.FragmentChat();
+                        select_fragment = new FragmentChat();
                         break;
                     case ID_DISCOVERY:
-                        select_fragment = new com.IrisBICS.lonelysg.FragmentDiscovery();
+                        select_fragment = new FragmentDiscovery();
                         break;
                     case ID_INVITATION:
-                        select_fragment = new com.IrisBICS.lonelysg.FragmentInvitation();
+                        select_fragment = new FragmentInvitation();
                         break;
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, select_fragment).commit();
