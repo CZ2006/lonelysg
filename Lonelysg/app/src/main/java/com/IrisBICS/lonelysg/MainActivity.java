@@ -3,59 +3,76 @@ package com.IrisBICS.lonelysg;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 
 public class MainActivity extends AppCompatActivity {
-    MeowBottomNavigation meo;
-    private final static int ID_DISCOVERY = 1;
-    private final static int ID_INVITATION = 2;
-    private final static int ID_CHAT = 3;
-    private final static int ID_ACCOUNT = 4;
+    RelativeLayout loginStuff, passwordSignUpBar;
+
+    private EditText Username;
+    private EditText Password;
+    private Button SignIn;
+
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            loginStuff.setVisibility(View.VISIBLE);
+            passwordSignUpBar.setVisibility(View.VISIBLE);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        meo = (MeowBottomNavigation) findViewById(R.id.bottom_nav);
-        meo.add(new MeowBottomNavigation.Model(1, R.drawable.search_black));
-        meo.add(new MeowBottomNavigation.Model(2, R.drawable.add_button));
-        meo.add(new MeowBottomNavigation.Model(3, R.drawable.chat_black));
-        meo.add(new MeowBottomNavigation.Model(4, R.drawable.account_circle));
+        setContentView(R.layout.login_screen);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new com.IrisBICS.lonelysg.FragmentAccount()).commit();
+        loginStuff = (RelativeLayout) findViewById(R.id.loginStuff);
+        passwordSignUpBar = (RelativeLayout) findViewById(R.id.passwordSignUpBar);
 
-        meo.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
+        ImageView logo = (ImageView)findViewById(R.id.logo);
+        logo.animate().alpha(0f).setDuration(1900);
+
+        handler.postDelayed(runnable, 2000); // Timeout for the splash
+
+        Username = (EditText)findViewById(R.id.usernameInput);
+        Password = (EditText)findViewById(R.id.passwordInput);
+        SignIn = (Button)findViewById(R.id.signInButton);
+
+        SignIn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClickItem(MeowBottomNavigation.Model item) {
-            }
-        });
-
-        meo.setOnShowListener(new MeowBottomNavigation.ShowListener(){
-            @Override
-            public void onShowItem(MeowBottomNavigation.Model item) {
-                Fragment select_fragment = null;
-                switch(item.getId()){
-                    case ID_ACCOUNT:
-                        select_fragment = new com.IrisBICS.lonelysg.FragmentAccount();
-                        break;
-                    case ID_CHAT:
-                        select_fragment = new com.IrisBICS.lonelysg.FragmentChat();
-                        break;
-                    case ID_DISCOVERY:
-                        select_fragment = new com.IrisBICS.lonelysg.FragmentDiscovery();
-                        break;
-                    case ID_INVITATION:
-                        select_fragment = new com.IrisBICS.lonelysg.FragmentInvitation();
-                        break;
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, select_fragment).commit();
+            public void onClick(View view){
+                Intent intent = new Intent(MainActivity.this, LoginPage.class);
+                startActivity(intent);
+                // validate(Username.getText().toString(), Password.getText().toString());
             }
         });
     }
+
+    // Username and password validation
+    private void validate(String userName, String userPassword){
+        if ((userName == "") && (userPassword == "")){
+            Intent intent = new Intent(MainActivity.this, LoginPage.class);
+            startActivity(intent);
+        } // Successful login
+
+        else{
+            int counter = 0;
+            counter++;
+            SignIn.setEnabled(false); //Disables the button
+        }
+    }
+
 }
