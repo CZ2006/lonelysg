@@ -43,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
         passwordSignUpBar = (RelativeLayout) findViewById(R.id.passwordSignUpBar);
 
         ImageView logo = (ImageView)findViewById(R.id.logo);
-        logo.animate().alpha(0f).setDuration(1900);
+        logo.animate().alpha(0f).setDuration(2850);
 
-        handler.postDelayed(runnable, 2000); // Timeout for the splash
+        handler.postDelayed(runnable, 3000); // Timeout for the splash
 
         Username = (EditText)findViewById(R.id.usernameInput);
         Password = (EditText)findViewById(R.id.passwordInput);

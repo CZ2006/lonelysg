@@ -30,7 +30,7 @@ public class FragmentInvitation extends Fragment {
     ArrayAdapter<String>arrayAdapter;
 
     //For time and date selection
-    Button datePick, timePick;
+    Button datePick, timePick, confirmButton, cancelButton;
 
     @Nullable
     @Override
@@ -98,6 +98,25 @@ public class FragmentInvitation extends Fragment {
                 }, HOUR, MINUTE, true);
 
                 timePickerDialog.show();
+            }
+        });
+
+        confirmButton = (Button)v.findViewById(R.id.confirmButton);
+        cancelButton = (Button)v.findViewById(R.id.cancelButton);
+
+        // Pressing confirm button
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "New Invitation Created", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Pressing cancel button
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Process Cancelled", Toast.LENGTH_SHORT).show();
             }
         });
 
