@@ -2,17 +2,17 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/getStuff", (req,res)=>{ //Sample function fetching data from the realtime DB on firebase
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getStuff after running firebase serve
+    //Call using http://localhost:5001/lonely-4a186/us-central1/app/Winnie/getStuff after running firebase serve
     let database = req.app.get("database")
     var ref = database.ref('User');
     ref.once("value", function(snapshot){
         console.log(snapshot.val()); //View response value in the command line
-        res.end("OK Min Hui!") //Returned in the browser or postman
+        res.end("OK Winnie!") //Returned in the browser or postman
     })
 })
 
 router.post("/addUser", (req, res) => { //Sample function adding new user to realtime DB on firebase
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/addUser in postman with sample data in the body after running firebase serve
+    //Call using http://localhost:5001/lonely-4a186/us-central1/app/Winnie/addUser in postman with sample data in the body after running firebase serve
     let database = req.app.get("database")
     let userRef = database.ref("User")
 
