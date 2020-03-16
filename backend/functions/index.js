@@ -1,8 +1,12 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 const express = require('express')
+
 const apirouteIris = require('./routes/Iris/api')
 const apirouteMinHui = require('./routes/MinHui/api')
+const apirouteCheyanne = require('./routes/Cheyanne/api')
+const apirouteWinnie = require('./routes/Winnie/api')
+const apirouteXQ = require('./routes/XQ/api')
 
 const app = express();
 app.use(require('cors')({ origin: true, credentials: true }))
@@ -20,6 +24,9 @@ var db = admin.database();
 app.set('database',db)
 app.use('/Iris', apirouteIris) //Route to Iris' functions
 app.use('/MinHui', apirouteMinHui) //Route to Min Hui's functions
+app.use('/Cheyanne', apirouteCheyanne)
+app.use('/Winnie', apirouteWinnie)
+app.use('/XQ', apirouteXQ)
 exports.app = functions.https.onRequest(app)
 
 
