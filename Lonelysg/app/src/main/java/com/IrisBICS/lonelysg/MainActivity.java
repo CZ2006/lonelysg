@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText Username;
     private EditText Password;
     private Button SignIn;
+    private Button signUp;
     private FirebaseAuth mAuth;
 
     Handler handler = new Handler();
@@ -54,8 +55,10 @@ public class MainActivity extends AppCompatActivity {
         Username = (EditText)findViewById(R.id.usernameInput);
         Password = (EditText)findViewById(R.id.passwordInput);
         SignIn = (Button)findViewById(R.id.signInButton);
+        signUp = (Button)findViewById(R.id.signUpButton);
 
         //If logged in, go straight to next page
+        //might want to change this to onStart instead of onCreate
         FirebaseAuth.AuthStateListener mAuthStateListener = new FirebaseAuth.AuthStateListener(){
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -85,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("MainActivity", "signInWithEmail:success");
+                                Toast.makeText(MainActivity.this, "Sign in success!", Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Intent intent = new Intent(MainActivity.this, LoginPage.class);
                                 startActivity(intent);
@@ -98,5 +102,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Intent intentS = new Intent(MainActivity.this, SignUpPage.class);
+                startActivity(intentS);
+            }
+        });
+
     }
 }
