@@ -1,15 +1,18 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/getUsers", (req,res)=>{ //Sample function fetching data from the realtime DB on firebase
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/Iris/getStuff after running firebase serve
+// === User features ===
+
+//Open: How do we link user profiles with authentication implemented by Winnie?
+
+router.get("/getUser", (req,res) => {
     let database = req.app.get("database")
-    var ref = database.ref('User');
-    ref.once("value", function(snapshot){
-        console.log(snapshot.val()); //View response value in the command line
-        res.end("OK Iris!") //Returned in the browser or postman
+    var targetUser = database.ref('User/User' + req.body);
+    targetUser.once("value", function(snapshot){
+        res.end(JSON.stringify(snapshot.val()));
     })
 })
+
 
 router.post("/addUser", (req, res) => { 
     let database = req.app.get("database")
@@ -40,7 +43,6 @@ router.delete("/deleteUser", (req, res) => {
 
     let database = req.app.get("database")
     let userToDel = database.ref("User/User" + req.body)
-
     userToDel.set({})
 
     res.end(req.body + " deleted from the DB!")
@@ -81,14 +83,16 @@ router.post("/updateUser", (req, res) => {
 
 })
 
+// === Invitation features ===
+
+/* router.get("/addInvitation", (req, res) => {
+
+    res.end("Invitation added!")
+}) */
+
 module.exports = router;
 
 //Todo
-
-// - getUser
-// - addUser
-// - removeUser
-// - editUser
 
 // - addInvitation
 // - removeInvitation
