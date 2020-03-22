@@ -3,33 +3,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
+    tools:context=".LoginUI">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:background="#ffffff"
+        android:orientation="horizontal"
         android:padding="15dp">
 
-        <TextView
-            android:id="@+id/activityName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Activity Name"
-            android:textSize="24sp"
-            android:textStyle="bold"/>
+        <ImageView
+            android:id="@+id/userImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/ic_launcher"
+            android:layout_gravity="center"/>
 
-        <TextView
-            android:id="@+id/activityDateTime"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/activityName"
-            android:layout_weight="1"
-            android:text="Activity Date and Time"
-            android:textSize="16sp" />
+            android:orientation="vertical"
+            android:layout_gravity="center">
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/activityName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="15dp"
+                android:text="Activity Name"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/activityDateTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/activityName"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:text="Activity Date and Time"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

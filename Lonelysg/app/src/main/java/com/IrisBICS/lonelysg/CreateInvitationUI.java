@@ -23,14 +23,14 @@ import androidx.fragment.app.Fragment;
 import java.text.DateFormat;
 import java.util.Calendar;
 
-public class FragmentInvitation extends Fragment {
+public class CreateInvitationUI extends Fragment {
     // For dropdown box
     Spinner dropdownbox;
     String categories[] = {"Choose your invitation category", "Food and Drinks", "Movies", "Sports", "Study", "Others"};
     ArrayAdapter<String>arrayAdapter;
 
     //For time and date selection
-    Button datePick, timePick;
+    Button datePick, timePick, confirmButton, cancelButton;
 
     @Nullable
     @Override
@@ -98,6 +98,25 @@ public class FragmentInvitation extends Fragment {
                 }, HOUR, MINUTE, true);
 
                 timePickerDialog.show();
+            }
+        });
+
+        confirmButton = (Button)v.findViewById(R.id.confirmButton);
+        cancelButton = (Button)v.findViewById(R.id.cancelButton);
+
+        // Pressing confirm button
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "New Invitation Created", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Pressing cancel button
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Process Cancelled", Toast.LENGTH_SHORT).show();
             }
         });
 
