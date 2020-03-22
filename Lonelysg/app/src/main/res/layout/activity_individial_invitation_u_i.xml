@@ -212,12 +212,12 @@
                     android:layout_height="35dp"
                     android:id="@+id/acceptInvitation"
                     android:layout_marginRight="20dp"
-                    android:text="CHAT "
+                    android:text="REQUEST "
                     android:textColor="@color/white"
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:drawableRight="@drawable/chat_white"
-                    android:paddingRight="36dp"
+                    android:paddingRight="21dp"
                     android:background="@drawable/borders3"/>
 
                 <Button
