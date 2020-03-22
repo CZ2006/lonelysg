@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@drawable/splash_screen"
-    tools:context=".MainActivity">
+    tools:context=".LoginUI">
 
     <RelativeLayout
         android:id="@+id/loginPlaceholder"
