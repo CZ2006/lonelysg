@@ -22,8 +22,6 @@ public class AccountUI extends Fragment {
     String moreSettings[] = {"Change Password", "Delete Account", "Log Out"};
     ArrayAdapter<String> arrayAdapter;
 
-    // For Edit Profile Pop-Up
-    Dialog editProfilePopUp;
     Button editProfile;
 
     @Nullable

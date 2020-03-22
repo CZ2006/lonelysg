@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditProfileUI"></activity>
+        <activity android:name=".IndividialInvitationUI"></activity>
+        <activity android:name=".EditProfileUI" />
         <activity android:name=".NavigationBarUI" />
         <activity android:name=".InvitationsUI" />
         <activity android:name=".LoginUI">

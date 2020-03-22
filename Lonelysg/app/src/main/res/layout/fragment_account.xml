@@ -240,7 +240,7 @@
                     android:paddingLeft="60dp"
                     android:paddingRight="60dp"
                     android:text="EDIT PROFILE"
-                    android:textColor="#000000"
+                    android:textColor="@color/white"
                     android:textSize="21sp"
                     android:textStyle="bold"/>
 
