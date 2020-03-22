@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentChat extends Fragment {
+public class ChatUI extends Fragment {
 
     ListView chatList;
 //    String[] chatUsers = {"User 1", "User 2", "User 3", "User 4","User 5"};
