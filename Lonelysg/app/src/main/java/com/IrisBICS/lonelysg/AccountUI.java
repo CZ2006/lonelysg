@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,7 +63,7 @@ public class AccountUI extends Fragment {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(getActivity(), "Logging out!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), MainActivity.class);
+                Intent intent = new Intent(getActivity(), LoginUI.class);
                 startActivity(intent);
             }
         });
