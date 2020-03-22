@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="chatView" type="id" />
+    <item name="typeMessage" type="id" />
+    <item name="sendButton" type="id" />
+</resources>

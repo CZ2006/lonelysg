@@ -1,19 +1,9 @@
 package com.IrisBICS.lonelysg;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 
@@ -23,6 +13,8 @@ public class LoginPage extends AppCompatActivity {
     private final static int ID_INVITATION = 2;
     private final static int ID_CHAT = 3;
     private final static int ID_ACCOUNT = 4;
+
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,5 +56,7 @@ public class LoginPage extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, select_fragment).commit();
             }
         });
+
+
     }
 }
