@@ -13,6 +13,7 @@
         <activity android:name=".EditProfileUI" />
         <activity android:name=".NavigationBarUI" />
         <activity android:name=".InvitationsUI" />
+        <activity android:name=".SignUpPage" />
         <activity android:name=".LoginUI">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
