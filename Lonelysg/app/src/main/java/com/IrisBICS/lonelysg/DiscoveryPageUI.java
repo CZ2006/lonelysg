@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-public class FragmentDiscovery extends Fragment implements View.OnClickListener {
+public class DiscoveryPageUI extends Fragment implements View.OnClickListener {
     private CardView foodIcon, movieIcon, othersIcon, sportsIcon, studyIcon;
 
     @Nullable
