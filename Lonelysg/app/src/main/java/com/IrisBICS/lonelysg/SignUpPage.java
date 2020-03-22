@@ -51,7 +51,7 @@ public class SignUpPage extends AppCompatActivity {
                                 Log.d("MainActivity", "createUserWithEmail:success");
                                 Toast.makeText(SignUpPage.this, "Sign up success!", Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                Intent intent = new Intent(SignUpPage.this, LoginPage.class);
+                                Intent intent = new Intent(SignUpPage.this, NavigationBarUI.class);
                                 startActivity(intent);
                             } else {
                                 // If sign up fails, display a message to the user.
@@ -68,7 +68,7 @@ public class SignUpPage extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                Intent intent = new Intent(SignUpPage.this, MainActivity.class);
+                Intent intent = new Intent(SignUpPage.this, LoginUI.class);
                 startActivity(intent);
             }
         });

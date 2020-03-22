@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".AccountUI"
     android:background="@color/backgroundcolor">
-    >
 
     <RelativeLayout
         android:id="@+id/userProfileTop"
@@ -42,7 +41,8 @@
             android:textStyle="bold"
             android:layout_centerHorizontal="true"/>
 
-        <Button
+        <Spinner
+            android:id="@+id/moreSettingsicon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
@@ -235,12 +235,12 @@
                     android:layout_height="36dp"
                     android:layout_marginLeft="70dp"
                     android:layout_marginRight="70dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="40dp"
                     android:background="@drawable/borders3"
                     android:paddingLeft="60dp"
                     android:paddingRight="60dp"
                     android:text="EDIT PROFILE"
-                    android:textColor="#000000"
+                    android:textColor="@color/white"
                     android:textSize="21sp"
                     android:textStyle="bold"/>
 
