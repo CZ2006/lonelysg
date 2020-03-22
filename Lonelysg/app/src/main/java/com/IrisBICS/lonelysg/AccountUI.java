@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import androidx.fragment.app.Fragment;
 
 public class AccountUI extends Fragment {
@@ -23,6 +24,10 @@ public class AccountUI extends Fragment {
     ArrayAdapter<String> arrayAdapter;
 
     Button editProfile;
+
+    private Button logout;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,5 +50,21 @@ public class AccountUI extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        mAuth = FirebaseAuth.getInstance();
+        logout = (Button) getView().findViewById(R.id.logoutButton);
+
+        logout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(getActivity(), "Logging out!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

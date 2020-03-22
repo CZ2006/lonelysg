@@ -55,4 +55,9 @@ public class NavigationBarUI extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 }
