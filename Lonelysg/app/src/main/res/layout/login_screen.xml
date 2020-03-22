@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@drawable/splash_screen"
-    tools:context=".MainActivity">
+    tools:context=".LoginUI">
 
     <RelativeLayout
         android:id="@+id/loginPlaceholder"
@@ -26,29 +26,28 @@
             android:src="@drawable/logo"/>
 
         <RelativeLayout
+            android:id="@+id/loginStuff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/logo"
-            android:layout_marginTop="5dp"
-            android:visibility="gone"
-            android:id="@+id/loginStuff">
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/loginText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="0dp"
                 android:text="Login"
-                android:textStyle="bold"
-                android:layout_marginLeft="20dp"
                 android:textColor="@color/backgroundcolor"
-                android:textSize="30sp"/>
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
             <RelativeLayout
+                android:id="@+id/usernamePasswordInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/loginText"
-                android:id="@+id/usernamePasswordInput">
+                android:layout_below="@+id/loginText">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -58,58 +57,60 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="USERNAME"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="20dp"
+                        android:text="USERNAME"
                         android:textColor="@color/backgroundcolor"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/usernameInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="18dp"
-                        android:textColor="@color/backgroundcolor"
-                        android:background="@drawable/borders"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="0dp"
                         android:layout_marginRight="20dp"
-                        android:layout_marginLeft="20dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/usernameInput">
+                        android:background="@drawable/borders"
+                        android:textColor="@color/backgroundcolor"
+                        android:textSize="18dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:id="@+id/passwordInputStuff">
+                        android:layout_below="@+id/usernameInput">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="PASSWORD"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginLeft="20dp"
-                            android:textColor="@color/backgroundcolor"
-                            android:textSize="20sp"/>
-
-                        <EditText
-                            android:id="@+id/passwordInput"
+                        <LinearLayout
+                            android:id="@+id/passwordInputStuff"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="18dp"
-                            android:textColor="@color/backgroundcolor"
-                            android:background="@drawable/borders"
-                            android:layout_marginTop="0dp"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginLeft="20dp"/>
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:text="PASSWORD"
+                                android:textColor="@color/backgroundcolor"
+                                android:textSize="20sp" />
+
+                            <EditText
+                                android:id="@+id/passwordInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginTop="0dp"
+                                android:layout_marginRight="20dp"
+                                android:background="@drawable/borders"
+                                android:textColor="@color/backgroundcolor"
+                                android:textSize="18dp" />
+
+                        </LinearLayout>
+
                     </LinearLayout>
 
-                </LinearLayout>
                 </LinearLayout>
 
             </RelativeLayout>
@@ -127,7 +128,7 @@
                 android:text="SIGN IN"
                 android:textColor="@color/backgroundcolor"
                 android:textSize="21sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
