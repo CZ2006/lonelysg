@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment;
 import java.text.DateFormat;
 import java.util.Calendar;
 
-public class FragmentInvitation extends Fragment {
+public class CreateInvitationUI extends Fragment {
     // For dropdown box
     Spinner dropdownbox;
     String categories[] = {"Choose your invitation category", "Food and Drinks", "Movies", "Sports", "Study", "Others"};
