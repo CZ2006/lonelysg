@@ -47,9 +47,9 @@ public class LoginUI extends AppCompatActivity {
         passwordSignUpBar = (RelativeLayout) findViewById(R.id.passwordSignUpBar);
 
         ImageView logo = (ImageView)findViewById(R.id.logo);
-        logo.animate().alpha(0f).setDuration(2650);
+        logo.animate().alpha(0f).setDuration(2600);
 
-        handler.postDelayed(runnable, 2800); // Timeout for the splash
+        handler.postDelayed(runnable, 3000); // Timeout for the splash
 
         mAuth = FirebaseAuth.getInstance();
         Username = (EditText)findViewById(R.id.usernameInput);
@@ -60,7 +60,6 @@ public class LoginUI extends AppCompatActivity {
         //If logged in, go straight to next page
         //might want to change this to onStart instead of onCreate
         FirebaseAuth.AuthStateListener mAuthStateListener = new FirebaseAuth.AuthStateListener(){
-            @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
                 if (mFirebaseUser != null) {
