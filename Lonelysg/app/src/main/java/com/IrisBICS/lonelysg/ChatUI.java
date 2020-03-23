@@ -65,7 +65,7 @@ public class ChatUI extends Fragment {
 
                 System.out.println(chatUsersList + "test");
 
-                ChatListView chatListView = new ChatListView(FragmentChat.this.getActivity(),chatUsersList);
+                ChatListView chatListView = new ChatListView(ChatUI.this.getActivity(),chatUsersList);
                 System.out.println("phase 1");
                 chatList.setAdapter(chatListView);
                 System.out.println("phase 2");
@@ -87,7 +87,7 @@ public class ChatUI extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String receiver = chatUsersList.get(i);
                 Intent intent;
-                intent = new Intent(FragmentChat.this.getActivity(), IndividualChatUI.class);
+                intent = new Intent(ChatUI.this.getActivity(), IndividualChatUI.class);
                 intent.putExtra("receiver", receiver);
                 startActivity(intent);
             }

@@ -11,14 +11,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginUI extends AppCompatActivity {
     RelativeLayout loginStuff, passwordSignUpBar;
@@ -107,7 +107,7 @@ public class LoginUI extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                Intent intentS = new Intent(LoginUI.this, SignUpPage.class);
+                Intent intentS = new Intent(LoginUI.this, ApiTest.class);
                 startActivity(intentS);
             }
         });

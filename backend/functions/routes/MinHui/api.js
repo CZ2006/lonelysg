@@ -5,10 +5,20 @@ router.get("/getMessage", (req,res)=>{
     //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getMessage after running firebase serve
     let database = req.app.get("database")
     var ref = database.ref('Messages');
+    
     ref.once("value", function(snapshot){
-        console.log(snapshot.val()); //View response value in the command line
-        res.end("Messages loaded.") //Returned in the browser or postman
+        var messages = snapshot.val();
+        console.log(messages); //View response value in the command line
+        // res.json(JSON.stringify(snapshot.val())) //Returned in the browser or postman
+        var messagesArray = [];
+        for (var i in messages){
+            messagesArray.push(messages[i]);
+        }
+        res.json(messagesArray);
     })
+
+    
+
 })
 
 router.post("/sendMessage", (req, res) => { //Sample function adding new user to realtime DB on firebase

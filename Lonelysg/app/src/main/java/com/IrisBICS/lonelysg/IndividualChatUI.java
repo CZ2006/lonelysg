@@ -32,9 +32,11 @@ public class IndividualChatUI extends AppCompatActivity {
             @Override
             public void DataIsLoaded(List<Message> messages, List<String> keys) {
                 for (int i = 0;i<messages.size();i++){
-                    if (!(messages.get(i).getReceiver().equals(receiver))){
-                        messages.remove(i);
-                        i--;
+                    if (!((messages.get(i).getReceiver().equals(receiver))&(messages.get(i).getSender().equals(FirebaseDatabaseHelper.getCurrentUser())))){
+                        if (!((messages.get(i).getSender().equals(receiver))&(messages.get(i).getReceiver().equals(FirebaseDatabaseHelper.getCurrentUser())))){
+                            messages.remove(i);
+                            i--;
+                        }
                     }
                 }
                 new ChatRecyclerView().setConfig(recyclerView,IndividualChatUI.this,messages,keys);
@@ -59,7 +61,7 @@ public class IndividualChatUI extends AppCompatActivity {
                 Message message = new Message();
                 message.setMessage(typeMessage.getText().toString());
                 message.setSender(FirebaseDatabaseHelper.getCurrentUser());
-                message.setReceiver("winniehui.99@gmail.com");
+                message.setReceiver(receiver);
                 new FirebaseDatabaseHelper().sendMessage(message, new FirebaseDatabaseHelper.DataStatus() {
                     @Override
                     public void DataIsLoaded(List<Message> messages, List<String> keys) {
