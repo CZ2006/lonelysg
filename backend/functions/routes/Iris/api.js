@@ -9,7 +9,7 @@ router.get("/getUser", (req,res) => {
     let database = req.app.get("database")
     var targetUser = database.ref('User/User' + req.body);
     targetUser.once("value", function(snapshot){
-        res.end(JSON.stringify(snapshot.val()));
+        res.json(snapshot.val());
     })
 })
 
