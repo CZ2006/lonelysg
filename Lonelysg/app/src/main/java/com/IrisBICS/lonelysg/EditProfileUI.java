@@ -1,14 +1,9 @@
 package com.IrisBICS.lonelysg;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -26,7 +21,7 @@ public class EditProfileUI extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.editprofile_pop_up_page);
+        setContentView(R.layout.editprofile);
 
         // For dropdown box (category selection)
         dropdownbox = (Spinner) findViewById(R.id.genderCategoryDropBox);
@@ -41,6 +36,8 @@ public class EditProfileUI extends Activity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(EditProfileUI.this, "Profile Information Updated", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent (EditProfileUI.this, NavigationBarUI.class);
+                startActivity(i);
             }
         });
 
@@ -49,6 +46,8 @@ public class EditProfileUI extends Activity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(EditProfileUI.this, "Process Cancelled", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent (EditProfileUI.this, NavigationBarUI.class);
+                startActivity(i);
             }
         });
     }
