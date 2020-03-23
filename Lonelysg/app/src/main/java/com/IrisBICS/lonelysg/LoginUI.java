@@ -23,10 +23,11 @@ import androidx.appcompat.app.AppCompatActivity;
 public class LoginUI extends AppCompatActivity {
     RelativeLayout loginStuff, passwordSignUpBar;
 
-    private EditText Username;
-    private EditText Password;
-    private Button SignIn;
+    private EditText username;
+    private EditText password;
+    private Button signIn;
     private Button signUp;
+    private Button forgotPW;
     private FirebaseAuth mAuth;
 
     Handler handler = new Handler();
@@ -37,6 +38,21 @@ public class LoginUI extends AppCompatActivity {
             passwordSignUpBar.setVisibility(View.VISIBLE);
         }
     };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //If logged in, go straight to next page
+        FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
+        if (mFirebaseUser != null) {
+            Toast.makeText(LoginUI.this, "You are logged in.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(LoginUI.this, NavigationBarUI.class);
+            startActivity(intent);
+        }
+        else {
+            Toast.makeText(LoginUI.this, "Please log in.", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,33 +68,17 @@ public class LoginUI extends AppCompatActivity {
         handler.postDelayed(runnable, 2800); // Timeout for the splash
 
         mAuth = FirebaseAuth.getInstance();
-        Username = (EditText)findViewById(R.id.usernameInput);
-        Password = (EditText)findViewById(R.id.passwordInput);
-        SignIn = (Button)findViewById(R.id.signInButton);
+        username = (EditText)findViewById(R.id.usernameInput);
+        password = (EditText)findViewById(R.id.passwordInput);
+        signIn = (Button)findViewById(R.id.signInButton);
         signUp = (Button)findViewById(R.id.signUpButton);
+        forgotPW = (Button)findViewById(R.id.forgotPasswordButton);
 
-        //If logged in, go straight to next page
-        //might want to change this to onStart instead of onCreate
-        FirebaseAuth.AuthStateListener mAuthStateListener = new FirebaseAuth.AuthStateListener(){
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
-                if (mFirebaseUser != null) {
-                    Toast.makeText(LoginUI.this, "You are logged in.", Toast.LENGTH_SHORT).show();
-                    //Intent intent = new Intent(MainActivity.this, LoginPage.class);
-                    //startActivity(intent);
-                }
-                else {
-                    Toast.makeText(LoginUI.this, "Please log in.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        };
-
-        SignIn.setOnClickListener(new View.OnClickListener() {
+        signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                String email = Username.getText().toString();
-                String pwd = Password.getText().toString();
+                String email = username.getText().toString();
+                String pwd = password.getText().toString();
                 //to do: error handling. for now just assume input will be correct
                 if (!email.isEmpty() && !pwd.isEmpty()) {
                     //FIREBASE LOGIN AUTHENTICATION
@@ -87,14 +87,14 @@ public class LoginUI extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
-                                Log.d("MainActivity", "signInWithEmail:success");
+                                Log.d("LoginUI", "signInWithEmail:success");
                                 Toast.makeText(LoginUI.this, "Sign in success!", Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Intent intent = new Intent(LoginUI.this, NavigationBarUI.class);
                                 startActivity(intent);
                             } else {
                                 // If sign in fails, display a message to the user.
-                                Log.w("MainActivity", "signInWithEmail:failure", task.getException());
+                                Log.w("LoginUI", "signInWithEmail:failure", task.getException());
                                 Toast.makeText(LoginUI.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -112,10 +112,41 @@ public class LoginUI extends AppCompatActivity {
             }
         });
 
+        forgotPW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                String email = username.getText().toString();
+                if (email.isEmpty()) { //dk why this isn't showing
+                    Toast.makeText(LoginUI.this, "Please enter your registered email first.", Toast.LENGTH_SHORT).show();
+                }
+                if (!email.isEmpty()) {
+                    //call password reset api
+                    FirebaseAuth auth = FirebaseAuth.getInstance();
+
+                    auth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d("LoginUI", "Email sent.");
+                                Toast.makeText(LoginUI.this, "Password reset sent to your email!", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(LoginUI.this, "Please make sure email is already registered.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+                else {
+                    Toast.makeText(LoginUI.this, "Error occurred :(", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
     }
+
 }
