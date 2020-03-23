@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment;
 
 public class AccountUI extends Fragment {
     Spinner dropdownicon;
-    String moreSettings[] = {"Change Password", "Delete Account", "Log Out"};
+    String moreSettings[] = {"Change Password", "Delete Account"};
     ArrayAdapter<String> arrayAdapter;
 
     Button editProfile;
