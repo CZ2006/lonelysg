@@ -63,9 +63,9 @@ public class LoginUI extends AppCompatActivity {
         passwordSignUpBar = (RelativeLayout) findViewById(R.id.passwordSignUpBar);
 
         ImageView logo = (ImageView)findViewById(R.id.logo);
-        logo.animate().alpha(0f).setDuration(2650);
+        logo.animate().alpha(0f).setDuration(2600);
 
-        handler.postDelayed(runnable, 2800); // Timeout for the splash
+        handler.postDelayed(runnable, 3000); // Timeout for the splash
 
         mAuth = FirebaseAuth.getInstance();
         username = (EditText)findViewById(R.id.usernameInput);
@@ -75,6 +75,7 @@ public class LoginUI extends AppCompatActivity {
         forgotPW = (Button)findViewById(R.id.forgotPasswordButton);
 
         signIn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view){
                 String email = username.getText().toString();

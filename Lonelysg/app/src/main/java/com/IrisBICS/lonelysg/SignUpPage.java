@@ -40,6 +40,7 @@ public class SignUpPage extends AppCompatActivity {
             public void onClick(View view){
                 String email = username.getText().toString();
                 String pwd = password.getText().toString();
+
                 //to do: error handling. for now just assume input will be correct
                 if (!email.isEmpty() && !pwd.isEmpty()) {
                     //FIREBASE LOGIN AUTHENTICATION
