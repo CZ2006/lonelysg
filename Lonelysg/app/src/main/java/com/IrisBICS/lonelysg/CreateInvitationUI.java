@@ -93,7 +93,7 @@ public class CreateInvitationUI extends Fragment {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                         String timeString = "hour: " + hour + "minute: " + minute;
-                        datePick.setText(timeString);
+                        timePick.setText(timeString);
                     }
                 }, HOUR, MINUTE, true);
 
