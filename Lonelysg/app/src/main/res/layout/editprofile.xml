@@ -195,7 +195,7 @@
                 android:textAlignment="center"
                 android:text="CONFIRM"
                 android:textColor="@color/black"
-                android:background="@drawable/borders3"
+                android:background="@drawable/borders4"
                 android:layout_gravity="center"/>
 
             <Button
@@ -208,7 +208,7 @@
                 android:textAlignment="center"
                 android:text="CANCEL"
                 android:textColor="@color/black"
-                android:background="@drawable/borders3"
+                android:background="@drawable/borders4"
                 android:layout_gravity="center"/>
 
         </LinearLayout>
