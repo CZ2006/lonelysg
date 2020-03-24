@@ -1,4 +1,4 @@
-package com.IrisBICS.lonelysg;
+package com.IrisBICS.lonelysg.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,11 +14,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.IrisBICS.lonelysg.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.RemoteMessage;
+import com.pusher.pushnotifications.PushNotificationReceivedListener;
+import com.pusher.pushnotifications.PushNotifications;
+
 
 public class LoginUI extends AppCompatActivity {
     RelativeLayout loginStuff, passwordSignUpBar;
@@ -108,7 +113,7 @@ public class LoginUI extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                Intent intentS = new Intent(LoginUI.this, ApiTest.class);
+                Intent intentS = new Intent(LoginUI.this, SignUpPage.class);
                 startActivity(intentS);
             }
         });
@@ -143,11 +148,35 @@ public class LoginUI extends AppCompatActivity {
             }
         });
 
+        PushNotifications.start(getApplicationContext(), "211e38a9-4bc8-40c5-958a-4a7f9aa91547");
+        PushNotifications.addDeviceInterest("debug-apple");
+
+
     }
 
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
+            @Override
+            public void onMessageReceived(RemoteMessage remoteMessage) {
+                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
+                if (messagePayload == null) {
+                    // Message payload was not set for this notification
+                    Log.i("MyActivity", "Payload was missing");
+                } else {
+                    Log.i("MyActivity", messagePayload);
+                    Toast.makeText(LoginUI.this, "You received a request", Toast.LENGTH_SHORT).show();
+                    // Now update the UI based on your message payload!
+                }
+            }
+        });
+    }
+
 
 }

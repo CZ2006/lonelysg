@@ -1,4 +1,4 @@
-package com.IrisBICS.lonelysg;
+package com.IrisBICS.lonelysg.Adapters;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -10,14 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.IrisBICS.lonelysg.R;
+
 import java.util.List;
 
-public class ChatListView extends ArrayAdapter<String> {
+public class ChatListAdapter extends ArrayAdapter<String> {
 
     private List<String> chatUsers;
     private Activity context;
 
-    public ChatListView(Activity context, List<String> users) {
+    public ChatListAdapter(Activity context, List<String> users) {
         super(context, R.layout.chat_list_layout, users);
         this.context = context;
         this.chatUsers = users;
@@ -28,7 +30,7 @@ public class ChatListView extends ArrayAdapter<String> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         View r = convertView;
-        ViewHolder viewHolder = null;
+        ViewHolder viewHolder;
         if(r==null) {
             LayoutInflater layoutInflater = context.getLayoutInflater();
             r = layoutInflater.inflate(R.layout.chat_list_layout,null,true);
@@ -48,4 +50,5 @@ public class ChatListView extends ArrayAdapter<String> {
             chatUser = (TextView) v.findViewById(R.id.chatUser);
         }
     }
+
 }

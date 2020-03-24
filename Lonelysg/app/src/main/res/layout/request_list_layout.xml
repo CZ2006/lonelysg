@@ -2,8 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    tools:context=".MainActivity">-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,13 +11,24 @@
         android:padding="15dp">
 
         <TextView
-            android:id="@+id/chatUser"
+            android:id="@+id/requestInvitation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/requestUser"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:text="Invitation Title"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/requestUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Username"
-            android:textSize="24sp"
-            android:textStyle="bold"/>
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
 
     </RelativeLayout>

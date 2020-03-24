@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditProfileUI"
+    tools:context=".Activities.EditProfileUI"
     android:padding="5dp"
     android:layout_gravity="center"
     android:background="@drawable/splash_screen">>

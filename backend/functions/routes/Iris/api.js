@@ -5,9 +5,9 @@ const router = express.Router();
 
 //Open: How do we link user profiles with authentication implemented by Winnie?
 
-router.get("/getUser", (req,res) => {
+router.get("/getUser/:userID", (req,res) => {
     let database = req.app.get("database")
-    var targetUser = database.ref('User/User' + req.body);
+    var targetUser = database.ref('User/User' + req.param('userID'));
     targetUser.once("value", function(snapshot){
         res.end(JSON.stringify(snapshot.val()));
     })
@@ -39,16 +39,15 @@ router.post("/addUser", (req, res) => {
     } */
 })
 
-router.delete("/deleteUser", (req, res) => {
+router.delete("/deleteUser/:userID", (req, res) => {
 
     let database = req.app.get("database")
-    let userToDel = database.ref("User/User" + req.body)
+    let userToDel = database.ref('User/User' + req.param('userID'))
     userToDel.set({})
 
-    res.end(req.body + " deleted from the DB!")
+    res.end("deleted from the DB!")
 
 })
-
 
 router.post("/updateUser", (req, res) => {
 
