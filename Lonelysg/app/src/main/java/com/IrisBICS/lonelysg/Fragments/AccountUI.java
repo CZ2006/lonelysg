@@ -1,9 +1,11 @@
-package com.IrisBICS.lonelysg;
+package com.IrisBICS.lonelysg.Fragments;
+
 
 import android.accounts.Account;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,13 @@ import androidx.fragment.app.Fragment;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import androidx.fragment.app.Fragment;
+
+import com.IrisBICS.lonelysg.Activities.EditProfileUI;
+import com.IrisBICS.lonelysg.Activities.LoginUI;
+import com.IrisBICS.lonelysg.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class AccountUI extends Fragment {
     TextView profileName;

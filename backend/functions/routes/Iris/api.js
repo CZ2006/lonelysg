@@ -49,7 +49,6 @@ router.delete("/deleteUser/:userID", (req, res) => {
 
 })
 
-
 router.post("/updateUser", (req, res) => {
 
     let database = req.app.get("database")

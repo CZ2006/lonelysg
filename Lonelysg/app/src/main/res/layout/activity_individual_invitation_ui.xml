@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".IndividialInvitationUI"
+    tools:context=".Activities.IndividualInvitationUI"
     android:background="@color/backgroundcolor">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -66,7 +66,7 @@
             android:scaleType="centerInside"/>
 
         <TextView
-            android:id="@+id/activityName"
+            android:id="@+id/activityTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageUser"
@@ -121,6 +121,7 @@
                         android:textSize="24sp"/>
 
                     <TextView
+                        android:id="@+id/activityDesc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Just a normal lunch where we can talk about politics and how important social distancing is"
@@ -210,27 +211,29 @@
                 <Button
                     android:layout_width="150dp"
                     android:layout_height="35dp"
-                    android:id="@+id/acceptInvitation"
                     android:layout_marginRight="20dp"
-                    android:text="REQUEST "
-                    android:textColor="@color/white"
-                    android:textAlignment="textEnd"
-                    android:textSize="18sp"
-                    android:drawableRight="@drawable/chat_white"
-                    android:paddingRight="21dp"
-                    android:background="@drawable/borders3"/>
-
-                <Button
-                    android:layout_width="150dp"
-                    android:layout_height="35dp"
                     android:id="@+id/rejectInvitation"
                     android:text="BACK "
                     android:textColor="@color/white"
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:drawableRight="@drawable/cancel_icon"
-                    android:paddingRight="34dp"
+                    android:paddingRight="21dp"
                     android:background="@drawable/borders3"/>
+
+                <Button
+                    android:layout_width="150dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/acceptInvitation"
+                    android:text="REQUEST "
+                    android:textColor="@color/white"
+                    android:textAlignment="textEnd"
+                    android:textSize="18sp"
+                    android:drawableRight="@drawable/chat_white"
+                    android:paddingRight="34dp"
+                    android:background="@drawable/borders3"
+
+                    />
 
             </LinearLayout>
 

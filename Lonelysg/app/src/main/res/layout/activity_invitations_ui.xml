@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InvitationsUI">
+    tools:context=".Activities.InvitationsUI">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             app:layout_scrollFlags="exitUntilCollapsed|scroll"
             app:contentScrim="?attr/colorPrimary"
-            app:title="INVITATIONS LIST"
+            app:title="INVITATIONS"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleMarginEnd="64dp"
@@ -60,7 +60,7 @@
 
             <ListView
                 android:id="@+id/invitationsListView"
-                android:layout_width="283dp"
+                android:layout_width="300dp"
                 android:layout_height="400dp"
                 android:layout_marginTop="28dp"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -1,4 +1,4 @@
-package com.IrisBICS.lonelysg;
+package com.IrisBICS.lonelysg.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,14 +11,19 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.IrisBICS.lonelysg.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.RemoteMessage;
+import com.pusher.pushnotifications.PushNotificationReceivedListener;
+import com.pusher.pushnotifications.PushNotifications;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.messaging.RemoteMessage;
 import com.pusher.pushnotifications.PushNotificationReceivedListener;
@@ -146,6 +151,7 @@ public class LoginUI extends AppCompatActivity {
 
         PushNotifications.start(getApplicationContext(), "211e38a9-4bc8-40c5-958a-4a7f9aa91547");
         PushNotifications.addDeviceInterest("debug-apple");
+
     }
 
     @Override
@@ -171,4 +177,5 @@ public class LoginUI extends AppCompatActivity {
             }
         });
     }
+
 }

@@ -1,4 +1,4 @@
-package com.IrisBICS.lonelysg;
+package com.IrisBICS.lonelysg.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+<<<<<<< HEAD:Lonelysg/app/src/main/java/com/IrisBICS/lonelysg/EditProfileUI.java
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -25,6 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import com.IrisBICS.lonelysg.R;
 
 public class EditProfileUI extends Activity {
 

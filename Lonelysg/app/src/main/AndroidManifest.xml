@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.IrisBICS.lonelysg">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,12 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".IndividialInvitationUI" />
-        <activity android:name=".EditProfileUI" />
-        <activity android:name=".NavigationBarUI" />
-        <activity android:name=".InvitationsUI" />
-        <activity android:name=".SignUpPage" />
-        <activity android:name=".LoginUI">
+        <activity android:name=".Activities.PendingRequestsUI"></activity>
+        <activity android:name=".Activities.ReceivedRequestsUI" />
+        <activity android:name=".Activities.ManageRequestsUI" />
+        <activity android:name=".Activities.UserInvitationsUI" />
+        <activity android:name=".Activities.CreateInvitationUI" />
+        <activity android:name=".Activities.ManageInvitationsUI" />
+        <activity android:name=".Activities.IndividualInvitationUI" />
+        <activity android:name=".Activities.IndividualChatUI" />
+        <activity android:name=".Activities.EditProfileUI" />
+        <activity android:name=".Activities.NavigationBarUI" />
+        <activity android:name=".Activities.InvitationsUI" />
+        <activity android:name=".Activities.SignUpPage" />
+        <activity android:name=".Activities.LoginUI">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
