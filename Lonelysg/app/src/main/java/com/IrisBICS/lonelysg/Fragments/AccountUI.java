@@ -1,11 +1,6 @@
 package com.IrisBICS.lonelysg.Fragments;
 
 
-import android.accounts.Account;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,33 +10,26 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.firebase.auth.FirebaseAuth;
-import androidx.fragment.app.Fragment;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import androidx.fragment.app.Fragment;
 
 import com.IrisBICS.lonelysg.Activities.EditProfileUI;
 import com.IrisBICS.lonelysg.Activities.LoginUI;
+import com.IrisBICS.lonelysg.AppController;
+import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class AccountUI extends Fragment {
     TextView profileName;
@@ -113,7 +101,7 @@ public class AccountUI extends Fragment {
 
     private void getUserProfile(String userID) {
         String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+        JsonObjectRequest getUserProfileRequest = new JsonObjectRequest
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -124,7 +112,7 @@ public class AccountUI extends Fragment {
                             user.setAge(response.getString("age"));
                             user.setOccupation(response.getString("occupation"));
                             user.setInterests(response.getString("interests"));
-                            setUserProfile(user);
+                            setUserProfile();
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
@@ -137,11 +125,10 @@ public class AccountUI extends Fragment {
                         Log.e("Volley", error.toString());
                     }
                 });
-        RequestQueue requestQueue = Volley.newRequestQueue(AccountUI.this.getContext());
-        requestQueue.add(jsonObjectRequest);
+        AppController.getInstance(this.getContext()).addToRequestQueue(getUserProfileRequest);
     };
 
-    private void setUserProfile(User user){
+    private void setUserProfile(){
         profileName.setText(user.getUsername());
         profileGender.setText(user.getGender());
         profileAge.setText(user.getAge());

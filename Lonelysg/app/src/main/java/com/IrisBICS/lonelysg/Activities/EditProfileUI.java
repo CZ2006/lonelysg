@@ -12,22 +12,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-<<<<<<< HEAD:Lonelysg/app/src/main/java/com/IrisBICS/lonelysg/EditProfileUI.java
+import com.IrisBICS.lonelysg.AppController;
+import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import com.IrisBICS.lonelysg.R;
 
 public class EditProfileUI extends Activity {
 
@@ -128,8 +124,7 @@ public class EditProfileUI extends Activity {
                     Log.e("Volley", error.toString());
                 }
             });
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(updateUserRequest);
+            AppController.getInstance(this).addToRequestQueue(updateUserRequest);
         } catch (JSONException e) {
             e.printStackTrace();
         }
