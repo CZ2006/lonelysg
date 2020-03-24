@@ -11,15 +11,80 @@ router.get("/getStuff", (req,res)=>{ //Sample function fetching data from the re
     })
 })
 
-router.post("/addUser", (req, res) => { //Sample function adding new user to realtime DB on firebase
+router.post("/sendNotif", (req,res)=>{
+	const PushNotifications = require('@pusher/push-notifications-server');
+
+	let beamsClient = new PushNotifications({
+		instanceId: '211e38a9-4bc8-40c5-958a-4a7f9aa91547',
+		secretKey: '899F51F33EF49FF687ABA0D6512A626B8A62AE96BBBAB4A217F4411925AAF348'
+	});
+
+	beamsClient.publishToInterests(['debug-apple'], {
+		fcm: {
+		notification: {
+		title: 'Notification',
+		body: 'You received a request!'
+		}
+	}
+	}).then((publishResponse) => {
+		console.log('Just published:', publishResponse.publishId);
+		return null;
+	}).catch((error) => {
+		console.log('Error:', error);
+	});
+	res.end("Posted!");
+})
+
+router.get("/getUser/:userID", (req,res) => {
+    let database = req.app.get("database")
+    var targetUser = database.ref('User/User' + req.param('userID'));
+    targetUser.once("value", function(snapshot){
+        res.end(JSON.stringify(snapshot.val()));
+    })
+})
+
+router.delete("/deleteUser/:userID", (req, res) => {
+
+    let database = req.app.get("database")
+    let userToDel = database.ref('User/User-' + req.param('userID'))
+    userToDel.set({})
+
+    res.end("deleted from the DB!")
+
+})
+
+router.put("/updateUser/:userID", (req, res) => {
+
+    let database = req.app.get("database")
+    let userToUpdate = database.ref("User/User" + req.params.userID)
+
+	userToUpdate.once("value", function(snapshot){
+            newData = snapshot.val()
+			userToUpdate.update(req.body)
+        })
+	
+	res.end("User-" + userToUpdate.userID + " updated!")
+
+    /*{
+        "userID": 2,
+        "password": "newPa55w0rd...",
+        "interests": "Youtube, Marvel"
+    } */
+
+})
+
+router.post("/addUser/:newID", (req, res) => { //Sample function adding new user to realtime DB on firebase
     //Call using http://localhost:5001/lonely-4a186/us-central1/app/XQ/addUser in postman with sample data in the body after running firebase serve
     let database = req.app.get("database")
     let userRef = database.ref("User")
 
-    const newUser = userRef.child("User" + req.body.userID) //Requires information sent in JSON format and containing at least userID
-    newUser.set(req.body)
 
-    res.end("Posted!"); //Returned in postman
+	const newReq = userRef.child("User" + req.params.newID) //Requires information sent in JSON format
+	req.body.userID = req.params.newID; 
+	newReq.set(req.body);
+	res.end("User added."); //Returned in postman
+    })
+ 
 
     /* Sample data to test this function:
 
@@ -35,8 +100,6 @@ router.post("/addUser", (req, res) => { //Sample function adding new user to rea
         "job": "NTU Student",
         "interests": "No idea"
     } */
-})
-
 //Update user
 //Delete user
 

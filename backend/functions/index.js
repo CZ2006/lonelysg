@@ -13,7 +13,7 @@ app.use(require('cors')({ origin: true, credentials: true }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-//var serviceAccount = require("../ignore/lonely-4a186-firebase-adminsdk-xiwbf-361c914115.json")
+//var serviceAccount = require("../ignore/lonely-4a186-firebase-adminsdk-xiwbf-867785e4c2.json")
 admin.initializeApp({
     //credential: admin.credential.cert(serviceAccount),
     credential: admin.credential.applicationDefault(),
