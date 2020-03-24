@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".Activities.PendingRequestsUI"></activity>
         <activity android:name=".Activities.ReceivedRequestsUI" />
         <activity android:name=".Activities.ManageRequestsUI" />
@@ -24,6 +25,7 @@
         <activity android:name=".Activities.InvitationsUI" />
         <activity android:name=".Activities.SignUpPage" />
         <activity android:name=".Activities.LoginUI">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

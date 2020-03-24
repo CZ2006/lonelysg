@@ -52,7 +52,7 @@ router.delete("/deleteUser/:userID", (req, res) => {
 router.post("/updateUser", (req, res) => {
 
     let database = req.app.get("database")
-    let userToUpdate = database.ref("User/User" + req.body.userID)
+    let userToUpdate = database.ref("User" + req.body.userID)
 
     async function updateUser() {
         var newData;
