@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@drawable/splash_screen"
-    tools:context=".LoginUI">
+    tools:context=".Activities.LoginUI">
 
     <RelativeLayout
         android:id="@+id/loginPlaceholder"
@@ -104,8 +104,8 @@
                                 android:layout_marginLeft="20dp"
                                 android:layout_marginTop="0dp"
                                 android:layout_marginRight="20dp"
-                                android:inputType="textPassword"
                                 android:background="@drawable/borders"
+                                android:inputType="textPassword"
                                 android:textColor="@color/backgroundcolor"
                                 android:textSize="18dp" />
 
