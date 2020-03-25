@@ -39,7 +39,7 @@ public class CreateInvitationUI extends AppCompatActivity {
     private EditText enterTitle, enterDesc;
 
     //For time and date selection
-    private Button datePick, timePick, confirmButton, cancelButton;
+    private Button datePick, startTimePick, endTimePick, confirmButton, cancelButton;
 
     String dateString, timeString, category;
     String currentUser = FirebaseAuthHelper.getCurrentUser();
@@ -68,7 +68,8 @@ public class CreateInvitationUI extends AppCompatActivity {
             }});
 
         datePick = findViewById(R.id.datePick);
-        timePick = findViewById(R.id.timePick);
+        startTimePick = findViewById(R.id.startTimePick);
+        endTimePick = findViewById(R.id.endTimePick);
 
         // For date selection
         datePick.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +85,7 @@ public class CreateInvitationUI extends AppCompatActivity {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(CreateInvitationUI.this  , new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-                        dateString = year + " " + month + " " + date;
+                        dateString = year + "/" + month + "/" + date;
                         datePick.setText(dateString);
 
                         // For date formatting
@@ -104,8 +105,8 @@ public class CreateInvitationUI extends AppCompatActivity {
             }
         });
 
-        // For time selection
-        timePick.setOnClickListener(new View.OnClickListener() {
+        // For start time selection
+        startTimePick.setOnClickListener(new View.OnClickListener() {
             @Nullable
             @Override
             public void onClick (View view) {
@@ -118,7 +119,29 @@ public class CreateInvitationUI extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                         timeString = hour + ":" + minute;
-                        timePick.setText(timeString);
+                        startTimePick.setText(timeString);
+                    }
+                }, HOUR, MINUTE, true);
+
+                timePickerDialog.show();
+            }
+        });
+
+        // For end time selection
+        endTimePick.setOnClickListener(new View.OnClickListener() {
+            @Nullable
+            @Override
+            public void onClick (View view) {
+                Calendar calender = Calendar.getInstance();
+                // Current time shown when button is clicked
+                int HOUR = calender.get(Calendar.HOUR);
+                int MINUTE = calender.get(Calendar.MINUTE);
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(CreateInvitationUI.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                        timeString = hour + ":" + minute;
+                        endTimePick.setText(timeString);
                     }
                 }, HOUR, MINUTE, true);
 

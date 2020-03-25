@@ -88,7 +88,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="270dp"
+        android:layout_height="match_parent"
         android:layout_below="@+id/imageUser"
         android:layout_marginTop="5dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -100,6 +100,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:id="@+id/invitationDetails"
                 android:orientation="vertical">
 
@@ -203,13 +204,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/invitationDetails"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginBottom="20dp"
                 android:layout_centerHorizontal="true"
                 android:orientation="horizontal">
 
                 <Button
-                    android:layout_width="150dp"
+                    android:layout_width="140dp"
                     android:layout_height="35dp"
                     android:layout_marginRight="20dp"
                     android:id="@+id/rejectInvitation"
@@ -218,11 +219,11 @@
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:drawableRight="@drawable/cancel_icon"
-                    android:paddingRight="21dp"
+                    android:paddingRight="29dp"
                     android:background="@drawable/borders3"/>
 
                 <Button
-                    android:layout_width="150dp"
+                    android:layout_width="140dp"
                     android:layout_height="35dp"
                     android:id="@+id/acceptInvitation"
                     android:text="REQUEST "
@@ -230,7 +231,7 @@
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:drawableRight="@drawable/chat_white"
-                    android:paddingRight="34dp"
+                    android:paddingRight="15dp"
                     android:background="@drawable/borders3"
 
                     />

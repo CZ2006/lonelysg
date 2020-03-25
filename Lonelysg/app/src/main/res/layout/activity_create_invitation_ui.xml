@@ -68,13 +68,23 @@
             android:textAlignment="center" />
 
         <Button
-            android:id="@+id/timePick"
+            android:id="@+id/startTimePick"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="15dp"
-            android:text="Select Time"
+            android:text="Select Start Time"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/endTimePick"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="15dp"
+            android:text="Select End Time"
             android:textAlignment="center" />
 
         <Button
