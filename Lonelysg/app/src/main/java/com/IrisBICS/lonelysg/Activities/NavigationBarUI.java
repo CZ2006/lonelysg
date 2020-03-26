@@ -1,10 +1,15 @@
-package com.IrisBICS.lonelysg;
+package com.IrisBICS.lonelysg.Activities;
+
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.os.Bundle;
-
+import com.IrisBICS.lonelysg.Fragments.ManageActivitiesUI;
+import com.IrisBICS.lonelysg.Fragments.AccountUI;
+import com.IrisBICS.lonelysg.Fragments.ChatUI;
+import com.IrisBICS.lonelysg.Fragments.DiscoveryPageUI;
+import com.IrisBICS.lonelysg.R;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 
 public class NavigationBarUI extends AppCompatActivity {
@@ -13,6 +18,8 @@ public class NavigationBarUI extends AppCompatActivity {
     private final static int ID_INVITATION = 2;
     private final static int ID_CHAT = 3;
     private final static int ID_ACCOUNT = 4;
+
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +55,14 @@ public class NavigationBarUI extends AppCompatActivity {
                         select_fragment = new DiscoveryPageUI();
                         break;
                     case ID_INVITATION:
-                        select_fragment = new CreateInvitationUI();
+                        select_fragment = new ManageActivitiesUI();
                         break;
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, select_fragment).commit();
             }
         });
+
+
     }
 
     @Override

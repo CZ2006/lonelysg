@@ -1,4 +1,4 @@
-package com.IrisBICS.lonelysg;
+package com.IrisBICS.lonelysg.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,14 +11,23 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.IrisBICS.lonelysg.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.RemoteMessage;
+import com.pusher.pushnotifications.PushNotificationReceivedListener;
+import com.pusher.pushnotifications.PushNotifications;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.messaging.RemoteMessage;
+import com.pusher.pushnotifications.PushNotificationReceivedListener;
+import com.pusher.pushnotifications.PushNotifications;
 
 public class LoginUI extends AppCompatActivity {
     RelativeLayout loginStuff, passwordSignUpBar;
@@ -48,8 +57,7 @@ public class LoginUI extends AppCompatActivity {
             Toast.makeText(LoginUI.this, "You are logged in.", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(LoginUI.this, NavigationBarUI.class);
             startActivity(intent);
-        }
-        else {
+        } else {
             Toast.makeText(LoginUI.this, "Please log in.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -62,22 +70,22 @@ public class LoginUI extends AppCompatActivity {
         loginStuff = (RelativeLayout) findViewById(R.id.loginStuff);
         passwordSignUpBar = (RelativeLayout) findViewById(R.id.passwordSignUpBar);
 
-        ImageView logo = (ImageView)findViewById(R.id.logo);
+        ImageView logo = (ImageView) findViewById(R.id.logo);
         logo.animate().alpha(0f).setDuration(2600);
 
         handler.postDelayed(runnable, 3000); // Timeout for the splash
 
         mAuth = FirebaseAuth.getInstance();
-        username = (EditText)findViewById(R.id.usernameInput);
-        password = (EditText)findViewById(R.id.passwordInput);
-        signIn = (Button)findViewById(R.id.signInButton);
-        signUp = (Button)findViewById(R.id.signUpButton);
-        forgotPW = (Button)findViewById(R.id.forgotPasswordButton);
+        username = (EditText) findViewById(R.id.usernameInput);
+        password = (EditText) findViewById(R.id.passwordInput);
+        signIn = (Button) findViewById(R.id.signInButton);
+        signUp = (Button) findViewById(R.id.signUpButton);
+        forgotPW = (Button) findViewById(R.id.forgotPasswordButton);
 
         signIn.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 String email = username.getText().toString();
                 String pwd = password.getText().toString();
                 //to do: error handling. for now just assume input will be correct
@@ -107,7 +115,7 @@ public class LoginUI extends AppCompatActivity {
 
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 Intent intentS = new Intent(LoginUI.this, SignUpPage.class);
                 startActivity(intentS);
             }
@@ -115,7 +123,7 @@ public class LoginUI extends AppCompatActivity {
 
         forgotPW.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 String email = username.getText().toString();
                 if (email.isEmpty()) { //dk why this isn't showing
                     Toast.makeText(LoginUI.this, "Please enter your registered email first.", Toast.LENGTH_SHORT).show();
@@ -130,24 +138,44 @@ public class LoginUI extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Log.d("LoginUI", "Email sent.");
                                 Toast.makeText(LoginUI.this, "Password reset sent to your email!", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(LoginUI.this, "Please make sure email is already registered.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-                }
-                else {
+                } else {
                     Toast.makeText(LoginUI.this, "Error occurred :(", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        PushNotifications.start(getApplicationContext(), "211e38a9-4bc8-40c5-958a-4a7f9aa91547");
+        PushNotifications.addDeviceInterest("debug-apple");
 
     }
 
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
+            @Override
+            public void onMessageReceived(RemoteMessage remoteMessage) {
+                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
+                if (messagePayload == null) {
+                    // Message payload was not set for this notification
+                    Log.i("MyActivity", "Payload was missing");
+                } else {
+                    Log.i("MyActivity", messagePayload);
+                    Toast.makeText(LoginUI.this, "You received a request", Toast.LENGTH_SHORT).show();
+                    // Now update the UI based on your message payload!
+                }
+            }
+        });
     }
 
 }
