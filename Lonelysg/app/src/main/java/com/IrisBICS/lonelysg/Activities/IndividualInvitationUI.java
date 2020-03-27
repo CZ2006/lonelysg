@@ -165,12 +165,17 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Add a marker in NTU,
-        // and move the map's camera to the same location.
-        LatLng ntu = new LatLng(1.3483, 103.6831);
-        googleMap.addMarker(new MarkerOptions().position(ntu)
+        //LatLng latLng = invitation.getPlaceLatLng();
+        //googleMap.addMarker(new MarkerOptions().position(latLng)
+        //        .title(invitation.getPlaceName()));
+
+        //below 3 lines are to be deleted and replaced by above once database function is added
+        LatLng latLng = new LatLng(1.3483, 103.6831);
+        googleMap.addMarker(new MarkerOptions().position(latLng)
                 .title("Location Marker"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ntu,13));
+
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,13));
     }
 
 }
