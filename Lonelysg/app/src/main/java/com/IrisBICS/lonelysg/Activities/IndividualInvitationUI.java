@@ -8,8 +8,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Invitation;
@@ -19,11 +17,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class IndividualInvitationUI extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class IndividualInvitationUI extends AppCompatActivity implements OnMapReadyCallback {
 
     private Button acceptInvitation, rejectInvitation;
     private TextView activityTitle, activityDateTime,activityDesc;
@@ -36,6 +42,11 @@ public class IndividualInvitationUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_individual_invitation_ui);
+
+        //TRYING OUT MAP
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         Intent receivedIntent = getIntent();
         invitationID = receivedIntent.getStringExtra("invitationID");
@@ -150,6 +161,16 @@ public class IndividualInvitationUI extends AppCompatActivity {
         activityDateTime.setText(invitation.getDate()+" "+invitation.getStartTime());
         activityTitle.setText(invitation.getTitle());
         activityDesc.setText(invitation.getDesc());
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        // Add a marker in NTU,
+        // and move the map's camera to the same location.
+        LatLng ntu = new LatLng(1.3483, 103.6831);
+        googleMap.addMarker(new MarkerOptions().position(ntu)
+                .title("Location Marker"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(ntu));
     }
 
 }
