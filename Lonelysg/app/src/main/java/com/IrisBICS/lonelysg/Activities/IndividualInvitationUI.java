@@ -43,7 +43,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_individual_invitation_ui);
 
-        //TRYING OUT MAP
+        //MAP
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -170,7 +170,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         LatLng ntu = new LatLng(1.3483, 103.6831);
         googleMap.addMarker(new MarkerOptions().position(ntu)
                 .title("Location Marker"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(ntu));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ntu,13));
     }
 
 }

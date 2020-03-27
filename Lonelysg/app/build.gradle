@@ -47,4 +47,5 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.elpassion.android.commons:recycler:0.0.21'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.libraries.places:places:2.2.0'
 }

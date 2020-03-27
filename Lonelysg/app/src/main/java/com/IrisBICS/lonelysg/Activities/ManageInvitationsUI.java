@@ -3,15 +3,15 @@ package com.IrisBICS.lonelysg.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.IrisBICS.lonelysg.R;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
 public class ManageInvitationsUI extends AppCompatActivity {
 
-    private Button createInvitation, viewInvitations;
+    private CardView createInvitation, viewInvitations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
