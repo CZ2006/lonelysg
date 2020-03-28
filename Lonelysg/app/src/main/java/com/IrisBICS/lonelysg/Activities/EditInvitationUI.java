@@ -1,8 +1,11 @@
 package com.IrisBICS.lonelysg.Activities;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,28 +17,54 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.Models.Invitation;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.IrisBICS.lonelysg.AppController;
+import com.IrisBICS.lonelysg.Models.Invitation;
+import com.IrisBICS.lonelysg.Models.User;
+
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 import java.util.Calendar;
+
+
+import java.io.File;
+import java.util.Calendar;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditInvitationUI extends AppCompatActivity {
 
     private EditText editInvTitle;
     private EditText editInvDesc;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    private StorageReference mStorage = FirebaseStorage.getInstance().getReference();
+
     private String userID = mAuth.getCurrentUser().getUid();
     private Invitation invitation = new Invitation();
     private String invitationID;
@@ -53,6 +82,7 @@ public class EditInvitationUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_invitation_ui);
+
 
         editInvTitle = findViewById(R.id.editTitle);
         editInvDesc = findViewById(R.id.editDesc);
@@ -121,9 +151,11 @@ public class EditInvitationUI extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 updateInvitation();
+
                 Intent intent = new Intent(getApplicationContext(), IndividualUserInvitationUI.class);
                 intent.putExtra("invitationID", invitation.getInvitationID());
                 startActivity(intent);
+
             }
         });
 
@@ -147,8 +179,9 @@ public class EditInvitationUI extends AppCompatActivity {
                 jsonBody.put("Title", editInvTitle.getHint());
             }
             else{jsonBody.put("Title", editInvTitle.getText());}
-
+          
             if (!editInvCategory.getSelectedItem().toString().matches("Choose your invitation category")) {
+
                 jsonBody.put("Category", editInvCategory.getSelectedItem().toString());
             }
             if (editInvDesc.getText().toString().matches("")) {
@@ -198,8 +231,10 @@ public class EditInvitationUI extends AppCompatActivity {
                             invitation.setDate(response.getString("Date"));
                             editInvTitle.setHint(invitation.getTitle());
                             editInvDesc.setHint(invitation.getDesc());
+
                             editInvTime.setText(invitation.getStartTime());
                             editInvDate.setText(invitation.getDate());
+
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
@@ -211,5 +246,7 @@ public class EditInvitationUI extends AppCompatActivity {
                     }
                 });
         AppController.getInstance(this).addToRequestQueue(getInvitationRequest);
+
     }
+
 }

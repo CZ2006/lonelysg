@@ -33,6 +33,8 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.pusher.pushnotifications.PushNotifications;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -223,6 +225,8 @@ public class CreateInvitationUI extends AppCompatActivity {
                     addInvitation();
                     Toast.makeText(CreateInvitationUI.this, "New Invitation Created", Toast.LENGTH_SHORT).show();
                 }
+                String requestInterest = currentUser+"request";
+                PushNotifications.addDeviceInterest(requestInterest);
             }
         });
 
