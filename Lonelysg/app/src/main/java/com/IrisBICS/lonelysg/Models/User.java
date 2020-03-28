@@ -1,5 +1,9 @@
 package com.IrisBICS.lonelysg.Models;
 
+import android.net.Uri;
+
+import java.net.URI;
+
 public class User {
     private String username;
     private String gender;
@@ -9,6 +13,7 @@ public class User {
     private String userID;
     private String password;
     private String email;
+    private Uri profilePic;
 
 //    public User(String username, String gender, String age, String occupation, String interests) {
 //        this.username = username;
@@ -67,4 +72,8 @@ public class User {
     public String getEmail() { return email; }
 
     public void setEmail(String email) { this.email = email; }
+
+    public Uri getProfilePic() { return profilePic; }
+
+    public void setProfilePic(Uri profilePic) { this.profilePic = profilePic; }
 }

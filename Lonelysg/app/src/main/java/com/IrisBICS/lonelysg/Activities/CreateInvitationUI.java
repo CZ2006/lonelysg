@@ -24,6 +24,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.pusher.pushnotifications.PushNotifications;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -154,6 +155,8 @@ public class CreateInvitationUI extends AppCompatActivity {
                     addInvitation(title, desc);
                     Toast.makeText(CreateInvitationUI.this, "New Invitation Created", Toast.LENGTH_SHORT).show();
                 }
+                String requestInterest = currentUser+"request";
+                PushNotifications.addDeviceInterest(requestInterest);
             }
         });
 

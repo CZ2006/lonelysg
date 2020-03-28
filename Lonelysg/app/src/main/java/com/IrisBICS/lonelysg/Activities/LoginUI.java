@@ -23,11 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pusher.pushnotifications.PushNotificationReceivedListener;
 import com.pusher.pushnotifications.PushNotifications;
-
-
-import com.google.firebase.messaging.RemoteMessage;
-import com.pusher.pushnotifications.PushNotificationReceivedListener;
-import com.pusher.pushnotifications.PushNotifications;
+import com.pusher.pushnotifications.api.PushNotificationService;
 
 public class LoginUI extends AppCompatActivity {
     RelativeLayout loginStuff, passwordSignUpBar;
@@ -149,9 +145,22 @@ public class LoginUI extends AppCompatActivity {
             }
         });
 
-        PushNotifications.start(getApplicationContext(), "211e38a9-4bc8-40c5-958a-4a7f9aa91547");
-        PushNotifications.addDeviceInterest("debug-apple");
-
+//        PushNotifications.start(getApplicationContext(), "211e38a9-4bc8-40c5-958a-4a7f9aa91547");
+//        PushNotifications.addDeviceInterest("debug-apple");
+//        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
+//            @Override
+//            public void onMessageReceived(RemoteMessage remoteMessage) {
+//                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
+//                if (messagePayload == null) {
+//                    // Message payload was not set for this notification
+//                    Log.i("MyActivity", "Payload was missing");
+//                } else {
+//                    Log.i("MyActivity", messagePayload);
+//                    Toast.makeText(LoginUI.this, "You received a request", Toast.LENGTH_SHORT).show();
+//                    // Now update the UI based on your message payload!
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -159,23 +168,23 @@ public class LoginUI extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
-            @Override
-            public void onMessageReceived(RemoteMessage remoteMessage) {
-                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
-                if (messagePayload == null) {
-                    // Message payload was not set for this notification
-                    Log.i("MyActivity", "Payload was missing");
-                } else {
-                    Log.i("MyActivity", messagePayload);
-                    Toast.makeText(LoginUI.this, "You received a request", Toast.LENGTH_SHORT).show();
-                    // Now update the UI based on your message payload!
-                }
-            }
-        });
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
+//            @Override
+//            public void onMessageReceived(RemoteMessage remoteMessage) {
+//                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
+//                if (messagePayload == null) {
+//                    // Message payload was not set for this notification
+//                    Log.i("MyActivity", "Payload was missing");
+//                } else {
+//                    Log.i("MyActivity", messagePayload);
+//                    Toast.makeText(LoginUI.this, "You received a request", Toast.LENGTH_SHORT).show();
+//                    // Now update the UI based on your message payload!
+//                }
+//            }
+//        });
+//    }
 
 }

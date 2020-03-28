@@ -1,6 +1,8 @@
 package com.IrisBICS.lonelysg.Activities;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -11,6 +13,9 @@ import com.IrisBICS.lonelysg.Fragments.ChatUI;
 import com.IrisBICS.lonelysg.Fragments.DiscoveryPageUI;
 import com.IrisBICS.lonelysg.R;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+import com.google.firebase.messaging.RemoteMessage;
+import com.pusher.pushnotifications.PushNotificationReceivedListener;
+import com.pusher.pushnotifications.PushNotifications;
 
 public class NavigationBarUI extends AppCompatActivity {
     MeowBottomNavigation meo;
@@ -62,6 +67,22 @@ public class NavigationBarUI extends AppCompatActivity {
             }
         });
 
+        PushNotifications.start(getApplicationContext(), "211e38a9-4bc8-40c5-958a-4a7f9aa91547");
+        PushNotifications.addDeviceInterest("debug-apple");
+        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
+            @Override
+            public void onMessageReceived(RemoteMessage remoteMessage) {
+                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
+                if (messagePayload == null) {
+                    // Message payload was not set for this notification
+                    Log.i("MyActivity", "Payload was missing");
+                } else {
+                    Log.i("MyActivity", messagePayload);
+                    Toast.makeText(NavigationBarUI.this, "You received a request", Toast.LENGTH_SHORT).show();
+                    // Now update the UI based on your message payload!
+                }
+            }
+        });
 
     }
 
