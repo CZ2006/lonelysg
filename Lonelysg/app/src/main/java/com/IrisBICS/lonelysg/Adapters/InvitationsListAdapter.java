@@ -42,7 +42,7 @@ public class InvitationsListAdapter extends ArrayAdapter<Invitation> {
             }
             else viewHolder = (ViewHolder) r.getTag();
             viewHolder.invitationTitle.setText(invitationsList.get(position).getTitle());
-            viewHolder.invitationDateTime.setText(invitationsList.get(position).getDate()+" " + invitationsList.get(position).getStartTime());
+            viewHolder.invitationDateTime.setText(invitationsList.get(position).getDate()+" " + invitationsList.get(position).getStartTime()+" - " + invitationsList.get(position).getEndTime());
 //            viewHolder.userImage.setImageResource(userImage[position]);
             return r;
         }

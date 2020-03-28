@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,17 +17,25 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.IrisBICS.lonelysg.AppController;
+import com.IrisBICS.lonelysg.Models.Invitation;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.Models.Invitation;
 import com.IrisBICS.lonelysg.Models.User;
+
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -35,20 +44,27 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+
+import java.util.Calendar;
+
 
 import java.io.File;
 import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EditInvitationUI extends Activity {
+public class EditInvitationUI extends AppCompatActivity {
 
     private EditText editInvTitle;
     private EditText editInvDesc;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
     private StorageReference mStorage = FirebaseStorage.getInstance().getReference();
+
     private String userID = mAuth.getCurrentUser().getUid();
     private Invitation invitation = new Invitation();
     private String invitationID;
@@ -65,7 +81,8 @@ public class EditInvitationUI extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.editprofile);
+        setContentView(R.layout.activity_edit_invitation_ui);
+
 
         editInvTitle = findViewById(R.id.editTitle);
         editInvDesc = findViewById(R.id.editDesc);
@@ -81,8 +98,8 @@ public class EditInvitationUI extends Activity {
         arrayAdapter = new ArrayAdapter<String>(EditInvitationUI.this, android.R.layout.simple_list_item_1, categories);
         editInvCategory.setAdapter(arrayAdapter);
 
-        confirmButton = (Button)findViewById(R.id.editProfileConfirmButton);
-        cancelButton = (Button)findViewById(R.id.editProfileCancelButton);
+        confirmButton = (Button)findViewById(R.id.confirmButton);
+        cancelButton = (Button)findViewById(R.id.cancelEditButton);
 
         // For date selection
         editInvDate.setOnClickListener(new View.OnClickListener() {
@@ -134,8 +151,11 @@ public class EditInvitationUI extends Activity {
             @Override
             public void onClick(View view) {
                 updateInvitation();
-                Intent i = new Intent (EditInvitationUI.this, UserInvitationsUI.class);
-                startActivity(i);
+
+                Intent intent = new Intent(getApplicationContext(), IndividualUserInvitationUI.class);
+                intent.putExtra("invitationID", invitation.getInvitationID());
+                startActivity(intent);
+
             }
         });
 
@@ -143,7 +163,10 @@ public class EditInvitationUI extends Activity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(EditInvitationUI.this, "Process Cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditInvitationUI.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), IndividualUserInvitationUI.class);
+                intent.putExtra("invitationID", invitation.getInvitationID());
+                startActivity(intent);
             }
         });
     }
@@ -156,8 +179,9 @@ public class EditInvitationUI extends Activity {
                 jsonBody.put("Title", editInvTitle.getHint());
             }
             else{jsonBody.put("Title", editInvTitle.getText());}
+          
+            if (!editInvCategory.getSelectedItem().toString().matches("Choose your invitation category")) {
 
-            if (!editInvCategory.getSelectedItem().toString().matches("Select Date")) {
                 jsonBody.put("Category", editInvCategory.getSelectedItem().toString());
             }
             if (editInvDesc.getText().toString().matches("")) {
@@ -165,11 +189,11 @@ public class EditInvitationUI extends Activity {
             }
             else{jsonBody.put("Description", editInvDesc.getText());}
             if (editInvTime.getText().toString().matches("Select Time")) {
-                jsonBody.put("Start Time", editInvTime.getHint());
+                jsonBody.put("Start Time", editInvTime.getText());
             }
             else{jsonBody.put("Start Time", editInvTime.getText());}
             if (editInvDate.getText().toString().matches("Select Date")) {
-                jsonBody.put("Date", editInvDate.getHint());
+                jsonBody.put("Date", editInvDate.getText());
             }
             else{jsonBody.put("Date", editInvDate.getText());}
             String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateInvitation/"+invitationID;
@@ -207,8 +231,10 @@ public class EditInvitationUI extends Activity {
                             invitation.setDate(response.getString("Date"));
                             editInvTitle.setHint(invitation.getTitle());
                             editInvDesc.setHint(invitation.getDesc());
-                            editInvTime.setHint(invitation.getStartTime());
-                            editInvDate.setHint(invitation.getDate());
+
+                            editInvTime.setText(invitation.getStartTime());
+                            editInvDate.setText(invitation.getDate());
+
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
@@ -220,5 +246,7 @@ public class EditInvitationUI extends Activity {
                     }
                 });
         AppController.getInstance(this).addToRequestQueue(getInvitationRequest);
-    };
+
+    }
+
 }

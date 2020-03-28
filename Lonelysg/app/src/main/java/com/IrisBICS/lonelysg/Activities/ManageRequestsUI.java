@@ -3,15 +3,15 @@ package com.IrisBICS.lonelysg.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.IrisBICS.lonelysg.R;
 
 public class ManageRequestsUI extends AppCompatActivity {
 
-    private Button viewPending, viewReceived;
+    private CardView viewPending, viewReceived;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -6,14 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.IrisBICS.lonelysg.Activities.ManageInvitationsUI;
+import com.IrisBICS.lonelysg.Activities.ManageRequestsUI;
+import com.IrisBICS.lonelysg.R;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-
-import com.IrisBICS.lonelysg.Activities.ManageInvitationsUI;
-import com.IrisBICS.lonelysg.Activities.ManageRequestsUI;
-import com.IrisBICS.lonelysg.R;
 
 public class ManageActivitiesUI extends Fragment {
 

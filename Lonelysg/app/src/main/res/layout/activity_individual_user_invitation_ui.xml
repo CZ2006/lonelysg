@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.IndividualInvitationUI"
+    tools:context=".Activities.IndividualUserInvitationUI"
     android:background="@color/backgroundcolor">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -22,17 +22,8 @@
             app:contentScrim="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp">
-            //android:background="@drawable/map_sample">
-
-            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.IrisBICS.lonelysg.Activities.IndividualInvitationUI" />
-
+            app:expandedTitleMarginEnd="64dp"
+            android:background="@drawable/map_sample">
 
             <ImageButton
                 android:id="@+id/reportInvitation"
@@ -97,7 +88,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="270dp"
         android:layout_below="@+id/imageUser"
         android:layout_marginTop="5dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -109,7 +100,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:id="@+id/invitationDetails"
                 android:orientation="vertical">
 
@@ -134,71 +124,7 @@
                         android:id="@+id/activityDesc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="18sp"
-                        android:textColor="#000000"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="5dp"
-                        android:background="#D3D3D3"/>
-                </LinearLayout>
-
-                // For Name
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="User Information"
-                        android:fontFamily="sans-serif-medium"
-                        android:textColor="@color/darkblue"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:id="@+id/hostInfo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="18sp"
-                        android:textColor="#000000"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="5dp"
-                        android:background="#D3D3D3"/>
-                </LinearLayout>
-
-                // For interests
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="User Interests"
-                        android:fontFamily="sans-serif-medium"
-                        android:textColor="@color/darkblue"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:id="@+id/hostInterests"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
+                        android:text="Just a normal lunch where we can talk about politics and how important social distancing is"
                         android:textSize="18sp"
                         android:textColor="#000000"/>
 
@@ -215,35 +141,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/invitationDetails"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:layout_centerHorizontal="true"
                 android:orientation="horizontal">
 
                 <Button
-                    android:layout_width="140dp"
+                    android:layout_width="150dp"
                     android:layout_height="35dp"
                     android:layout_marginRight="20dp"
-                    android:id="@+id/backButton"
-                    android:text="BACK "
+                    android:id="@+id/deleteInvitation"
+                    android:text="DELETE "
                     android:textColor="@color/white"
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:drawableRight="@drawable/cancel_icon"
-                    android:paddingRight="29dp"
+                    android:paddingRight="21dp"
                     android:background="@drawable/borders3"/>
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="35dp"
-                    android:id="@+id/acceptInvitation"
-                    android:text="SEND REQUEST "
+                    android:id="@+id/editInvitation"
+                    android:text="EDIT "
                     android:textColor="@color/white"
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:drawableRight="@drawable/chat_white"
-                    android:paddingRight="15dp"
-                    android:paddingLeft="15dp"
+                    android:paddingRight="34dp"
                     android:background="@drawable/borders3"
 
                     />

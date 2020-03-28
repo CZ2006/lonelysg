@@ -14,10 +14,10 @@ router.get("/getMessages/:user1/:user2", (req,res)=>{
         console.log(messages); //View response value in the command line
         var messagesArray = [];
         for (var i in messages){
-            if ((messages[i].receiver==(user2))&(messages[i].sender==(user1))){
+            if ((messages[i].Receiver==(user2))&(messages[i].Sender==(user1))){
                 messagesArray.push(messages[i]);
             }
-            else if ((messages[i].sender==(user2))&(messages[i].receiver==(user1))){
+            else if ((messages[i].Sender==(user2))&(messages[i].Receiver==(user1))){
                 messagesArray.push(messages[i]);
             }
         }
@@ -25,41 +25,40 @@ router.get("/getMessages/:user1/:user2", (req,res)=>{
     })
 })
 
-router.get("/getChatUsersList/:email", (req,res)=>{ 
+router.get("/getChatUsersList/:userID", (req,res)=>{ 
     //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getChatUsersList after running firebase serve
     
     let database = req.app.get("database")
     var ref = database.ref('Messages');
-    var user = req.params.email;
-    console.log(user);
+    var user = req.params.userID;
     
     ref.once("value", function(snapshot){
         var messages = snapshot.val();
         var chatUsersArray = [];
         for (var i in messages){
             var exists = 0;
-            if (messages[i].sender == user){
+            if (messages[i].Sender == user){
                 for(var j in chatUsersArray){
                     exists = 0;
-                    if (messages[i].receiver==(chatUsersArray[j])){
+                    if (messages[i].Receiver==(chatUsersArray[j])){
                         exists = 1;
                         break;
                     }
                 }
                 if (exists==0){
-                    chatUsersArray.push(messages[i].receiver);
+                    chatUsersArray.push(messages[i].Receiver);
                 }
             }
-            if (messages[i].receiver==user){
+            if (messages[i].Receiver==user){
                 exists = 0;
                 for(var k in chatUsersArray){
-                    if (messages[i].sender==(chatUsersArray[k])){
+                    if (messages[i].Sender==(chatUsersArray[k])){
                         exists = 1;
                         break;
                     }
                 }
                 if (exists==0){
-                    chatUsersArray.push(messages[i].sender);
+                    chatUsersArray.push(messages[i].Sender);
                 }
             }
         }
@@ -77,7 +76,7 @@ router.post("/sendMessage", (req, res) => { //Sample function adding new user to
     
     msgRef.once("value", function(snapshot){
         var messages = snapshot.val();
-        var newID = 1;
+        var newID = 0;
         for (var i in messages){
             newID++;
         }
@@ -97,17 +96,18 @@ router.get("/getInvitation/:invitationID", (req,res) => {
     })
 })
 
-router.get("/getInvitations/:category", (req,res)=>{ 
+router.get("/getInvitations/:category/:user", (req,res)=>{ 
     //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getInvitations after running firebase serve
     let database = req.app.get("database")
     var ref = database.ref('Invitations');
     var category = req.params.category;
+    var user = req.params.user;
     
     ref.once("value", function(snapshot){
         var invitations = snapshot.val();
         var invitationsArray = [];
         for (var i in invitations){
-            if ((invitations[i].Category==(category))){
+            if ((invitations[i].Category==(category))&(invitations[i].Host!=user)){
                 invitationsArray.push(invitations[i]);
             }
         }
@@ -140,7 +140,7 @@ router.post("/addInvitation", (req, res) => {
 
     ref.once("value", function(snapshot){
         var invitations = snapshot.val();
-        var newID = 1;
+        var newID = 0;
         for (var i in invitations){
             newID++;
         }
@@ -150,6 +150,16 @@ router.post("/addInvitation", (req, res) => {
 
         res.end("Invitation added."); //Returned in postman
     })
+
+})
+
+router.delete("/deleteInvitation/:InvitationID", (req, res) => {
+
+    let database = req.app.get("database")
+    let invToDel = database.ref('Invitations/Invitation' + req.param('InvitationID'))
+    invToDel.set({})
+
+    res.end("Invitation deleted.")
 
 })
 
@@ -195,10 +205,10 @@ router.post("/sendRequest", (req, res) => {
     let ref = database.ref("Requests")
 
     ref.once("value", function(snapshot){
-		var newID = 1;
-        var requests = snapshot.val();  
+		var newID = 0;
+        var requests = snapshot.val(); 
         for (var i in requests){
-			newID++;
+            newID++;
         }
         const newReq = ref.child("Request" + newID) //Requires information sent in JSON format
         req.body.RequestID = newID; 

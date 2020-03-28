@@ -12,7 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB_qsP8AOP_P0MdlPz-48TDaJYjTP3vbjo" />
+
         <activity android:name=".Activities.PendingRequestsUI"></activity>
+        <activity android:name=".Activities.EditInvitationUI"/>
+        <activity android:name=".Activities.IndividualUserInvitationUI" />
         <activity android:name=".Activities.ReceivedRequestsUI" />
         <activity android:name=".Activities.ManageRequestsUI" />
         <activity android:name=".Activities.UserInvitationsUI" />
@@ -25,13 +34,13 @@
         <activity android:name=".Activities.InvitationsUI" />
         <activity android:name=".Activities.SignUpPage" />
         <activity android:name=".Activities.LoginUI">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service android:name=".PusherMessagingService">
             <intent-filter android:priority="1">
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

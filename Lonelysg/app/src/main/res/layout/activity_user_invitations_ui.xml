@@ -10,28 +10,35 @@
         android:id="@+id/ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fcfcfc"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/splash_screen">
 
         <TextView
             android:id="@+id/userInvitations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:text="My Invitations"
+            android:gravity="center"
+            android:text="MY INVITATIONS"
+            android:textStyle="bold"
+            android:textColor="@color/white"
             android:textSize="36sp"/>
+
+        <View
+            android:layout_width="350dp"
+            android:layout_height="1dp"
+            android:layout_margin="5dp"
+            android:background="@color/white"/>
 
         <ListView
             android:id="@+id/userInvitationsListView"
-            android:layout_width="282dp"
-            android:layout_height="425dp"
+            android:layout_width="340dp"
+            android:layout_height="475dp"
             android:layout_marginTop="20dp" />
 
     </LinearLayout>

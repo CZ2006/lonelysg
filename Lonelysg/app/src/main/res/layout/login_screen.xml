@@ -61,7 +61,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="5dp"
-                        android:text="USERNAME"
+                        android:text="EMAIL"
                         android:textColor="@color/backgroundcolor"
                         android:textSize="20sp" />
 

@@ -13,11 +13,13 @@ import com.IrisBICS.lonelysg.Adapters.RequestListAdapter;
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Request;
+import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
 import com.IrisBICS.lonelysg.RequestCancelDialog;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -29,10 +31,11 @@ import java.util.ArrayList;
 public class PendingRequestsUI extends AppCompatActivity implements RequestCancelDialog.DialogListener{
 
     private ArrayList<Request> requests;
+    private ArrayList<User> hosts;
     private ListView pendingRequestsList;
     private int clickedPos = -1;
 
-    String currentUser = FirebaseAuthHelper.getCurrentUser();
+    String currentUserID = FirebaseAuthHelper.getCurrentUserID();
     RequestListAdapter requestListAdapter;
 
     @Override
@@ -41,9 +44,10 @@ public class PendingRequestsUI extends AppCompatActivity implements RequestCance
         setContentView(R.layout.activity_pending_requests_ui);
 
         requests = new ArrayList<>();
+        hosts = new ArrayList<>();
 
         pendingRequestsList = findViewById(R.id.pendingRequestsListView);
-        requestListAdapter = new RequestListAdapter(this, requests,"pending");
+        requestListAdapter = new RequestListAdapter(this, requests, hosts,"pending");
         pendingRequestsList.setAdapter(requestListAdapter);
 
         pendingRequestsList.setClickable(true);
@@ -59,11 +63,15 @@ public class PendingRequestsUI extends AppCompatActivity implements RequestCance
     }
 
     private void getPendingRequests() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getPendingRequests/"+currentUser;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getPendingRequests/"+currentUserID;
 
         final JsonArrayRequest getPendingRequestsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    User user = new User();
+                    hosts.add(user);
+                }
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
@@ -73,6 +81,7 @@ public class PendingRequestsUI extends AppCompatActivity implements RequestCance
                         request.setParticipant(jsonObject.getString("Participant"));
                         request.setRequestID(jsonObject.getString("RequestID"));
                         requests.add(request);
+                        getHost(request.getHost(),i);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -120,4 +129,34 @@ public class PendingRequestsUI extends AppCompatActivity implements RequestCance
             deleteRequest(requests.get(clickedPos).getRequestID());
         }
     }
+
+    private void getHost(String userID, final int i) {
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
+        JsonObjectRequest getUserProfileRequest = new JsonObjectRequest
+                (com.android.volley.Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            User host = new User();
+                            host.setUsername(response.getString("username"));
+//                            host.setGender(response.getString("gender"));
+//                            host.setAge(response.getString("age"));
+//                            host.setOccupation(response.getString("occupation"));
+//                            host.setInterests(response.getString("interests"));
+                            hosts.set(i, host);
+                        } catch (JSONException ex) {
+                            ex.printStackTrace();
+                        }
+                        requestListAdapter.notifyDataSetChanged();
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", error.toString());
+                    }
+                });
+        AppController.getInstance(this).addToRequestQueue(getUserProfileRequest);
+    }
+
 }

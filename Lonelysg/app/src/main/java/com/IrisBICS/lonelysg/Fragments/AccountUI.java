@@ -131,7 +131,7 @@ public class AccountUI extends Fragment {
                     }
                 });
         AppController.getInstance(this.getContext()).addToRequestQueue(getUserProfileRequest);
-    };
+    }
 
     private void setUserProfile(){
         profileName.setText(user.getUsername());

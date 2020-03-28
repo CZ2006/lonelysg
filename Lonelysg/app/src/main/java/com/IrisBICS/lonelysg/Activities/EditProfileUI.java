@@ -17,14 +17,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.IrisBICS.lonelysg.AppController;
+
+import com.IrisBICS.lonelysg.FirebaseAuthHelper;
+
 import com.IrisBICS.lonelysg.Fragments.AccountUI;
 import com.IrisBICS.lonelysg.Models.Upload;
 import com.IrisBICS.lonelysg.Models.User;
+
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -39,6 +44,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,6 +56,7 @@ public class EditProfileUI extends Activity {
 
     private CircleImageView editProfilePic;
     private Uri imageUri;
+
     private Uri downloadProfileUri;
     private EditText editName;
     private EditText editAge;
@@ -57,6 +64,7 @@ public class EditProfileUI extends Activity {
     private EditText editInterest;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private StorageReference mStorage = FirebaseStorage.getInstance().getReference();
+
     private static final int PICK_IMAGE = 1;
     private String userID = mAuth.getCurrentUser().getUid();
     private Task<Uri> downloadUrl;
@@ -64,6 +72,8 @@ public class EditProfileUI extends Activity {
     private User user = new User();
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
+
+    String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
     // For dropdown box
     Spinner dropdownbox;
@@ -118,11 +128,13 @@ public class EditProfileUI extends Activity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(EditProfileUI.this, "Process Cancelled", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
 
     private void updateProfile() {
+
         if (imageUri!=null){
             final StorageReference fileRef = mStorageRef.child(userID+ "." + getFileExtension(imageUri));
 
@@ -156,6 +168,7 @@ public class EditProfileUI extends Activity {
         }
         try {
             JSONObject jsonBody = new JSONObject();
+
             if (editName.getText().toString().matches("")) {
                 jsonBody.put("username", editName.getHint());
             }
@@ -178,6 +191,7 @@ public class EditProfileUI extends Activity {
             else{jsonBody.put("interests", editInterest.getText());}
             jsonBody.put("image",downloadProfileUri);
             String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateUser/"+userID;
+
             JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
                     new Response.Listener<JSONObject>() {
                         @Override

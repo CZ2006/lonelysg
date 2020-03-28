@@ -1,7 +1,10 @@
 package com.IrisBICS.lonelysg.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +30,7 @@ public class UserInvitationsUI extends AppCompatActivity {
 
     private ArrayList<Invitation> userInvitations;
     InvitationsListAdapter invitationsListAdapter;
-    String currentUser = FirebaseAuthHelper.getCurrentUser();
+    String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +44,20 @@ public class UserInvitationsUI extends AppCompatActivity {
         invitationsListAdapter = new InvitationsListAdapter(this, userInvitations);
         userInvitationsList.setAdapter(invitationsListAdapter);
 
+        userInvitationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                Intent intent = new Intent(getApplicationContext(), IndividualUserInvitationUI.class);
+                intent.putExtra("invitationID", userInvitations.get(i).getInvitationID());
+                startActivity(intent);
+            }
+        });
+
         getUserInvitations();
     }
 
     private void getUserInvitations() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getUserInvitations/"+currentUser;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getUserInvitations/"+currentUserID;
 
         final JsonArrayRequest getUserInvitationsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -56,10 +68,12 @@ public class UserInvitationsUI extends AppCompatActivity {
                         Invitation invitation = new Invitation();
                         invitation.setTitle(jsonObject.getString("Title"));
                         invitation.setStartTime(jsonObject.getString("Start Time"));
+                        invitation.setEndTime(jsonObject.getString("End Time"));
                         invitation.setHost(jsonObject.getString("Host"));
                         invitation.setDesc(jsonObject.getString("Description"));
                         invitation.setDate(jsonObject.getString("Date"));
                         invitation.setCategory(jsonObject.getString("Category"));
+                        invitation.setInvitationID(jsonObject.getString("InvitationID"));
                         userInvitations.add(invitation);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -75,4 +89,5 @@ public class UserInvitationsUI extends AppCompatActivity {
         });
         AppController.getInstance(this).addToRequestQueue(getUserInvitationsRequest);
     }
+
 }

@@ -13,6 +13,7 @@ import com.IrisBICS.lonelysg.Adapters.RequestListAdapter;
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Request;
+import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
 import com.IrisBICS.lonelysg.RequestActionDialog;
 import com.android.volley.Response;
@@ -31,10 +32,11 @@ import java.util.ArrayList;
 public class ReceivedRequestsUI extends AppCompatActivity implements RequestActionDialog.DialogListener{
 
     private ArrayList<Request> requests;
+    private ArrayList<User> participants;
     private ListView receivedRequestsList;
     private int clickedPos = -1;
 
-    String currentUser = FirebaseAuthHelper.getCurrentUser();
+    String currentUserID = FirebaseAuthHelper.getCurrentUserID();
     RequestListAdapter requestListAdapter;
 
     @Override
@@ -43,9 +45,10 @@ public class ReceivedRequestsUI extends AppCompatActivity implements RequestActi
         setContentView(R.layout.activity_received_requests_ui);
 
         requests = new ArrayList<>();
+        participants = new ArrayList<>();
 
         receivedRequestsList = findViewById(R.id.receivedRequestsListView);
-        requestListAdapter = new RequestListAdapter(this, requests,"received");
+        requestListAdapter = new RequestListAdapter(this, requests, participants,"received");
         receivedRequestsList.setAdapter(requestListAdapter);
 
         receivedRequestsList.setClickable(true);
@@ -61,11 +64,15 @@ public class ReceivedRequestsUI extends AppCompatActivity implements RequestActi
     }
 
     private void getReceivedRequests() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getReceivedRequests/"+currentUser;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getReceivedRequests/"+currentUserID;
 
         final JsonArrayRequest getReceivedRequestsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    User user = new User();
+                    participants.add(user);
+                }
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
@@ -75,6 +82,7 @@ public class ReceivedRequestsUI extends AppCompatActivity implements RequestActi
                         request.setParticipant(jsonObject.getString("Participant"));
                         request.setRequestID(jsonObject.getString("RequestID"));
                         requests.add(request);
+                        getParticipant(request.getParticipant(),i);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -116,9 +124,9 @@ public class ReceivedRequestsUI extends AppCompatActivity implements RequestActi
             String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/sendMessage";
             JSONObject jsonBody = new JSONObject();
 
-            jsonBody.put("message", "Hello! I have accepted your request!");
-            jsonBody.put("receiver", requests.get(clickedPos).getParticipant());
-            jsonBody.put("sender", currentUser);
+            jsonBody.put("Message", "Hello! I have accepted your request!");
+            jsonBody.put("Receiver", requests.get(clickedPos).getParticipant());
+            jsonBody.put("Sender", currentUserID);
 
             JsonObjectRequest sendAcceptRequestMessageRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
@@ -156,6 +164,35 @@ public class ReceivedRequestsUI extends AppCompatActivity implements RequestActi
             deleteRequest(requests.get(clickedPos).getRequestID());
             //insert xq send notif
         }
+    }
+
+    private void getParticipant(String userID, final int i) {
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
+        JsonObjectRequest getUserProfileRequest = new JsonObjectRequest
+                (com.android.volley.Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            User participant = new User();
+                            participant.setUsername(response.getString("username"));
+//                            host.setGender(response.getString("gender"));
+//                            host.setAge(response.getString("age"));
+//                            host.setOccupation(response.getString("occupation"));
+//                            host.setInterests(response.getString("interests"));
+                            participants.set(i, participant);
+                        } catch (JSONException ex) {
+                            ex.printStackTrace();
+                        }
+                        requestListAdapter.notifyDataSetChanged();
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", error.toString());
+                    }
+                });
+        AppController.getInstance(this).addToRequestQueue(getUserProfileRequest);
     }
 
 }
