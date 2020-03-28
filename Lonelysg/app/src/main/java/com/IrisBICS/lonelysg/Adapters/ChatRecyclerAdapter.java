@@ -18,12 +18,11 @@ import java.util.List;
 public class ChatRecyclerAdapter extends RecyclerView.Adapter<ChatRecyclerAdapter.MessageViewHolder>{
 
     private List<Message> messageList;
-    private ItemClickListener mClickListener;
     private LayoutInflater mInflater;
 
     public static final int SENDER_MESSAGE = 1;
     public static final int RECEIVER_MESSAGE = 0;
-    private String currentUser;
+    String currentUserID = FirebaseAuthHelper.getCurrentUserID();;
 
     public ChatRecyclerAdapter(Context context, List<Message> messageList) {
         this.mInflater = LayoutInflater.from(context);
@@ -55,49 +54,25 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<ChatRecyclerAdapte
     }
 
     public int getItemViewType(int position){
-        currentUser = FirebaseAuthHelper.getCurrentUser();
-        if (messageList.get(position).getSender().equals(currentUser)){
+        if (messageList.get(position).getSender().equals(currentUserID)){
             return SENDER_MESSAGE;
         }
         else return RECEIVER_MESSAGE;
     }
 
-    public class MessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MessageViewHolder extends RecyclerView.ViewHolder{
 
-        TextView user;
         TextView message;
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
-            user = itemView.findViewById(R.id.user);
             message = itemView.findViewById(R.id.message);
-            itemView.setOnClickListener(this);
         }
 
         public void bind(Message m){
             message.setText(m.getMessage());
-            user.setText(m.getSender());
         }
 
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-        }
-    }
-
-    // convenience method for getting Message at click position
-    Message getMessage(int id) {
-        return messageList.get(id);
-    }
-
-    // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
-    }
-
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener{
-        void onItemClick(View view, int position);
     }
 
 }

@@ -22,7 +22,6 @@
         <activity android:name=".Activities.PendingRequestsUI"></activity>
         <activity android:name=".Activities.EditInvitationUI"/>
         <activity android:name=".Activities.IndividualUserInvitationUI" />
-        <activity android:name=".Activities.PendingRequestsUI" />
         <activity android:name=".Activities.ReceivedRequestsUI" />
         <activity android:name=".Activities.ManageRequestsUI" />
         <activity android:name=".Activities.UserInvitationsUI" />

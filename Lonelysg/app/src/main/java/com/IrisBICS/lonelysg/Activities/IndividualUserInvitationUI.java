@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.IrisBICS.lonelysg.AppController;
-import com.IrisBICS.lonelysg.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Invitation;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
@@ -30,7 +29,6 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
 
     private Invitation invitation;
     private String invitationID;
-    String currentUser = FirebaseAuthHelper.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +37,7 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
 
         Intent receivedIntent = getIntent();
         invitationID = receivedIntent.getStringExtra("invitationID");
-        invitation = new Invitation("","","","","","",invitationID);
+        invitation = new Invitation("","","","","","","",invitationID,"","","");
 
         activityDateTime = findViewById(R.id.activityDateTime);
         activityDesc = findViewById(R.id.activityDesc);
@@ -82,6 +80,7 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
                             invitation.setCategory(response.getString("Category"));
                             invitation.setTitle(response.getString("Title"));
                             invitation.setStartTime(response.getString("Start Time"));
+                            invitation.setEndTime(response.getString("End Time"));
                             invitation.setHost(response.getString("Host"));
                             invitation.setDesc(response.getString("Description"));
                             invitation.setDate(response.getString("Date"));
@@ -123,7 +122,7 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
 
     public void updateTextView(){
         System.out.println(invitation.getInvitationID());
-        activityDateTime.setText(invitation.getDate()+" "+invitation.getStartTime());
+        activityDateTime.setText(invitation.getDate()+" "+invitation.getStartTime()+" - " +invitation.getEndTime());
         activityTitle.setText(invitation.getTitle());
         activityDesc.setText(invitation.getDesc());
     }

@@ -8,9 +8,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Invitation;
+import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -27,37 +30,41 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 public class IndividualInvitationUI extends AppCompatActivity implements OnMapReadyCallback {
 
-    private Button acceptInvitation;
-    private TextView activityTitle, activityDateTime,activityDesc;
+    private Button acceptInvitation, backButton;
+    private TextView activityTitle, activityDateTime,activityDesc,hostInfo,hostInterests;
 
     private Invitation invitation;
     private String invitationID;
-    String currentUser = FirebaseAuthHelper.getCurrentUser();
+    String currentUserID = FirebaseAuthHelper.getCurrentUserID();
+    User host, participant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_individual_invitation_ui);
 
-        //MAP
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        host = new User();
+        participant = new User();
+
+//        //MAP
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(this);
 
         Intent receivedIntent = getIntent();
         invitationID = receivedIntent.getStringExtra("invitationID");
-        invitation = new Invitation("","","","","","",invitationID);
+        invitation = new Invitation("","","","","","","",invitationID,"","","");
 
         activityDateTime = findViewById(R.id.activityDateTime);
         activityDesc = findViewById(R.id.activityDesc);
         activityTitle = findViewById(R.id.activityTitle);
-        updateTextView();
+        hostInfo = findViewById(R.id.hostInfo);
+        hostInterests = findViewById(R.id.hostInterests);
 
         acceptInvitation = findViewById(R.id.acceptInvitation);
+        backButton = findViewById(R.id.backButton);
 
         // Click request button
         acceptInvitation.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +73,13 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
                 sendRequest();
 //                sendNotif();
                 Toast.makeText(IndividualInvitationUI.this, "Request Sent", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 finish();
             }
         });
@@ -85,10 +99,19 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
                             invitation.setCategory(response.getString("Category"));
                             invitation.setTitle(response.getString("Title"));
                             invitation.setStartTime(response.getString("Start Time"));
+                            invitation.setEndTime(response.getString("End Time"));
                             invitation.setHost(response.getString("Host"));
                             invitation.setDesc(response.getString("Description"));
                             invitation.setDate(response.getString("Date"));
+                            invitation.setLatitude(response.getString("Latitude"));
+                            invitation.setLongitude(response.getString("Longitude"));
+                            invitation.setLocationName(response.getString("Location"));
                             updateTextView();
+                            //MAP
+                            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                                    .findFragmentById(R.id.map);
+                            mapFragment.getMapAsync(IndividualInvitationUI.this);
+                            getHost(invitation.getHost());
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
@@ -109,7 +132,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
 
             jsonBody.put("Host", invitation.getHost());
             jsonBody.put("Invitation", invitation.getTitle());
-            jsonBody.put("Participant", currentUser);
+            jsonBody.put("Participant", currentUserID);
 
             JsonObjectRequest sendRequestRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
@@ -127,6 +150,82 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
             e.printStackTrace();
         }
     }
+
+    public void updateTextView(){
+        activityDateTime.setText(invitation.getDate()+" "+invitation.getStartTime()+" - " +invitation.getEndTime());
+        activityTitle.setText(invitation.getTitle());
+        activityDesc.setText(invitation.getDesc());
+    }
+
+    public void updateUserTextView(){
+        hostInfo.setText(host.getUsername()+", "+host.getGender()+", "+host.getOccupation());
+        hostInterests.setText(host.getInterests());
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng latLng = new LatLng(Double.parseDouble(invitation.getLatitude()),Double.parseDouble(invitation.getLongitude()));
+        googleMap.addMarker(new MarkerOptions().position(latLng)
+                .title(invitation.getLocationName()));
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,13));
+    }
+
+    private void getHost(String userID) {
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
+        JsonObjectRequest getUserProfileRequest = new JsonObjectRequest
+                (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        System.out.println("reached manager inside");
+                        try {
+                            host.setUsername(response.getString("username"));
+                            host.setGender(response.getString("gender"));
+                            host.setAge(response.getString("age"));
+                            host.setOccupation(response.getString("occupation"));
+                            host.setInterests(response.getString("interests"));
+                        } catch (JSONException ex) {
+                            ex.printStackTrace();
+                        }
+                       updateUserTextView();
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", error.toString());
+                    }
+                });
+        AppController.getInstance(this).addToRequestQueue(getUserProfileRequest);
+    }
+
+//    private void getParticipant(String userID) {
+//        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
+//        JsonObjectRequest getUserProfileRequest = new JsonObjectRequest
+//                (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        System.out.println("reached manager inside");
+//                        try {
+//                            participant.setUsername(response.getString("username"));
+////                            participant.setGender(response.getString("gender"));
+////                            participant.setAge(response.getString("age"));
+////                            participant.setOccupation(response.getString("occupation"));
+////                            participant.setInterests(response.getString("interests"));
+//                        } catch (JSONException ex) {
+//                            ex.printStackTrace();
+//                        }
+////                        arrayAdapter.notifyDataSetChanged();
+//                    }
+//                }, new Response.ErrorListener() {
+//
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.e("Volley", error.toString());
+//                    }
+//                });
+//        AppController.getInstance(this).addToRequestQueue(getUserProfileRequest);
+//    }
 
     private void sendNotif(){
         String url ="https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendNotif";
@@ -146,26 +245,5 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         AppController.getInstance(this).addToRequestQueue(sendNotifRequest);
     }
 
-    public void updateTextView(){
-        System.out.println(invitation.getInvitationID());
-        activityDateTime.setText(invitation.getDate()+" "+invitation.getStartTime());
-        activityTitle.setText(invitation.getTitle());
-        activityDesc.setText(invitation.getDesc());
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        //LatLng latLng = invitation.getPlaceLatLng();
-        //googleMap.addMarker(new MarkerOptions().position(latLng)
-        //        .title(invitation.getPlaceName()));
-
-        //below 3 lines are to be deleted and replaced by above once database function is added
-        LatLng latLng = new LatLng(1.3483, 103.6831);
-        googleMap.addMarker(new MarkerOptions().position(latLng)
-                .title("Location Marker"));
-
-
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,13));
-    }
 
 }

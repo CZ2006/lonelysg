@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.IrisBICS.lonelysg.Adapters.InvitationsListAdapter;
 import com.IrisBICS.lonelysg.AppController;
+import com.IrisBICS.lonelysg.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Invitation;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Response;
@@ -31,6 +32,7 @@ public class InvitationsUI extends AppCompatActivity {
 //    int userImage[] = {R.drawable.user_sample, R.drawable.user_sample, R.drawable.user_sample, R.drawable.user_sample, R.drawable.user_sample};
 
     InvitationsListAdapter invitationsListAdapter;
+    String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class InvitationsUI extends AppCompatActivity {
     }
 
     private void getInvitations() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getInvitations/"+category;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getInvitations/"+category+"/"+currentUserID;
 
         final JsonArrayRequest getInvitationsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -72,6 +74,7 @@ public class InvitationsUI extends AppCompatActivity {
                         invitation.setDesc(jsonObject.getString("Description"));
                         invitation.setHost(jsonObject.getString("Host"));
                         invitation.setStartTime(jsonObject.getString("Start Time"));
+                        invitation.setEndTime(jsonObject.getString("End Time"));
                         invitation.setTitle(jsonObject.getString("Title"));
                         invitation.setInvitationID(jsonObject.getString("InvitationID"));
                         invitation.setCategory(category);

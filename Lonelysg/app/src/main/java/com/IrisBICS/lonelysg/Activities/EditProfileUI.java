@@ -13,12 +13,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.IrisBICS.lonelysg.AppController;
+import com.IrisBICS.lonelysg.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,8 +33,9 @@ public class EditProfileUI extends Activity {
     private EditText age;
     private EditText occupation;
     private EditText interest;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private static final int PICK_IMAGE = 1;
+
+    String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
     // For dropdown box
     Spinner dropdownbox;
@@ -87,6 +88,7 @@ public class EditProfileUI extends Activity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(EditProfileUI.this, "Process Cancelled", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
@@ -100,10 +102,6 @@ public class EditProfileUI extends Activity {
     }
 
     private void updateProfile() {
-//        String userID = FirebaseAuthHelper.getUserID();
-        String userID = mAuth.getCurrentUser().getUid();
-        System.out.println("updating profile in progress");
-        System.out.println(dropdownbox.getSelectedItem().toString());
 
         try {
             JSONObject jsonBody = new JSONObject();
@@ -112,7 +110,7 @@ public class EditProfileUI extends Activity {
             jsonBody.put("age", age.getText());
             jsonBody.put("occupation",occupation.getText());
             jsonBody.put("interests",interest.getText());
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateUser/"+userID;
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateUser/"+currentUserID;
             JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
                     new Response.Listener<JSONObject>() {
                         @Override

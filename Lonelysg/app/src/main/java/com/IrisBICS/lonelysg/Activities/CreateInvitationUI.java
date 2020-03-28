@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +16,9 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.R;
@@ -23,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -35,9 +40,6 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 public class CreateInvitationUI extends AppCompatActivity {
 
     private Spinner categoryPick;
@@ -49,9 +51,9 @@ public class CreateInvitationUI extends AppCompatActivity {
     //For time and date selection
     private Button datePick, startTimePick, endTimePick, confirmButton, cancelButton;
 
-    String dateString, timeString, category;
+    String dateString, startTimeString, endTimeString, category, title, desc, latitude, longitude, locationName;
     Place location;
-    String currentUser = FirebaseAuthHelper.getCurrentUser();
+    String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +100,7 @@ public class CreateInvitationUI extends AppCompatActivity {
                         datePick.setText(dateString);
 
                         // For date formatting
-                        /*
+
                         Calendar calendar1 = Calendar.getInstance();
                         calendar1.set(Calendar.YEAR, year);
                         calendar1.set(Calendar.MONTH, month);
@@ -106,7 +108,7 @@ public class CreateInvitationUI extends AppCompatActivity {
 
                         CharSequence dateCharSequence = DateFormat.format("EEEE, dd MMM yyyy", calendar1);
                         datePick.setText(dateCharSequence);
-                         */
+
                     }
                 }, YEAR, MONTH, DATE);
 
@@ -127,8 +129,8 @@ public class CreateInvitationUI extends AppCompatActivity {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(CreateInvitationUI.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                        timeString = hour + ":" + minute;
-                        startTimePick.setText(timeString);
+                        startTimeString = hour + ":" + minute;
+                        startTimePick.setText(startTimeString);
                     }
                 }, HOUR, MINUTE, true);
 
@@ -149,8 +151,8 @@ public class CreateInvitationUI extends AppCompatActivity {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(CreateInvitationUI.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                        timeString = hour + ":" + minute;
-                        endTimePick.setText(timeString);
+                        endTimeString = hour + ":" + minute;
+                        endTimePick.setText(endTimeString);
                     }
                 }, HOUR, MINUTE, true);
 
@@ -165,13 +167,17 @@ public class CreateInvitationUI extends AppCompatActivity {
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
         // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG));
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                Toast.makeText(CreateInvitationUI.this, "Place is: " + place.getName(), Toast.LENGTH_SHORT).show();
                 location = place;
+                locationName = location.getName();
+                LatLng loc = location.getLatLng();
+                latitude = String.valueOf(loc.latitude);
+                longitude = String.valueOf(loc.longitude);
+                Toast.makeText(CreateInvitationUI.this, "Location is: " + place.getName(), Toast.LENGTH_SHORT).show();
                 Log.i("Create Invitation UI", "Place: " + place.getName() + ", " + place.getId());
             }
 
@@ -190,8 +196,8 @@ public class CreateInvitationUI extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = enterTitle.getText().toString().trim();
-                String desc = enterDesc.getText().toString().trim();
+                title = enterTitle.getText().toString().trim();
+                desc = enterDesc.getText().toString().trim();
                 if (title == null){
                     Toast.makeText(CreateInvitationUI.this, "Enter Event Title", Toast.LENGTH_SHORT).show();
                 }
@@ -204,11 +210,17 @@ public class CreateInvitationUI extends AppCompatActivity {
                 else if (dateString == null){
                     Toast.makeText(CreateInvitationUI.this, "Select Date", Toast.LENGTH_SHORT).show();
                 }
-                else if (timeString == null){
+                else if (startTimeString == null){
                     Toast.makeText(CreateInvitationUI.this, "Select Start Time", Toast.LENGTH_SHORT).show();
                 }
+                else if (endTimeString == null){
+                    Toast.makeText(CreateInvitationUI.this, "Select End Time", Toast.LENGTH_SHORT).show();
+                }
+                else if (location == null){
+                    Toast.makeText(CreateInvitationUI.this, "Select Location", Toast.LENGTH_SHORT).show();
+                }
                 else{
-                    addInvitation(title, desc);
+                    addInvitation();
                     Toast.makeText(CreateInvitationUI.this, "New Invitation Created", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -226,7 +238,7 @@ public class CreateInvitationUI extends AppCompatActivity {
         });
     }
 
-    private void addInvitation(String title, String desc) {
+    private void addInvitation() {
         try {
             String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/addInvitation";
             JSONObject jsonBody = new JSONObject();
@@ -234,9 +246,13 @@ public class CreateInvitationUI extends AppCompatActivity {
             jsonBody.put("Category", category);
             jsonBody.put("Date", dateString);
             jsonBody.put("Description", desc);
-            jsonBody.put("Host", currentUser);
-            jsonBody.put("Start Time", timeString);
+            jsonBody.put("Host", currentUserID);
+            jsonBody.put("Start Time", startTimeString);
+            jsonBody.put("End Time", endTimeString);
             jsonBody.put("Title", title);
+            jsonBody.put("Latitude", latitude);
+            jsonBody.put("Longitude", longitude);
+            jsonBody.put("Location",locationName);
 
             JsonObjectRequest addInvitationRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
@@ -255,4 +271,5 @@ public class CreateInvitationUI extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 }

@@ -30,7 +30,7 @@ public class UserInvitationsUI extends AppCompatActivity {
 
     private ArrayList<Invitation> userInvitations;
     InvitationsListAdapter invitationsListAdapter;
-    String currentUser = FirebaseAuthHelper.getCurrentUser();
+    String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class UserInvitationsUI extends AppCompatActivity {
     }
 
     private void getUserInvitations() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getUserInvitations/"+currentUser;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getUserInvitations/"+currentUserID;
 
         final JsonArrayRequest getUserInvitationsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -68,6 +68,7 @@ public class UserInvitationsUI extends AppCompatActivity {
                         Invitation invitation = new Invitation();
                         invitation.setTitle(jsonObject.getString("Title"));
                         invitation.setStartTime(jsonObject.getString("Start Time"));
+                        invitation.setEndTime(jsonObject.getString("End Time"));
                         invitation.setHost(jsonObject.getString("Host"));
                         invitation.setDesc(jsonObject.getString("Description"));
                         invitation.setDate(jsonObject.getString("Date"));
@@ -88,4 +89,5 @@ public class UserInvitationsUI extends AppCompatActivity {
         });
         AppController.getInstance(this).addToRequestQueue(getUserInvitationsRequest);
     }
+
 }

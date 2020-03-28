@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,12 +32,14 @@ import java.util.ArrayList;
 
 public class IndividualChatUI extends AppCompatActivity {
 
-    String currentUser = FirebaseAuthHelper.getCurrentUser();
+    String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
     private RecyclerView recyclerView;
     private EditText typeMessage;
     private Button sendButton;
-    private String receiver;
+    private TextView receiverName;
+    private ImageButton refresh;
+    private String receiverID, receiver;
     private ArrayList<Message> messages;
     ChatRecyclerAdapter chatAdapter;
 
@@ -45,12 +49,16 @@ public class IndividualChatUI extends AppCompatActivity {
         setContentView(R.layout.activity_individual_chat_ui);
 
         Intent receivedIntent = getIntent();
-        receiver = receivedIntent.getStringExtra("receiver");
+        Bundle extras = receivedIntent.getExtras();
+        receiverID = extras.getString("receiver_id");
+        receiver = extras.getString("receiver_name");
         messages = new ArrayList<>();
 
-
+        receiverName = findViewById(R.id.receiverName);
+        receiverName.setText(receiver);
         typeMessage = findViewById(R.id.typeMessage);
         sendButton = findViewById(R.id.sendButton);
+        refresh = findViewById(R.id.refreshButton);
         recyclerView = findViewById(R.id.chatView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -66,6 +74,15 @@ public class IndividualChatUI extends AppCompatActivity {
             public void onClick(View view) {
                 String text = typeMessage.getText().toString().trim();
                 sendMessage(text);
+                typeMessage.setText("");
+            }
+        });
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                messages = new ArrayList<>();
+                getMessages();
             }
         });
 
@@ -74,7 +91,7 @@ public class IndividualChatUI extends AppCompatActivity {
     }
 
     private void getMessages() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getMessages/"+currentUser+"/"+receiver;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getMessages/"+currentUserID+"/"+receiverID;
 
         final JsonArrayRequest getMessagesRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -83,11 +100,10 @@ public class IndividualChatUI extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
                         Message message = new Message();
-                        message.setMessage(jsonObject.getString("message"));
-                        message.setReceiver(jsonObject.getString("receiver"));
-                        message.setSender(jsonObject.getString("sender"));
+                        message.setMessage(jsonObject.getString("Message"));
+                        message.setReceiver(jsonObject.getString("Receiver"));
+                        message.setSender(jsonObject.getString("Sender"));
                         messages.add(message);
-                        System.out.println(messages.get(i).getMessage());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -108,24 +124,23 @@ public class IndividualChatUI extends AppCompatActivity {
             String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/sendMessage";
             JSONObject jsonBody = new JSONObject();
 
-            jsonBody.put("message", text);
-            jsonBody.put("receiver", receiver);
-            jsonBody.put("sender", currentUser);
+            jsonBody.put("Message", text);
+            jsonBody.put("Receiver", receiverID);
+            jsonBody.put("Sender", currentUserID);
 
             JsonObjectRequest sendMessageRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Message message = new Message();
                     message.setMessage(text);
-                    message.setReceiver(receiver);
-                    message.setSender(currentUser);
+                    message.setReceiver(receiverID);
+                    message.setSender(currentUserID);
                     messages.add(message);
                     chatAdapter.notifyDataSetChanged();
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    onBackPressed();
                 }
             });
             AppController.getInstance(this).addToRequestQueue(sendMessageRequest);
@@ -134,6 +149,7 @@ public class IndividualChatUI extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 }
 
 
