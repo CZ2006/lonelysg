@@ -51,8 +51,4 @@ public class FirebaseAuthHelper {
 //        void DataIsDeleted();
 //    }
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/mh

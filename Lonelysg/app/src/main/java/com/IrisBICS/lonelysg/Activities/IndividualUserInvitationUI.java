@@ -23,9 +23,9 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class IndividualInvitationUI extends AppCompatActivity {
+public class IndividualUserInvitationUI extends AppCompatActivity {
 
-    private Button acceptInvitation;
+    private Button editInvitation, deleteInvitation;
     private TextView activityTitle, activityDateTime,activityDesc;
 
     private Invitation invitation;
@@ -35,7 +35,7 @@ public class IndividualInvitationUI extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_individual_invitation_ui);
+        setContentView(R.layout.activity_individual_user_invitation_ui);
 
         Intent receivedIntent = getIntent();
         invitationID = receivedIntent.getStringExtra("invitationID");
@@ -46,16 +46,24 @@ public class IndividualInvitationUI extends AppCompatActivity {
         activityTitle = findViewById(R.id.activityTitle);
         updateTextView();
 
-        acceptInvitation = findViewById(R.id.acceptInvitation);
+        editInvitation = findViewById(R.id.editInvitation);
+        deleteInvitation = findViewById(R.id.deleteInvitation);
 
-        // Click request button
-        acceptInvitation.setOnClickListener(new View.OnClickListener() {
+        // Click edit button
+        editInvitation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendRequest();
-//                sendNotif();
-                Toast.makeText(IndividualInvitationUI.this, "Request Sent", Toast.LENGTH_SHORT).show();
-                finish();
+                Intent intent = new Intent(getApplicationContext(), EditInvitationUI.class);
+                intent.putExtra("invitationID", invitationID);
+                startActivity(intent);
+            }
+        });
+
+        // Click delete button
+        deleteInvitation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteInvitation();
             }
         });
 
@@ -77,6 +85,7 @@ public class IndividualInvitationUI extends AppCompatActivity {
                             invitation.setHost(response.getString("Host"));
                             invitation.setDesc(response.getString("Description"));
                             invitation.setDate(response.getString("Date"));
+                            invitation.setInvitationID(invitationID);
                             updateTextView();
                         } catch (JSONException ex) {
                             ex.printStackTrace();
@@ -91,48 +100,25 @@ public class IndividualInvitationUI extends AppCompatActivity {
         AppController.getInstance(this).addToRequestQueue(getInvitationRequest);
     }
 
-    private void sendRequest() {
-        try {
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/sendRequest";
-            JSONObject jsonBody = new JSONObject();
-
-            jsonBody.put("Host", invitation.getHost());
-            jsonBody.put("Invitation", invitation.getTitle());
-            jsonBody.put("Participant", currentUser);
-
-            JsonObjectRequest sendRequestRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    onBackPressed();
-                }
-            });
-            AppController.getInstance(this).addToRequestQueue(sendRequestRequest);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void sendNotif(){
-        String url ="https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendNotif";
-
-        // Request a string response from the provided URL.
-        StringRequest sendNotifRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-//                        Toast.makeText(ApiTest.this,"You received a request", Toast.LENGTH_SHORT).show();
-                    }
-                }, new Response.ErrorListener() {
+    private void deleteInvitation() {
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/deleteInvitation/"+invitationID;
+        StringRequest deleteInvitationRequest = new StringRequest(com.android.volley.Request.Method.DELETE,URL, new Response.Listener<String>()
+        {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onResponse(String response) {
+                // response
+                Toast.makeText(IndividualUserInvitationUI.this, "Invitation deleted.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), UserInvitationsUI.class);
+                startActivity(intent);
             }
-        });
-        AppController.getInstance(this).addToRequestQueue(sendNotifRequest);
+        },
+            new Response.ErrorListener()
+            {
+                @Override
+                public void onErrorResponse(VolleyError error) { }
+            }
+        );
+        AppController.getInstance(this).addToRequestQueue(deleteInvitationRequest);
     }
 
     public void updateTextView(){

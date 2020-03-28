@@ -11,8 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".Activities.PendingRequestsUI"></activity>
+        <activity android:name=".Activities.EditInvitationUI"/>
+        <activity android:name=".Activities.IndividualUserInvitationUI" />
+        <activity android:name=".Activities.PendingRequestsUI" />
         <activity android:name=".Activities.ReceivedRequestsUI" />
         <activity android:name=".Activities.ManageRequestsUI" />
         <activity android:name=".Activities.UserInvitationsUI" />
@@ -25,13 +26,13 @@
         <activity android:name=".Activities.InvitationsUI" />
         <activity android:name=".Activities.SignUpPage" />
         <activity android:name=".Activities.LoginUI">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service android:name=".PusherMessagingService">
             <intent-filter android:priority="1">
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.IndividualInvitationUI"
+    tools:context=".Activities.IndividualUserInvitationUI"
     android:background="@color/backgroundcolor">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -209,10 +209,23 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:layout_width="200dp"
+                    android:layout_width="150dp"
                     android:layout_height="35dp"
-                    android:id="@+id/acceptInvitation"
-                    android:text="SEND REQUEST "
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/deleteInvitation"
+                    android:text="DELETE "
+                    android:textColor="@color/white"
+                    android:textAlignment="textEnd"
+                    android:textSize="18sp"
+                    android:drawableRight="@drawable/cancel_icon"
+                    android:paddingRight="21dp"
+                    android:background="@drawable/borders3"/>
+
+                <Button
+                    android:layout_width="150dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/editInvitation"
+                    android:text="EDIT "
                     android:textColor="@color/white"
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
