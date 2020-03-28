@@ -8,10 +8,11 @@ public class FirebaseAuthHelper {
     private static FirebaseUser currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
 
 
-    public static String getCurrentUser(){
+    public static String getCurrentUser() {
         return currentUser.getEmail();
     }
-    public static String getUserID(){
+
+    public static String getUserID() {
         return currentUser.getUid();
     }
 
@@ -51,4 +52,6 @@ public class FirebaseAuthHelper {
 //        void DataIsDeleted();
 //    }
 
+
 }
+
