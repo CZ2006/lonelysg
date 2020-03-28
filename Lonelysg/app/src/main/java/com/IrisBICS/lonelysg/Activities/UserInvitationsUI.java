@@ -1,7 +1,10 @@
 package com.IrisBICS.lonelysg.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +44,15 @@ public class UserInvitationsUI extends AppCompatActivity {
         invitationsListAdapter = new InvitationsListAdapter(this, userInvitations);
         userInvitationsList.setAdapter(invitationsListAdapter);
 
+        userInvitationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                Intent intent = new Intent(getApplicationContext(), IndividualUserInvitationUI.class);
+                intent.putExtra("invitationID", userInvitations.get(i).getInvitationID());
+                startActivity(intent);
+            }
+        });
+
         getUserInvitations();
     }
 
@@ -60,6 +72,7 @@ public class UserInvitationsUI extends AppCompatActivity {
                         invitation.setDesc(jsonObject.getString("Description"));
                         invitation.setDate(jsonObject.getString("Date"));
                         invitation.setCategory(jsonObject.getString("Category"));
+                        invitation.setInvitationID(jsonObject.getString("InvitationID"));
                         userInvitations.add(invitation);
                     } catch (JSONException e) {
                         e.printStackTrace();

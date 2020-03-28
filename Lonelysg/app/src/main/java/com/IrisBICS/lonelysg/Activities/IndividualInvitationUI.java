@@ -31,7 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class IndividualInvitationUI extends AppCompatActivity implements OnMapReadyCallback {
 
-    private Button acceptInvitation, rejectInvitation;
+    private Button acceptInvitation;
     private TextView activityTitle, activityDateTime,activityDesc;
 
     private Invitation invitation;
@@ -58,7 +58,6 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         updateTextView();
 
         acceptInvitation = findViewById(R.id.acceptInvitation);
-        rejectInvitation = findViewById(R.id.rejectInvitation);
 
         // Click request button
         acceptInvitation.setOnClickListener(new View.OnClickListener() {
@@ -67,15 +66,6 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
                 sendRequest();
 //                sendNotif();
                 Toast.makeText(IndividualInvitationUI.this, "Request Sent", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-
-        // Click cancel button
-        rejectInvitation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(IndividualInvitationUI.this, "Invitation Rejected", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

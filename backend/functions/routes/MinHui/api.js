@@ -153,6 +153,16 @@ router.post("/addInvitation", (req, res) => {
 
 })
 
+router.delete("/deleteInvitation/:InvitationID", (req, res) => {
+
+    let database = req.app.get("database")
+    let invToDel = database.ref('Invitations/Invitation' + req.param('InvitationID'))
+    invToDel.set({})
+
+    res.end("Invitation deleted.")
+
+})
+
 router.get("/getReceivedRequests/:user", (req,res)=>{ 
     //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getReceivedRequests after running firebase serve
     let database = req.app.get("database")
