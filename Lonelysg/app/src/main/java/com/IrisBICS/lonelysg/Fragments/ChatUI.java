@@ -60,6 +60,7 @@ public class ChatUI extends Fragment {
             }
         });
         getChatUsersList();
+
         return v;
     }
 

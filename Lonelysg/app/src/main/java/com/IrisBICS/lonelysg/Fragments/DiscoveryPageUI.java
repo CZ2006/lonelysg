@@ -15,7 +15,7 @@ import com.IrisBICS.lonelysg.Activities.InvitationsUI;
 import com.IrisBICS.lonelysg.R;
 
 public class DiscoveryPageUI extends Fragment implements View.OnClickListener {
-    private CardView foodIcon, movieIcon, othersIcon, sportsIcon, studyIcon;
+    private CardView allIcon, gamesIcon, foodIcon, movieIcon, othersIcon, sportsIcon, studyIcon;
 
     @Nullable
     @Override
@@ -23,6 +23,8 @@ public class DiscoveryPageUI extends Fragment implements View.OnClickListener {
         View v = inflater.inflate(R.layout.fragment_discovery, container, false);
 
         // Defining cards
+        allIcon = v.findViewById(R.id.allIcon);
+        gamesIcon = v.findViewById(R.id.gamesIcon);
         foodIcon = v.findViewById(R.id.foodIcon);
         movieIcon = v.findViewById(R.id.movieIcon);
         othersIcon = v.findViewById(R.id.othersIcon);
@@ -30,6 +32,8 @@ public class DiscoveryPageUI extends Fragment implements View.OnClickListener {
         studyIcon = v.findViewById(R.id.studyIcon);
 
         // Add Click listener to the cards
+        allIcon.setOnClickListener(this);
+        gamesIcon.setOnClickListener(this);
         foodIcon.setOnClickListener(this);
         movieIcon.setOnClickListener(this);
         othersIcon.setOnClickListener(this);
@@ -44,6 +48,18 @@ public class DiscoveryPageUI extends Fragment implements View.OnClickListener {
         Intent intent;
 
         switch (v.getId()) {
+            case R.id.allIcon :
+                intent = new Intent(this.getActivity(), InvitationsUI.class);
+                intent.putExtra("category", "All");
+                startActivity(intent);
+                break;
+
+            case R.id.gamesIcon :
+                intent = new Intent(this.getActivity(), InvitationsUI.class);
+                intent.putExtra("category", "Games");
+                startActivity(intent);
+                break;
+
             case R.id.foodIcon :
                 intent = new Intent(this.getActivity(), InvitationsUI.class);
                 intent.putExtra("category", "Food and Drinks");

@@ -77,16 +77,17 @@ public class IndividualChatUI extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String text = typeMessage.getText().toString().trim();
-                sendMessage(text);
-                typeMessage.setText("");
+                if ((text!="")&(text!=null)){
+                    sendMessage(text);
+                    typeMessage.setText("");
+                }
             }
         });
 
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                messages = new ArrayList<>();
-                getMessages();
+                recreate();
             }
         });
 
