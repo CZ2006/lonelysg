@@ -45,7 +45,7 @@ import java.util.Calendar;
 public class CreateInvitationUI extends AppCompatActivity {
 
     private Spinner categoryPick;
-    String categories[] = {"Choose your invitation category", "Food and Drinks", "Movies", "Sports", "Study", "Others"};
+    String categories[] = {"Choose your invitation category", "Games", "Food and Drinks", "Movies", "Sports", "Study", "Others"};
     ArrayAdapter<String >arrayAdapter;
 
     private EditText enterTitle, enterDesc;
@@ -225,7 +225,7 @@ public class CreateInvitationUI extends AppCompatActivity {
                     addInvitation();
                     Toast.makeText(CreateInvitationUI.this, "New Invitation Created", Toast.LENGTH_SHORT).show();
                 }
-                String requestInterest = currentUser+"request";
+                String requestInterest = currentUserID+"request";
                 PushNotifications.addDeviceInterest(requestInterest);
             }
         });

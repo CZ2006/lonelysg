@@ -1,11 +1,8 @@
 package com.IrisBICS.lonelysg.Activities;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.net.Uri;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,45 +14,24 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.Models.Invitation;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.IrisBICS.lonelysg.AppController;
-import com.IrisBICS.lonelysg.Models.Invitation;
-import com.IrisBICS.lonelysg.Models.User;
-
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import java.util.Calendar;
-
-
-import java.io.File;
-import java.util.Calendar;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditInvitationUI extends AppCompatActivity {
 
@@ -71,7 +47,7 @@ public class EditInvitationUI extends AppCompatActivity {
 
     // For dropdown box
     private Spinner editInvCategory;
-    String categories[] = {"Choose your invitation category", "Food and Drinks", "Movies", "Sports", "Study", "Others"};
+    String categories[] = {"Choose your invitation category", "Games", "Food and Drinks", "Movies", "Sports", "Study", "Others"};
     ArrayAdapter<String >arrayAdapter;
 
     private Button confirmButton, cancelButton;

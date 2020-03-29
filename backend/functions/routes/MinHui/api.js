@@ -8,10 +8,16 @@ router.get("/getMessages/:user1/:user2", (req,res)=>{
     var ref = database.ref('Messages');
     var user1 = req.params.user1;
     var user2 = req.params.user2;
+
+    function compare(a, b) {
+        if (a.MessageID > b.MessageID) return 1;
+        if (b.MessageID > a.MessageID) return -1;
+      
+        return 0;
+      }
     
     ref.once("value", function(snapshot){
         var messages = snapshot.val();
-        console.log(messages); //View response value in the command line
         var messagesArray = [];
         for (var i in messages){
             if ((messages[i].Receiver==(user2))&(messages[i].Sender==(user1))){
@@ -21,7 +27,8 @@ router.get("/getMessages/:user1/:user2", (req,res)=>{
                 messagesArray.push(messages[i]);
             }
         }
-        res.json(messagesArray); //Returned in the browser or postman
+        messagesArray.sort(compare);
+        res.json(messagesArray); 
     })
 })
 
@@ -69,8 +76,8 @@ router.get("/getChatUsersList/:userID", (req,res)=>{
 
 })
 
-router.post("/sendMessage", (req, res) => { //Sample function adding new user to realtime DB on firebase
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/sendMessage in postman with sample data in the body after running firebase serve
+router.post("/sendMessage", (req, res) => { 
+    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/sendMessage 
     let database = req.app.get("database")
     let msgRef = database.ref("Messages")
     
@@ -80,10 +87,10 @@ router.post("/sendMessage", (req, res) => { //Sample function adding new user to
         for (var i in messages){
             newID++;
         }
-        const newMessage = msgRef.child("Message" + newID) //Requires information sent in JSON format
+        const newMessage = msgRef.child("Message" + newID) 
+        req.body.MessageID = newID; 
         newMessage.set(req.body)
-
-        res.end("Message sent."); //Returned in postman
+        res.json(req.body); 
     })
 
 })
@@ -106,9 +113,18 @@ router.get("/getInvitations/:category/:user", (req,res)=>{
     ref.once("value", function(snapshot){
         var invitations = snapshot.val();
         var invitationsArray = [];
-        for (var i in invitations){
-            if ((invitations[i].Category==(category))&(invitations[i].Host!=user)){
-                invitationsArray.push(invitations[i]);
+        if (category=="All"){
+            for (var i in invitations){
+                if ((invitations[i].Host!=user)&invitations[i].Category!="test"){
+                    invitationsArray.push(invitations[i]);
+                }
+            }
+        }
+        else{
+            for (var i in invitations){
+                if ((invitations[i].Category==(category))&(invitations[i].Host!=user)){
+                    invitationsArray.push(invitations[i]);
+                }
             }
         }
         res.json(invitationsArray); //Returned in the browser or postman

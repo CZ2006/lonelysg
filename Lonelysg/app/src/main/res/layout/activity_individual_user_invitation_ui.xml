@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageUser"
             android:layout_gravity="center_horizontal"
-            android:text="Lunch at Orchard"
+            android:text="Activity Title"
             android:textSize="27sp"
             android:textStyle="bold"/>
 
@@ -124,7 +124,7 @@
                         android:id="@+id/activityDesc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Just a normal lunch where we can talk about politics and how important social distancing is"
+                        android:text="Description of activity"
                         android:textSize="18sp"
                         android:textColor="#000000"/>
 
