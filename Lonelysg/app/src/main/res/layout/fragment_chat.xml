@@ -48,15 +48,7 @@
             android:id="@+id/chatList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/empty_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:visibility="gone"
-            android:text="No chats yet! Accept a request/wait for your request to be accepted to start chatting!" />
-
+        
     </androidx.core.widget.NestedScrollView>
 
 

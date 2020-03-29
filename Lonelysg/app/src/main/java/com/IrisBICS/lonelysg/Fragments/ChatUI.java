@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,7 +32,6 @@ import java.util.ArrayList;
 public class ChatUI extends Fragment {
 
     private ListView chatList;
-    private TextView emptyView;
     private ArrayList<String> chatUsersList, chatUsersIDList;
     ChatListAdapter chatListAdapter;
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
@@ -46,7 +44,6 @@ public class ChatUI extends Fragment {
         chatUsersList = new ArrayList<>();
         chatUsersIDList = new ArrayList<>();
         chatList = v.findViewById(R.id.chatList);
-        emptyView = v.findViewById(R.id.empty_view);
         chatListAdapter = new ChatListAdapter(this.getActivity(),chatUsersList);
         chatList.setAdapter(chatListAdapter);
         chatList.setClickable(true);
