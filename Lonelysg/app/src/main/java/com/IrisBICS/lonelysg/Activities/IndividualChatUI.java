@@ -21,12 +21,16 @@ import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.util.ArrayList;
 
@@ -129,8 +133,8 @@ public class IndividualChatUI extends AppCompatActivity {
             jsonBody.put("Sender", currentUserID);
 
             JsonObjectRequest sendMessageRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
+            @Override
+            public void onResponse(JSONObject response) {
                     Message message = new Message();
                     message.setMessage(text);
                     message.setReceiver(receiverID);
@@ -141,6 +145,8 @@ public class IndividualChatUI extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    Log.e("Volley", error.toString());
+                    System.out.println("error occurred");
                 }
             });
             AppController.getInstance(this).addToRequestQueue(sendMessageRequest);
@@ -149,7 +155,6 @@ public class IndividualChatUI extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 }
 
 

@@ -83,7 +83,7 @@ router.post("/sendMessage", (req, res) => { //Sample function adding new user to
         const newMessage = msgRef.child("Message" + newID) //Requires information sent in JSON format
         newMessage.set(req.body)
 
-        res.end("Message sent."); //Returned in postman
+        res.json(req.body); //Returned in postman
     })
 
 })
