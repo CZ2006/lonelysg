@@ -1,10 +1,12 @@
 package com.IrisBICS.lonelysg.Activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,11 +40,14 @@ import java.util.ArrayList;
 public class IndividualInvitationUI extends AppCompatActivity implements OnMapReadyCallback {
 
     private Button acceptInvitation, backButton;
-    private TextView activityTitle,activityDateTime,activityDesc,activityLocation,hostInfo,hostInterests;
 
+    private TextView activityTitle, activityDateTime,activityDesc,hostInfo,hostInterests;
+    private Uri imageUri;
     private Invitation invitation;
     private String invitationID;
+    private ImageView indInvImage;
     private ArrayList<com.IrisBICS.lonelysg.Models.Request> userSentRequests;
+
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
     User host, participant;
 
@@ -61,7 +67,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
 
         Intent receivedIntent = getIntent();
         invitationID = receivedIntent.getStringExtra("invitationID");
-        invitation = new Invitation("","","","","","","",invitationID,"","","");
+        invitation = new Invitation("","","","","","","",invitationID,"","","",imageUri);
 
         activityDateTime = findViewById(R.id.activityDateTime);
         activityDesc = findViewById(R.id.activityDesc);
@@ -69,6 +75,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         activityLocation = findViewById(R.id.activityLocation);
         hostInfo = findViewById(R.id.hostInfo);
         hostInterests = findViewById(R.id.hostInterests);
+        indInvImage = findViewById(R.id.invImage);
 
         acceptInvitation = findViewById(R.id.acceptInvitation);
         backButton = findViewById(R.id.backButton);
@@ -111,6 +118,11 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
                             invitation.setLatitude(response.getString("Latitude"));
                             invitation.setLongitude(response.getString("Longitude"));
                             invitation.setLocationName(response.getString("Location"));
+                            if (response.has("Image")!=false) {
+                                String InvPicUri = response.getString("Image");
+                                imageUri = Uri.parse(InvPicUri);
+                                invitation.setInvPic(imageUri);
+                            }
                             invitation.setInvitationID(response.getString("InvitationID"));
                             updateTextView();
                             //MAP
@@ -180,6 +192,9 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         activityDateTime.setText(invitation.getDate()+" "+invitation.getStartTime()+" - " +invitation.getEndTime());
         activityTitle.setText(invitation.getTitle());
         activityDesc.setText(invitation.getDesc());
+        if (invitation.getInvPic()!=null) {
+            Picasso.get().load(invitation.getInvPic()).into(indInvImage);
+        }
         activityLocation.setText(invitation.getLocationName());
     }
 

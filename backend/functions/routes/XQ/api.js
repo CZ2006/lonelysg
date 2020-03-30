@@ -105,7 +105,7 @@ router.put("/updateUser/:userID", (req, res) => {
 			userToUpdate.update(req.body)
         })
 	
-	res.end("User-" + userToUpdate.userID + " updated!")
+	res.json(req.body)
 
     /*{
         "userID": 2,
