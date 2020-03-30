@@ -42,11 +42,12 @@ public class UserInvitationsUI extends AppCompatActivity {
 
         userInvitations = new ArrayList<>();
 
+        back = findViewById(R.id.backButton);
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ManageInvitationsUI.class);
-                startActivity(intent);
+                finish();
             }
         });
         userInvitationsList = findViewById(R.id.userInvitationsListView);
