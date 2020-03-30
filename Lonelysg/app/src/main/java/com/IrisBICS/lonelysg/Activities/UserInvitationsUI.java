@@ -1,6 +1,7 @@
 package com.IrisBICS.lonelysg.Activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +34,7 @@ public class UserInvitationsUI extends AppCompatActivity {
     private ArrayList<Invitation> userInvitations;
     InvitationsListAdapter invitationsListAdapter;
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,11 @@ public class UserInvitationsUI extends AppCompatActivity {
                         invitation.setCategory(jsonObject.getString("Category"));
                         invitation.setInvitationID(jsonObject.getString("InvitationID"));
                         invitation.setLocationName(jsonObject.getString("Location"));
+                        if (jsonObject.has("Image")!=false) {
+                            String InvPicUri = jsonObject.getString("Image");
+                            imageUri = Uri.parse(InvPicUri);
+                            invitation.setInvPic(imageUri);
+                        }
                         userInvitations.add(invitation);
                     } catch (JSONException e) {
                         e.printStackTrace();
