@@ -71,8 +71,7 @@ public class IndividualUserInvitationUI extends AppCompatActivity implements OnM
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), UserInvitationsUI.class);
-                startActivity(intent);
+                finish();
             }
         });
 

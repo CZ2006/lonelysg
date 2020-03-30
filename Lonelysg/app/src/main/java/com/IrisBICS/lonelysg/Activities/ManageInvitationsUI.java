@@ -24,8 +24,7 @@ public class ManageInvitationsUI extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), NavigationBarUI.class);
-                startActivity(intent);
+                finish();
             }
         });
 
