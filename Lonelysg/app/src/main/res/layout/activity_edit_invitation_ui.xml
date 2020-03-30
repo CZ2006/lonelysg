@@ -27,6 +27,14 @@
             android:text="Edit Invitation"
             android:textSize="36sp" />
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:src="@drawable/user_sample"
+            android:id="@+id/editInvitationPic"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"/>
+
         <EditText
             android:id="@+id/editTitle"
             android:layout_width="match_parent"

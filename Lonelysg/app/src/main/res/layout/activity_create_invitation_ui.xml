@@ -22,6 +22,7 @@
             android:id="@+id/newInvitation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="NEW INVITATION"
             android:textSize="36sp"
@@ -33,6 +34,14 @@
             android:layout_height="1dp"
             android:layout_margin="5dp"
             android:background="@color/white"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:src="@drawable/user_sample"
+            android:id="@+id/newInvPic"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"/>
 
         <EditText
             android:id="@+id/enterTitle"
@@ -121,7 +130,7 @@
             android:layout_width="250dp"
             android:layout_height="35dp"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="15dp"
             android:background="@color/colorPrimary"
             android:text="CONFIRM"
@@ -133,7 +142,7 @@
             android:layout_width="250dp"
             android:layout_height="35dp"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
             android:background="@color/colorPrimary"
             android:text="CANCEL"

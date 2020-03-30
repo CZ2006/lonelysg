@@ -253,7 +253,9 @@ public class EditProfileUI extends Activity {
                             editAge.setHint(user.getAge());
                             editOccupation.setHint(user.getOccupation());
                             editInterest.setHint(user.getInterests());
-                            Picasso.get().load(user.getProfilePic()).into(editProfilePic);
+                            if (user.getProfilePic()!=null) {
+                                Picasso.get().load(user.getProfilePic()).into(editProfilePic);
+                            }
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }

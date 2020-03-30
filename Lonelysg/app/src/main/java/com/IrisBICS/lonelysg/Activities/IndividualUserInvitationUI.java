@@ -1,10 +1,12 @@
 package com.IrisBICS.lonelysg.Activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +29,8 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
 
     private Button editInvitation, deleteInvitation;
     private TextView activityTitle, activityDateTime,activityDesc;
+    private Uri imageUri;
+    private ImageView userInvImage;
 
     private Invitation invitation;
     private String invitationID;
@@ -37,11 +42,12 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
 
         Intent receivedIntent = getIntent();
         invitationID = receivedIntent.getStringExtra("invitationID");
-        invitation = new Invitation("","","","","","","",invitationID,"","","");
+        invitation = new Invitation("","","","","","","",invitationID,"","","",imageUri);
 
         activityDateTime = findViewById(R.id.activityDateTime);
         activityDesc = findViewById(R.id.activityDesc);
         activityTitle = findViewById(R.id.activityTitle);
+        userInvImage = findViewById(R.id.indUserInvImage);
         updateTextView();
 
         editInvitation = findViewById(R.id.editInvitation);
@@ -85,6 +91,11 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
                             invitation.setDesc(response.getString("Description"));
                             invitation.setDate(response.getString("Date"));
                             invitation.setInvitationID(invitationID);
+                            if (response.has("Image")!=false) {
+                                String InvPicUri = response.getString("Image");
+                                imageUri = Uri.parse(InvPicUri);
+                                invitation.setInvPic(imageUri);
+                            }
                             updateTextView();
                         } catch (JSONException ex) {
                             ex.printStackTrace();
@@ -125,6 +136,9 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
         activityDateTime.setText(invitation.getDate()+" "+invitation.getStartTime()+" - " +invitation.getEndTime());
         activityTitle.setText(invitation.getTitle());
         activityDesc.setText(invitation.getDesc());
+        if (invitation.getInvPic()!=null) {
+            Picasso.get().load(invitation.getInvPic()).into(userInvImage);
+        }
     }
 
 }
