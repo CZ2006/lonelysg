@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChatUI"
+    tools:context=".Fragments.FragmentChat"
     android:orientation="vertical"
     android:background="@color/backgroundcolor">
     >
@@ -36,5 +36,26 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ListView
+            android:id="@+id/chatList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="true"
+            android:scrollbarSize="3dp"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical"
+            android:scrollingCache="true"
+            android:smoothScrollbar="true"/>
+
+    </androidx.core.widget.NestedScrollView>
+
 
 </com.google.android.material.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout>

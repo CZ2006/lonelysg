@@ -10,5 +10,6 @@
         <item>3pm-6pm 1 April 2020</item>
         <item>7pm-8pm 2 April 2020</item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

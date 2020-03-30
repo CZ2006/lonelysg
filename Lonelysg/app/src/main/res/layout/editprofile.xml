@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditProfileUI"
+    tools:context=".Activities.ActivityEditProfile"
     android:padding="5dp"
     android:layout_gravity="center"
     android:background="@drawable/splash_screen">>
@@ -14,10 +14,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:src="@drawable/user_sample"
+            android:id="@+id/editProfilePic"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"/>
 
@@ -47,6 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:hint="Type New Name"
+                    android:id="@+id/editProfileName"
                     android:textSize="15sp"
                     android:textColor="#000000"/>
 
@@ -110,6 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:hint="Type New Age here"
+                    android:id="@+id/editProfileAge"
                     android:textSize="15sp"
                     android:textColor="#000000"/>
 
@@ -142,6 +145,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:hint="Type New Occupation"
+                    android:id="@+id/editProfileOccupation"
                     android:textSize="15sp"
                     android:textColor="#000000"/>
 
@@ -174,6 +178,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:hint="Type New Interests"
+                    android:id="@+id/editProfileInterests"
                     android:textSize="15sp"
                     android:textColor="#000000"/>
 

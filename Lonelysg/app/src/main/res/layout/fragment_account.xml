@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AccountUI"
+    tools:context=".Fragments.FragmentAccount"
     android:background="@color/backgroundcolor">
 
     <RelativeLayout
@@ -19,15 +19,13 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="170dp"
                 android:layout_height="170dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="15dp"
                 android:src="@drawable/user_sample"
-                android:adjustViewBounds="true"
-                android:padding="5dp"
-                android:scaleType="centerInside"/>
+                android:id="@+id/accountProfilePic" />
 
         </RelativeLayout>
 
@@ -36,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageUser"
-            android:text="USER 01, 25"
+            android:text="Loading..."
             android:textSize="30sp"
             android:textStyle="bold"
             android:layout_centerHorizontal="true"/>
@@ -89,7 +87,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="User 01"
+                        android:id="@+id/accountUsername"
+                        android:text="Loading..."
                         android:textSize="20sp"
                         android:textColor="#000000"/>
 
@@ -121,7 +120,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Male"
+                        android:text="Loading..."
+                        android:id="@+id/accountGender"
                         android:textSize="20sp"
                         android:textColor="#000000"/>
 
@@ -153,7 +153,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="25"
+                        android:text="Loading..."
+                        android:id="@+id/accountAge"
                         android:textSize="20sp"
                         android:textColor="#000000"/>
 
@@ -185,7 +186,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Architect"
+                        android:text="Loading..."
+                        android:id="@+id/accountOccupation"
                         android:textSize="20sp"
                         android:textColor="#000000"/>
 
@@ -217,7 +219,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Eating, Sleeping"
+                        android:text="Loading..."
+                        android:id="@+id/accountInterests"
                         android:textSize="20sp"
                         android:textColor="#000000"/>
 
