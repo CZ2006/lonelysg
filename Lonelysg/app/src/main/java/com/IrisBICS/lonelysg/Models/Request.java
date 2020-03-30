@@ -2,13 +2,14 @@ package com.IrisBICS.lonelysg.Models;
 
 public class Request {
 
-    private String participant, invitation, host, requestID;
+    private String participant, invitation, invitationID, host, requestID;
 
     public Request(){}
 
-    public Request(String participant, String invitation, String host, String reqID) {
+    public Request(String participant, String invitation,String invitationID, String host, String reqID) {
         this.participant = participant;
         this.invitation = invitation;
+        this.invitationID = invitationID;
         this.host = host;
         this.requestID = reqID;
     }
@@ -27,6 +28,14 @@ public class Request {
 
     public void setInvitation(String invitation) {
         this.invitation = invitation;
+    }
+
+    public String getInvitationID() {
+        return invitationID;
+    }
+
+    public void setInvitationID(String invitationID) {
+        this.invitationID = invitationID;
     }
 
     public String getHost() {

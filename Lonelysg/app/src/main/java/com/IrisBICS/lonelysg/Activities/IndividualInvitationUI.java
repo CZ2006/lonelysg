@@ -18,6 +18,7 @@ import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,16 +28,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class IndividualInvitationUI extends AppCompatActivity implements OnMapReadyCallback {
 
     private Button acceptInvitation, backButton;
-    private TextView activityTitle, activityDateTime,activityDesc,hostInfo,hostInterests;
+    private TextView activityTitle,activityDateTime,activityDesc,activityLocation,hostInfo,hostInterests;
 
     private Invitation invitation;
     private String invitationID;
+    private ArrayList<com.IrisBICS.lonelysg.Models.Request> userSentRequests;
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
     User host, participant;
 
@@ -47,6 +52,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
 
         host = new User();
         participant = new User();
+        userSentRequests = new ArrayList<>();
 
 //        //MAP
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -60,6 +66,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         activityDateTime = findViewById(R.id.activityDateTime);
         activityDesc = findViewById(R.id.activityDesc);
         activityTitle = findViewById(R.id.activityTitle);
+        activityLocation = findViewById(R.id.activityLocation);
         hostInfo = findViewById(R.id.hostInfo);
         hostInterests = findViewById(R.id.hostInterests);
 
@@ -70,10 +77,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         acceptInvitation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendRequest();
-//                sendNotif();
-                Toast.makeText(IndividualInvitationUI.this, "Request Sent", Toast.LENGTH_SHORT).show();
-                finish();
+                checkRequest();
             }
         });
 
@@ -85,6 +89,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         });
 
         getInvitation();
+        getUserRequests();
 
     }
 
@@ -106,6 +111,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
                             invitation.setLatitude(response.getString("Latitude"));
                             invitation.setLongitude(response.getString("Longitude"));
                             invitation.setLocationName(response.getString("Location"));
+                            invitation.setInvitationID(response.getString("InvitationID"));
                             updateTextView();
                             //MAP
                             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -125,6 +131,24 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         AppController.getInstance(this).addToRequestQueue(getInvitationRequest);
     }
 
+    public void checkRequest(){
+        boolean exists = false;
+        for (int i = 0;i<userSentRequests.size();i++){
+            if (userSentRequests.get(i).getInvitationID().equals(invitationID)){
+                exists = true;
+            }
+        }
+        if (exists==false){
+            sendRequest();
+            Toast.makeText(IndividualInvitationUI.this, "Request Sent", Toast.LENGTH_SHORT).show();
+//                    sendNotif();
+            finish();
+        }
+        else{
+            Toast.makeText(IndividualInvitationUI.this, "Request exists. Wait for host to accept your request.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void sendRequest() {
         try {
             String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/sendRequest";
@@ -132,6 +156,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
 
             jsonBody.put("Host", invitation.getHost());
             jsonBody.put("Invitation", invitation.getTitle());
+            jsonBody.put("InvitationID", invitation.getInvitationID());
             jsonBody.put("Participant", currentUserID);
 
             JsonObjectRequest sendRequestRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
@@ -155,6 +180,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         activityDateTime.setText(invitation.getDate()+" "+invitation.getStartTime()+" - " +invitation.getEndTime());
         activityTitle.setText(invitation.getTitle());
         activityDesc.setText(invitation.getDesc());
+        activityLocation.setText(invitation.getLocationName());
     }
 
     public void updateUserTextView(){
@@ -199,33 +225,35 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         AppController.getInstance(this).addToRequestQueue(getUserProfileRequest);
     }
 
-//    private void getParticipant(String userID) {
-//        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
-//        JsonObjectRequest getUserProfileRequest = new JsonObjectRequest
-//                (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        System.out.println("reached manager inside");
-//                        try {
-//                            participant.setUsername(response.getString("username"));
-////                            participant.setGender(response.getString("gender"));
-////                            participant.setAge(response.getString("age"));
-////                            participant.setOccupation(response.getString("occupation"));
-////                            participant.setInterests(response.getString("interests"));
-//                        } catch (JSONException ex) {
-//                            ex.printStackTrace();
-//                        }
-////                        arrayAdapter.notifyDataSetChanged();
-//                    }
-//                }, new Response.ErrorListener() {
-//
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.e("Volley", error.toString());
-//                    }
-//                });
-//        AppController.getInstance(this).addToRequestQueue(getUserProfileRequest);
-//    }
+    private void getUserRequests() {
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getPendingRequests/"+currentUserID;
+
+        final JsonArrayRequest getUserRequestsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        com.IrisBICS.lonelysg.Models.Request request = new com.IrisBICS.lonelysg.Models.Request();
+                        request.setHost(jsonObject.getString("Host"));
+                        request.setInvitation(jsonObject.getString("Invitation"));
+                        request.setInvitationID(jsonObject.getString("InvitationID"));
+                        request.setParticipant(jsonObject.getString("Participant"));
+                        request.setRequestID(jsonObject.getString("RequestID"));
+                        userSentRequests.add(request);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley", error.toString());
+            }
+        });
+        AppController.getInstance(this).addToRequestQueue(getUserRequestsRequest);
+    }
 
     private void sendNotif(){
         String url ="https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendNotif";

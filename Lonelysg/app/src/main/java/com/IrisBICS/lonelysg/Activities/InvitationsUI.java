@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -55,6 +56,7 @@ public class InvitationsUI extends AppCompatActivity implements SearchView.OnQue
     private ListView invitationsList;
     private SearchView searchView;
     private Spinner sortBy;
+    private Button back;
     String sortChoices[] = {"Recent", "Title", "Date", "Distance from current location"};
     private ArrayList<Invitation> invitations;
     private String category, sort;
@@ -106,8 +108,17 @@ public class InvitationsUI extends AppCompatActivity implements SearchView.OnQue
             public void onNothingSelected(AdapterView adapterView) {
             }});
 
-
         searchView = findViewById(R.id.searchView);
+
+        back = findViewById(R.id.backButton);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), NavigationBarUI.class);
+                intent.putExtra("next", "Discovery Page");
+                startActivity(intent);
+            }
+        });
 
         invitationsList = findViewById(R.id.invitationsListView);
         invitationsListAdapter = new InvitationsListAdapter(this, invitations);

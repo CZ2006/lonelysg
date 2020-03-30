@@ -18,14 +18,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class IndividualUserInvitationUI extends AppCompatActivity {
+public class IndividualUserInvitationUI extends AppCompatActivity implements OnMapReadyCallback {
 
-    private Button editInvitation, deleteInvitation;
-    private TextView activityTitle, activityDateTime,activityDesc;
+    private Button editInvitation, deleteInvitation, back;
+    private TextView activityTitle, activityDateTime,activityDesc, activityLocation;
 
     private Invitation invitation;
     private String invitationID;
@@ -39,13 +45,23 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
         invitationID = receivedIntent.getStringExtra("invitationID");
         invitation = new Invitation("","","","","","","",invitationID,"","","");
 
+        back = findViewById(R.id.backButton);
         activityDateTime = findViewById(R.id.activityDateTime);
         activityDesc = findViewById(R.id.activityDesc);
         activityTitle = findViewById(R.id.activityTitle);
+        activityLocation = findViewById(R.id.activityLocation);
         updateTextView();
 
         editInvitation = findViewById(R.id.editInvitation);
         deleteInvitation = findViewById(R.id.deleteInvitation);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), UserInvitationsUI.class);
+                startActivity(intent);
+            }
+        });
 
         // Click edit button
         editInvitation.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +100,13 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
                             invitation.setHost(response.getString("Host"));
                             invitation.setDesc(response.getString("Description"));
                             invitation.setDate(response.getString("Date"));
+                            invitation.setLocationName(response.getString("Location"));
                             invitation.setInvitationID(invitationID);
                             updateTextView();
+                            //MAP
+                            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                                    .findFragmentById(R.id.map);
+                            mapFragment.getMapAsync(IndividualUserInvitationUI.this);
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
@@ -121,10 +142,18 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
     }
 
     public void updateTextView(){
-        System.out.println(invitation.getInvitationID());
         activityDateTime.setText(invitation.getDate()+" "+invitation.getStartTime()+" - " +invitation.getEndTime());
         activityTitle.setText(invitation.getTitle());
         activityDesc.setText(invitation.getDesc());
+        activityLocation.setText(invitation.getLocationName());
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng latLng = new LatLng(Double.parseDouble(invitation.getLatitude()),Double.parseDouble(invitation.getLongitude()));
+        googleMap.addMarker(new MarkerOptions().position(latLng)
+                .title(invitation.getLocationName()));
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,13));
+    }
 }
