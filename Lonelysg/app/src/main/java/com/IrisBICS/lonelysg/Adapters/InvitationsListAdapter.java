@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 
 import com.IrisBICS.lonelysg.Models.Invitation;
 import com.IrisBICS.lonelysg.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -49,7 +50,8 @@ public class InvitationsListAdapter extends ArrayAdapter<Invitation> implements 
             viewHolder.invitationTitle.setText(displayedInvitationsList.get(position).getTitle());
             viewHolder.invitationDateTime.setText(displayedInvitationsList.get(position).getDate()+" " + displayedInvitationsList.get(position).getStartTime()+" - " + displayedInvitationsList.get(position).getEndTime());
             viewHolder.invitationLocation.setText(displayedInvitationsList.get(position).getLocationName());
-            viewHolder.invitationImage.setImageURI(displayedInvitationsList.get(position).getInvPic());
+            Picasso.get().load(displayedInvitationsList.get(position).getInvPic()).into(viewHolder.invitationImage);
+//            viewHolder.invitationImage.setImageURI(displayedInvitationsList.get(position).getInvPic());
 //            viewHolder.userImage.setImageResource(userImage[position]);
             return r;
         }
