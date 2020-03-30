@@ -1,6 +1,5 @@
 package com.IrisBICS.lonelysg.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -53,8 +52,7 @@ public class PendingRequestsUI extends AppCompatActivity implements RequestCance
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ManageRequestsUI.class);
-                startActivity(intent);
+                finish();
             }
         });
 
