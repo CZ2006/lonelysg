@@ -1,12 +1,14 @@
 package com.IrisBICS.lonelysg.Adapters;
 
 import android.app.Activity;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,6 +49,7 @@ public class InvitationsListAdapter extends ArrayAdapter<Invitation> implements 
             viewHolder.invitationTitle.setText(displayedInvitationsList.get(position).getTitle());
             viewHolder.invitationDateTime.setText(displayedInvitationsList.get(position).getDate()+" " + displayedInvitationsList.get(position).getStartTime()+" - " + displayedInvitationsList.get(position).getEndTime());
             viewHolder.invitationLocation.setText(displayedInvitationsList.get(position).getLocationName());
+            viewHolder.invitationImage.setImageURI(displayedInvitationsList.get(position).getInvPic());
 //            viewHolder.userImage.setImageResource(userImage[position]);
             return r;
         }
@@ -55,13 +58,13 @@ public class InvitationsListAdapter extends ArrayAdapter<Invitation> implements 
             TextView invitationTitle;
             TextView invitationDateTime;
             TextView invitationLocation;
-//            ImageView userImage;
+            ImageView invitationImage;
 
             ViewHolder(View v) {
                 invitationTitle = v.findViewById(R.id.invitationTitle);
                 invitationDateTime = v.findViewById(R.id.invitationDateTime);
                 invitationLocation = v.findViewById(R.id.invitationLocation);
-//                userImage = v.findViewById(R.id.userImage);
+                invitationImage = v.findViewById(R.id.invListImage);
             }
         }
 

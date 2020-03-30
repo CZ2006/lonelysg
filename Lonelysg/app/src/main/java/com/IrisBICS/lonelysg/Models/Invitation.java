@@ -1,13 +1,16 @@
 package com.IrisBICS.lonelysg.Models;
 
+import android.net.Uri;
+
 public class Invitation {
 
     private String category, date, desc, host, startTime, endTime, title, invitationID, latitude, longitude, locationName;
+    private Uri invPic;
 
     public Invitation() {
     }
 
-    public Invitation(String category, String date, String desc, String host, String startTime, String endTime, String title, String invitationID, String latitude, String longitude, String locationName) {
+    public Invitation(String category, String date, String desc, String host, String startTime, String endTime, String title, String invitationID, String latitude, String longitude, String locationName, Uri imageUri) {
         this.category = category;
         this.date = date;
         this.desc = desc;
@@ -19,6 +22,7 @@ public class Invitation {
         this.latitude = latitude;
         this.longitude = longitude;
         this.locationName = locationName;
+        this.invPic = imageUri;
     }
 
     public String getCategory() {
@@ -108,4 +112,8 @@ public class Invitation {
     public void setLocationName(String locationName) {
         this.locationName = locationName;
     }
+
+    public Uri getInvPic() { return invPic; }
+
+    public void setInvPic(Uri invPic) { this.invPic = invPic; }
 }

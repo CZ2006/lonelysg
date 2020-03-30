@@ -34,6 +34,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class AccountUI extends Fragment {
     TextView profileName;
     TextView profileGender;
@@ -43,7 +45,7 @@ public class AccountUI extends Fragment {
     TextView profileUsername;
     Uri imageUri;
     Spinner dropDownIcon;
-    ImageView profilePic;
+    CircleImageView profilePic;
     String moreSettings[] = {"Change Password", "Delete Account"};
     ArrayAdapter<String> arrayAdapter;
 
@@ -115,9 +117,11 @@ public class AccountUI extends Fragment {
                             user.setAge(response.getString("age"));
                             user.setOccupation(response.getString("occupation"));
                             user.setInterests(response.getString("interests"));
-                            String profilePicUri = response.getString("image");
-                            imageUri = Uri.parse(profilePicUri);
-                            user.setProfilePic(imageUri);
+                            if (response.has("image")!=false) {
+                                String profilePicUri = response.getString("image");
+                                imageUri = Uri.parse(profilePicUri);
+                                user.setProfilePic(imageUri);
+                            }
                             setUserProfile();
                         } catch (JSONException ex) {
                             ex.printStackTrace();
@@ -141,7 +145,6 @@ public class AccountUI extends Fragment {
         profileInterest.setText(user.getInterests());
         profileUsername.setText(user.getUsername());
         if (user.getProfilePic()!=null) {
-            System.out.print(user.getProfilePic());
             Picasso.get().load(user.getProfilePic()).into(profilePic);
         }
     }

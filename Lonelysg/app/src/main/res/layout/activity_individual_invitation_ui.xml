@@ -70,6 +70,7 @@
             android:layout_marginTop="40dp"
             android:layout_marginBottom="8dp"
             android:layout_gravity="center"
+            android:id="@+id/invImage"
             android:src="@drawable/user_sample"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"/>

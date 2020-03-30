@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
@@ -64,6 +65,7 @@ public class InvitationsUI extends AppCompatActivity implements SearchView.OnQue
     ArrayAdapter<String >arrayAdapter;
     InvitationsListAdapter invitationsListAdapter;
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
+    private Uri imageUri;
 
     FusedLocationProviderClient mFusedLocationClient;
     private double userLat, userLong;
@@ -160,6 +162,11 @@ public class InvitationsUI extends AppCompatActivity implements SearchView.OnQue
                         invitation.setLongitude(jsonObject.getString("Longitude"));
                         invitation.setLocationName(jsonObject.getString("Location"));
                         invitation.setCategory(category);
+                        if (jsonObject.has("Image")!=false) {
+                            String InvPicUri = jsonObject.getString("Image");
+                            imageUri = Uri.parse(InvPicUri);
+                            invitation.setInvPic(imageUri);
+                        }
                         invitations.add(invitation);
                     } catch (JSONException e) {
                         e.printStackTrace();
