@@ -41,7 +41,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
 
     private Button acceptInvitation, backButton;
 
-    private TextView activityTitle, activityDateTime,activityDesc,hostInfo,hostInterests;
+    private TextView activityTitle, activityDateTime,activityDesc,hostInfo,hostInterests, activityLocation;
     private Uri imageUri;
     private Invitation invitation;
     private String invitationID;
