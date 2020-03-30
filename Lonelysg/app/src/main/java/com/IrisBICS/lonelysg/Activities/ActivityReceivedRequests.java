@@ -30,7 +30,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ReceivedRequestsUI extends AppCompatActivity implements RequestActionDialog.DialogListener{
+public class ActivityReceivedRequests extends AppCompatActivity implements RequestActionDialog.DialogListener{
 
     private ArrayList<Request> requests;
     private ArrayList<User> participants;
@@ -119,7 +119,7 @@ public class ReceivedRequestsUI extends AppCompatActivity implements RequestActi
                 // response
                 requests.remove(requests.get(clickedPos));
                 requestListAdapter.notifyDataSetChanged();
-                Toast.makeText(ReceivedRequestsUI.this, "Done!", Toast.LENGTH_LONG).show();
+                Toast.makeText(ActivityReceivedRequests.this, "Done!", Toast.LENGTH_LONG).show();
             }
         },
                 new Response.ErrorListener()

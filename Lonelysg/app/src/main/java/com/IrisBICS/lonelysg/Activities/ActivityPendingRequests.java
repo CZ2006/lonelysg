@@ -29,7 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PendingRequestsUI extends AppCompatActivity implements RequestCancelDialog.DialogListener{
+public class ActivityPendingRequests extends AppCompatActivity implements RequestCancelDialog.DialogListener{
 
     private ArrayList<Request> requests;
     private ArrayList<User> hosts;
@@ -116,7 +116,7 @@ public class PendingRequestsUI extends AppCompatActivity implements RequestCance
                         // response
                         requests.remove(requests.get(clickedPos));
                         requestListAdapter.notifyDataSetChanged();
-                        Toast.makeText(PendingRequestsUI.this, response, Toast.LENGTH_LONG).show();
+                        Toast.makeText(ActivityPendingRequests.this, response, Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener()

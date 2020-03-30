@@ -55,7 +55,7 @@ import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CreateInvitationUI extends AppCompatActivity {
+public class ActivityCreateInvitation extends AppCompatActivity {
 
     private Spinner categoryPick;
     String categories[] = {"Choose your invitation category", "Games", "Food and Drinks", "Movies", "Sports", "Study", "Others"};
@@ -122,7 +122,7 @@ public class CreateInvitationUI extends AppCompatActivity {
                 int MONTH = calender.get(Calendar.MONTH); // Month 0 is January
                 int DATE = calender.get(Calendar.DATE);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(CreateInvitationUI.this  , new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ActivityCreateInvitation.this  , new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
                         dateString = year + "/" + month + "/" + date;
@@ -155,7 +155,7 @@ public class CreateInvitationUI extends AppCompatActivity {
                 int HOUR = calender.get(Calendar.HOUR);
                 int MINUTE = calender.get(Calendar.MINUTE);
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(CreateInvitationUI.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(ActivityCreateInvitation.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                         startTimeString = hour + ":" + minute;
@@ -177,7 +177,7 @@ public class CreateInvitationUI extends AppCompatActivity {
                 int HOUR = calender.get(Calendar.HOUR);
                 int MINUTE = calender.get(Calendar.MINUTE);
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(CreateInvitationUI.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(ActivityCreateInvitation.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                         endTimeString = hour + ":" + minute;
@@ -206,7 +206,7 @@ public class CreateInvitationUI extends AppCompatActivity {
                 LatLng loc = location.getLatLng();
                 latitude = String.valueOf(loc.latitude);
                 longitude = String.valueOf(loc.longitude);
-                Toast.makeText(CreateInvitationUI.this, "Location is: " + place.getName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityCreateInvitation.this, "Location is: " + place.getName(), Toast.LENGTH_SHORT).show();
                 Log.i("Create Invitation UI", "Place: " + place.getName() + ", " + place.getId());
             }
 
@@ -228,25 +228,25 @@ public class CreateInvitationUI extends AppCompatActivity {
                 title = enterTitle.getText().toString().trim();
                 desc = enterDesc.getText().toString().trim();
                 if (title == null){
-                    Toast.makeText(CreateInvitationUI.this, "Enter Event Title", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityCreateInvitation.this, "Enter Event Title", Toast.LENGTH_SHORT).show();
                 }
                 else if (category == null){
-                    Toast.makeText(CreateInvitationUI.this, "Select Category", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityCreateInvitation.this, "Select Category", Toast.LENGTH_SHORT).show();
                 }
                 else if (desc == null){
-                    Toast.makeText(CreateInvitationUI.this, "Enter Description", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityCreateInvitation.this, "Enter Description", Toast.LENGTH_SHORT).show();
                 }
                 else if (dateString == null){
-                    Toast.makeText(CreateInvitationUI.this, "Select Date", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityCreateInvitation.this, "Select Date", Toast.LENGTH_SHORT).show();
                 }
                 else if (startTimeString == null){
-                    Toast.makeText(CreateInvitationUI.this, "Select Start Time", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityCreateInvitation.this, "Select Start Time", Toast.LENGTH_SHORT).show();
                 }
                 else if (endTimeString == null){
-                    Toast.makeText(CreateInvitationUI.this, "Select End Time", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityCreateInvitation.this, "Select End Time", Toast.LENGTH_SHORT).show();
                 }
                 else if (location == null){
-                    Toast.makeText(CreateInvitationUI.this, "Select Location", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityCreateInvitation.this, "Select Location", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     if (imageUri != null) {
@@ -254,7 +254,7 @@ public class CreateInvitationUI extends AppCompatActivity {
                     }
                     else {addInvWithoutPic();}
 //                    addInvitation();
-                    Toast.makeText(CreateInvitationUI.this, "New Invitation Created", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityCreateInvitation.this, "New Invitation Created", Toast.LENGTH_SHORT).show();
                 }
                 String requestInterest = currentUserID+"request";
                 PushNotifications.addDeviceInterest(requestInterest);
@@ -265,9 +265,9 @@ public class CreateInvitationUI extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(CreateInvitationUI.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityCreateInvitation.this, "Cancelled", Toast.LENGTH_SHORT).show();
                 Intent intent;
-                intent = new Intent(CreateInvitationUI.this, ManageInvitationsUI.class);
+                intent = new Intent(ActivityCreateInvitation.this, ActivityManageInvitations.class);
                 startActivity(intent);
             }
         });
@@ -317,7 +317,7 @@ public class CreateInvitationUI extends AppCompatActivity {
                             }
                         }) {
                         };
-                        AppController.getInstance(CreateInvitationUI.this).addToRequestQueue(addInvitationRequest);
+                        AppController.getInstance(ActivityCreateInvitation.this).addToRequestQueue(addInvitationRequest);
 
                     } catch (JSONException e) {
                         e.printStackTrace();

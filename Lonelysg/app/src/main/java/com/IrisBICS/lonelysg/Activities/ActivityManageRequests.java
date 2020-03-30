@@ -10,15 +10,15 @@ import androidx.cardview.widget.CardView;
 
 import com.IrisBICS.lonelysg.R;
 
-public class ManageInvitationsUI extends AppCompatActivity {
+public class ActivityManageRequests extends AppCompatActivity {
 
-    private CardView createInvitation, viewInvitations;
+    private CardView viewPending, viewReceived;
     private Button back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_invitations_ui);
+        setContentView(R.layout.activity_manage_requests_ui);
 
         back = findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {
@@ -28,22 +28,22 @@ public class ManageInvitationsUI extends AppCompatActivity {
             }
         });
 
-        createInvitation = findViewById(R.id.createInvitation);
-        createInvitation.setOnClickListener(new View.OnClickListener() {
+        viewPending = findViewById(R.id.pendingRequests);
+        viewPending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent;
-                intent = new Intent(ManageInvitationsUI.this, CreateInvitationUI.class);
+                intent = new Intent(ActivityManageRequests.this, ActivityPendingRequests.class);
                 startActivity(intent);
             }
         });
 
-        viewInvitations = findViewById(R.id.viewInvitations);
-        viewInvitations.setOnClickListener(new View.OnClickListener() {
+        viewReceived = findViewById(R.id.receivedRequestsTitle);
+        viewReceived.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent;
-                intent = new Intent(ManageInvitationsUI.this, UserInvitationsUI.class);
+                intent = new Intent(ActivityManageRequests.this, ActivityReceivedRequests.class);
                 startActivity(intent);
             }
         });

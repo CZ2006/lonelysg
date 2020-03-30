@@ -21,21 +21,21 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB_qsP8AOP_P0MdlPz-48TDaJYjTP3vbjo" />
 
-        <activity android:name=".Activities.PendingRequestsUI"></activity>
-        <activity android:name=".Activities.EditInvitationUI"/>
-        <activity android:name=".Activities.IndividualUserInvitationUI" />
-        <activity android:name=".Activities.ReceivedRequestsUI" />
-        <activity android:name=".Activities.ManageRequestsUI" />
-        <activity android:name=".Activities.UserInvitationsUI" />
-        <activity android:name=".Activities.CreateInvitationUI" />
-        <activity android:name=".Activities.ManageInvitationsUI" />
-        <activity android:name=".Activities.IndividualInvitationUI" />
-        <activity android:name=".Activities.IndividualChatUI" />
-        <activity android:name=".Activities.EditProfileUI" />
-        <activity android:name=".Activities.NavigationBarUI" />
-        <activity android:name=".Activities.InvitationsUI" />
-        <activity android:name=".Activities.SignUpPage" />
-        <activity android:name=".Activities.LoginUI">
+        <activity android:name=".Activities.ActivityPendingRequests"></activity>
+        <activity android:name=".Activities.ActivityEditInvitation"/>
+        <activity android:name=".Activities.ActivityIndividualUserInvitation" />
+        <activity android:name=".Activities.ActivityReceivedRequests" />
+        <activity android:name=".Activities.ActivityManageRequests" />
+        <activity android:name=".Activities.ActivityUserInvitations" />
+        <activity android:name=".Activities.ActivityCreateInvitation" />
+        <activity android:name=".Activities.ActivityManageInvitations" />
+        <activity android:name=".Activities.ActivityIndividualInvitation" />
+        <activity android:name=".Activities.ActivityIndividualChat" />
+        <activity android:name=".Activities.ActivityEditProfile" />
+        <activity android:name=".Activities.ActivityNavigationBar" />
+        <activity android:name=".Activities.ActivityInvitations" />
+        <activity android:name=".Activities.ActivitySignUp" />
+        <activity android:name=".Activities.ActivityLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

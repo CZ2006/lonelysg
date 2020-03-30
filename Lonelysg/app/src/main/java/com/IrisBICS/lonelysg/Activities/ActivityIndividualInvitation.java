@@ -37,7 +37,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class IndividualInvitationUI extends AppCompatActivity implements OnMapReadyCallback {
+public class ActivityIndividualInvitation extends AppCompatActivity implements OnMapReadyCallback {
 
     private Button acceptInvitation, backButton;
 
@@ -128,7 +128,7 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
                             //MAP
                             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                                     .findFragmentById(R.id.map);
-                            mapFragment.getMapAsync(IndividualInvitationUI.this);
+                            mapFragment.getMapAsync(ActivityIndividualInvitation.this);
                             getHost(invitation.getHost());
                         } catch (JSONException ex) {
                             ex.printStackTrace();
@@ -152,12 +152,12 @@ public class IndividualInvitationUI extends AppCompatActivity implements OnMapRe
         }
         if (exists==false){
             sendRequest();
-            Toast.makeText(IndividualInvitationUI.this, "Request Sent", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActivityIndividualInvitation.this, "Request Sent", Toast.LENGTH_SHORT).show();
 //                    sendNotif();
             finish();
         }
         else{
-            Toast.makeText(IndividualInvitationUI.this, "Request exists. Wait for host to accept your request.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActivityIndividualInvitation.this, "Request exists. Wait for host to accept your request.", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -44,7 +44,7 @@ import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EditInvitationUI extends AppCompatActivity {
+public class ActivityEditInvitation extends AppCompatActivity {
 
     private EditText editInvTitle;
     private EditText editInvDesc;
@@ -88,7 +88,7 @@ public class EditInvitationUI extends AppCompatActivity {
 
         // For dropdown box (category selection)
         editInvCategory = findViewById(R.id.editCategoryDropBox);
-        arrayAdapter = new ArrayAdapter<String>(EditInvitationUI.this, android.R.layout.simple_list_item_1, categories);
+        arrayAdapter = new ArrayAdapter<String>(ActivityEditInvitation.this, android.R.layout.simple_list_item_1, categories);
         editInvCategory.setAdapter(arrayAdapter);
 
         confirmButton = findViewById(R.id.confirmButton);
@@ -113,7 +113,7 @@ public class EditInvitationUI extends AppCompatActivity {
                 int MONTH = calender.get(Calendar.MONTH); // Month 0 is January
                 int DATE = calender.get(Calendar.DATE);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(EditInvitationUI.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ActivityEditInvitation.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
                         dateString = year + " " + month + " " + date;
@@ -136,7 +136,7 @@ public class EditInvitationUI extends AppCompatActivity {
                 int HOUR = calender.get(Calendar.HOUR);
                 int MINUTE = calender.get(Calendar.MINUTE);
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(EditInvitationUI.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(ActivityEditInvitation.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                         timeString = hour + ":" + minute;
@@ -155,7 +155,7 @@ public class EditInvitationUI extends AppCompatActivity {
                     updateInvWithPic();
                 }
                 else {updateInvWithoutPic();}
-                Intent intent = new Intent(getApplicationContext(), IndividualUserInvitationUI.class);
+                Intent intent = new Intent(getApplicationContext(), ActivityIndividualUserInvitation.class);
                 intent.putExtra("invitationID", invitation.getInvitationID());
                 startActivity(intent);
 
@@ -166,8 +166,8 @@ public class EditInvitationUI extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(EditInvitationUI.this, "Cancelled", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), IndividualUserInvitationUI.class);
+                Toast.makeText(ActivityEditInvitation.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), ActivityIndividualUserInvitation.class);
                 intent.putExtra("invitationID", invitation.getInvitationID());
                 startActivity(intent);
             }
@@ -233,7 +233,7 @@ public class EditInvitationUI extends AppCompatActivity {
                                 Log.e("Volley", error.toString());
                             }
                         });
-                        AppController.getInstance(EditInvitationUI.this).addToRequestQueue(updateUserRequest);
+                        AppController.getInstance(ActivityEditInvitation.this).addToRequestQueue(updateUserRequest);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -280,7 +280,7 @@ public class EditInvitationUI extends AppCompatActivity {
                     Log.e("Volley", error.toString());
                 }
             });
-            AppController.getInstance(EditInvitationUI.this).addToRequestQueue(updateUserRequest);
+            AppController.getInstance(ActivityEditInvitation.this).addToRequestQueue(updateUserRequest);
         } catch (JSONException e) {
             e.printStackTrace();
         }

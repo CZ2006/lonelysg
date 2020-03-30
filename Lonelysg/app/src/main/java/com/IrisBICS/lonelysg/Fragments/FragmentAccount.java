@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,8 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.IrisBICS.lonelysg.Activities.EditProfileUI;
-import com.IrisBICS.lonelysg.Activities.LoginUI;
+import com.IrisBICS.lonelysg.Activities.ActivityEditProfile;
+import com.IrisBICS.lonelysg.Activities.ActivityLogin;
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
@@ -36,7 +35,7 @@ import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AccountUI extends Fragment {
+public class FragmentAccount extends Fragment {
     TextView profileName;
     TextView profileGender;
     TextView profileAge;
@@ -82,7 +81,7 @@ public class AccountUI extends Fragment {
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent (v.getContext(), EditProfileUI.class);
+                Intent i = new Intent (v.getContext(), ActivityEditProfile.class);
                 startActivity(i);
             }
         });
@@ -99,7 +98,7 @@ public class AccountUI extends Fragment {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(getActivity(), "Logging out!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), LoginUI.class);
+                Intent intent = new Intent(getActivity(), ActivityLogin.class);
                 startActivity(intent);
             }
         });

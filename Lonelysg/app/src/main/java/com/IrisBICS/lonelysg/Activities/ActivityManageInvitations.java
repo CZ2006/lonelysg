@@ -10,15 +10,15 @@ import androidx.cardview.widget.CardView;
 
 import com.IrisBICS.lonelysg.R;
 
-public class ManageRequestsUI extends AppCompatActivity {
+public class ActivityManageInvitations extends AppCompatActivity {
 
-    private CardView viewPending, viewReceived;
+    private CardView createInvitation, viewInvitations;
     private Button back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_requests_ui);
+        setContentView(R.layout.activity_manage_invitations_ui);
 
         back = findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {
@@ -28,22 +28,22 @@ public class ManageRequestsUI extends AppCompatActivity {
             }
         });
 
-        viewPending = findViewById(R.id.pendingRequests);
-        viewPending.setOnClickListener(new View.OnClickListener() {
+        createInvitation = findViewById(R.id.createInvitation);
+        createInvitation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent;
-                intent = new Intent(ManageRequestsUI.this, PendingRequestsUI.class);
+                intent = new Intent(ActivityManageInvitations.this, ActivityCreateInvitation.class);
                 startActivity(intent);
             }
         });
 
-        viewReceived = findViewById(R.id.receivedRequestsTitle);
-        viewReceived.setOnClickListener(new View.OnClickListener() {
+        viewInvitations = findViewById(R.id.viewInvitations);
+        viewInvitations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent;
-                intent = new Intent(ManageRequestsUI.this, ReceivedRequestsUI.class);
+                intent = new Intent(ActivityManageInvitations.this, ActivityUserInvitations.class);
                 startActivity(intent);
             }
         });

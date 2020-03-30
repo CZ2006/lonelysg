@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.IrisBICS.lonelysg.Activities.ManageInvitationsUI;
-import com.IrisBICS.lonelysg.Activities.ManageRequestsUI;
+import com.IrisBICS.lonelysg.Activities.ActivityManageInvitations;
+import com.IrisBICS.lonelysg.Activities.ActivityManageRequests;
 import com.IrisBICS.lonelysg.R;
 
 import androidx.annotation.NonNull;
@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-public class ManageActivitiesUI extends Fragment {
+public class FragmentActivities extends Fragment {
 
     private CardView invitationsIcon, requestsIcon;
 
@@ -33,7 +33,7 @@ public class ManageActivitiesUI extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent;
-                intent = new Intent(ManageActivitiesUI.this.getActivity(), ManageInvitationsUI.class);
+                intent = new Intent(FragmentActivities.this.getActivity(), ActivityManageInvitations.class);
                 startActivity(intent);
             }
         });
@@ -41,7 +41,7 @@ public class ManageActivitiesUI extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent;
-                intent = new Intent(ManageActivitiesUI.this.getActivity(), ManageRequestsUI.class);
+                intent = new Intent(FragmentActivities.this.getActivity(), ActivityManageRequests.class);
                 startActivity(intent);
             }
         });

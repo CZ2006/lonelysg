@@ -11,10 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.IrisBICS.lonelysg.Activities.InvitationsUI;
+import com.IrisBICS.lonelysg.Activities.ActivityInvitations;
 import com.IrisBICS.lonelysg.R;
 
-public class DiscoveryPageUI extends Fragment implements View.OnClickListener {
+public class FragmentDiscoveryPage extends Fragment implements View.OnClickListener {
     private CardView allIcon, gamesIcon, foodIcon, movieIcon, othersIcon, sportsIcon, studyIcon;
 
     @Nullable
@@ -49,43 +49,43 @@ public class DiscoveryPageUI extends Fragment implements View.OnClickListener {
 
         switch (v.getId()) {
             case R.id.allIcon :
-                intent = new Intent(this.getActivity(), InvitationsUI.class);
+                intent = new Intent(this.getActivity(), ActivityInvitations.class);
                 intent.putExtra("category", "All");
                 startActivity(intent);
                 break;
 
             case R.id.gamesIcon :
-                intent = new Intent(this.getActivity(), InvitationsUI.class);
+                intent = new Intent(this.getActivity(), ActivityInvitations.class);
                 intent.putExtra("category", "Games");
                 startActivity(intent);
                 break;
 
             case R.id.foodIcon :
-                intent = new Intent(this.getActivity(), InvitationsUI.class);
+                intent = new Intent(this.getActivity(), ActivityInvitations.class);
                 intent.putExtra("category", "Food and Drinks");
                 startActivity(intent);
                 break;
 
             case R.id.movieIcon :
-                intent = new Intent(this.getActivity(), InvitationsUI.class);
+                intent = new Intent(this.getActivity(), ActivityInvitations.class);
                 intent.putExtra("category", "Movies");
                 startActivity(intent);
                 break;
 
             case R.id.othersIcon :
-                intent = new Intent(this.getActivity(), InvitationsUI.class);
+                intent = new Intent(this.getActivity(), ActivityInvitations.class);
                 intent.putExtra("category", "Others");
                 startActivity(intent);
                 break;
 
             case R.id.sportsIcon :
-                intent = new Intent(this.getActivity(), InvitationsUI.class);
+                intent = new Intent(this.getActivity(), ActivityInvitations.class);
                 intent.putExtra("category", "Sports");
                 startActivity(intent);
                 break;
 
             case R.id.studyIcon :
-                intent = new Intent(this.getActivity(), InvitationsUI.class);
+                intent = new Intent(this.getActivity(), ActivityInvitations.class);
                 intent.putExtra("category", "Study");
                 startActivity(intent);
                 break;

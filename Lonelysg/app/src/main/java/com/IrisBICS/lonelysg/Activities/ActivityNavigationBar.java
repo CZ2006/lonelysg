@@ -7,17 +7,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.IrisBICS.lonelysg.Fragments.AccountUI;
-import com.IrisBICS.lonelysg.Fragments.ChatUI;
-import com.IrisBICS.lonelysg.Fragments.DiscoveryPageUI;
-import com.IrisBICS.lonelysg.Fragments.ManageActivitiesUI;
+import com.IrisBICS.lonelysg.Fragments.FragmentAccount;
+import com.IrisBICS.lonelysg.Fragments.FragmentChat;
+import com.IrisBICS.lonelysg.Fragments.FragmentDiscoveryPage;
+import com.IrisBICS.lonelysg.Fragments.FragmentActivities;
 import com.IrisBICS.lonelysg.R;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pusher.pushnotifications.PushNotificationReceivedListener;
 import com.pusher.pushnotifications.PushNotifications;
 
-public class NavigationBarUI extends AppCompatActivity {
+public class ActivityNavigationBar extends AppCompatActivity {
     MeowBottomNavigation meo;
     private final static int ID_DISCOVERY = 1;
     private final static int ID_INVITATION = 2;
@@ -37,7 +37,7 @@ public class NavigationBarUI extends AppCompatActivity {
         meo.add(new MeowBottomNavigation.Model(3, R.drawable.chat_black));
         meo.add(new MeowBottomNavigation.Model(4, R.drawable.account_circle));
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DiscoveryPageUI()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentDiscoveryPage()).commit();
 
 
         meo.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
@@ -52,16 +52,16 @@ public class NavigationBarUI extends AppCompatActivity {
                 Fragment select_fragment = null;
                 switch(item.getId()){
                     case ID_ACCOUNT:
-                        select_fragment = new AccountUI();
+                        select_fragment = new FragmentAccount();
                         break;
                     case ID_CHAT:
-                        select_fragment = new ChatUI();
+                        select_fragment = new FragmentChat();
                         break;
                     case ID_DISCOVERY:
-                        select_fragment = new DiscoveryPageUI();
+                        select_fragment = new FragmentDiscoveryPage();
                         break;
                     case ID_INVITATION:
-                        select_fragment = new ManageActivitiesUI();
+                        select_fragment = new FragmentActivities();
                         break;
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, select_fragment).commit();
@@ -79,7 +79,7 @@ public class NavigationBarUI extends AppCompatActivity {
                     Log.i("MyActivity", "Payload was missing");
                 } else {
                     Log.i("MyActivity", messagePayload);
-                    Toast.makeText(NavigationBarUI.this, "You received a request", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityNavigationBar.this, "You received a request", Toast.LENGTH_SHORT).show();
                     // Now update the UI based on your message payload!
                 }
             }

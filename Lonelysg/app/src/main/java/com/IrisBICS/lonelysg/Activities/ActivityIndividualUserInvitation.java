@@ -32,7 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class IndividualUserInvitationUI extends AppCompatActivity implements OnMapReadyCallback {
+public class ActivityIndividualUserInvitation extends AppCompatActivity implements OnMapReadyCallback {
 
 
     private Uri imageUri;
@@ -79,7 +79,7 @@ public class IndividualUserInvitationUI extends AppCompatActivity implements OnM
         editInvitation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), EditInvitationUI.class);
+                Intent intent = new Intent(getApplicationContext(), ActivityEditInvitation.class);
                 intent.putExtra("invitationID", invitationID);
                 startActivity(intent);
             }
@@ -123,7 +123,7 @@ public class IndividualUserInvitationUI extends AppCompatActivity implements OnM
                             //MAP
                             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                                     .findFragmentById(R.id.map);
-                            mapFragment.getMapAsync(IndividualUserInvitationUI.this);
+                            mapFragment.getMapAsync(ActivityIndividualUserInvitation.this);
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
@@ -144,8 +144,8 @@ public class IndividualUserInvitationUI extends AppCompatActivity implements OnM
             @Override
             public void onResponse(String response) {
                 // response
-                Toast.makeText(IndividualUserInvitationUI.this, "Invitation deleted.", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), UserInvitationsUI.class);
+                Toast.makeText(ActivityIndividualUserInvitation.this, "Invitation deleted.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), ActivityUserInvitations.class);
                 startActivity(intent);
             }
         },

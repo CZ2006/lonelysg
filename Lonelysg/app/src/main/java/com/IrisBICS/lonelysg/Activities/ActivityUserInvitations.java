@@ -25,7 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class UserInvitationsUI extends AppCompatActivity {
+public class ActivityUserInvitations extends AppCompatActivity {
 
     private ListView userInvitationsList;
     private Button back;
@@ -57,7 +57,7 @@ public class UserInvitationsUI extends AppCompatActivity {
         userInvitationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                Intent intent = new Intent(getApplicationContext(), IndividualUserInvitationUI.class);
+                Intent intent = new Intent(getApplicationContext(), ActivityIndividualUserInvitation.class);
                 intent.putExtra("invitationID", userInvitations.get(i).getInvitationID());
                 startActivity(intent);
             }

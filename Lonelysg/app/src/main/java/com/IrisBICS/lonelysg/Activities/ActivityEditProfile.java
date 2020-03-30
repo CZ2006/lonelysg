@@ -44,7 +44,7 @@ import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EditProfileUI extends Activity {
+public class ActivityEditProfile extends Activity {
 
     private CircleImageView editProfilePic;
     private Uri imageUri;
@@ -91,7 +91,7 @@ public class EditProfileUI extends Activity {
 
         // For dropdown box (category selection)
         dropdownbox = (Spinner) findViewById(R.id.genderCategoryDropBox);
-        arrayAdapter = new ArrayAdapter<String>(EditProfileUI.this, android.R.layout.simple_list_item_1, categories);
+        arrayAdapter = new ArrayAdapter<String>(ActivityEditProfile.this, android.R.layout.simple_list_item_1, categories);
         dropdownbox.setAdapter(arrayAdapter);
 
         confirmButton = (Button)findViewById(R.id.editProfileConfirmButton);
@@ -112,7 +112,7 @@ public class EditProfileUI extends Activity {
                     updateProfileWithPic();
                 }
                 else {updateProfileWithoutPic();}
-                Intent i = new Intent (EditProfileUI.this, NavigationBarUI.class);
+                Intent i = new Intent (ActivityEditProfile.this, ActivityNavigationBar.class);
                 startActivity(i);
             }
         });
@@ -121,7 +121,7 @@ public class EditProfileUI extends Activity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(EditProfileUI.this, "Process Cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityEditProfile.this, "Process Cancelled", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -183,7 +183,7 @@ public class EditProfileUI extends Activity {
                                 Log.e("Volley", error.toString());
                             }
                         });
-                        AppController.getInstance(EditProfileUI.this).addToRequestQueue(updateUserRequest);
+                        AppController.getInstance(ActivityEditProfile.this).addToRequestQueue(updateUserRequest);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -229,7 +229,7 @@ public class EditProfileUI extends Activity {
                     Log.e("Volley", error.toString());
                 }
             });
-            AppController.getInstance(EditProfileUI.this).addToRequestQueue(updateUserRequest);
+            AppController.getInstance(ActivityEditProfile.this).addToRequestQueue(updateUserRequest);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.IrisBICS.lonelysg.Activities.IndividualChatUI;
+import com.IrisBICS.lonelysg.Activities.ActivityIndividualChat;
 import com.IrisBICS.lonelysg.Adapters.ChatListAdapter;
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.FirebaseAuthHelper;
@@ -29,7 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ChatUI extends Fragment {
+public class FragmentChat extends Fragment {
 
     private ListView chatList;
     private ArrayList<String> chatUsersList, chatUsersIDList;
@@ -51,7 +51,7 @@ public class ChatUI extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent;
-                intent = new Intent(ChatUI.this.getActivity(), IndividualChatUI.class);
+                intent = new Intent(FragmentChat.this.getActivity(), ActivityIndividualChat.class);
                 Bundle extras = new Bundle();
                 extras.putString("receiver_name", chatUsersList.get(i));
                 extras.putString("receiver_id", chatUsersIDList.get(i));

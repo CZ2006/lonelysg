@@ -50,7 +50,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class InvitationsUI extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class ActivityInvitations extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     int PERMISSION_ID = 1;
 
@@ -128,7 +128,7 @@ public class InvitationsUI extends AppCompatActivity implements SearchView.OnQue
         invitationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                    Intent intent = new Intent(getApplicationContext(), IndividualInvitationUI.class);
+                    Intent intent = new Intent(getApplicationContext(), ActivityIndividualInvitation.class);
                     intent.putExtra("invitationID", invitations.get(i).getInvitationID());
                     startActivity(intent);
             }

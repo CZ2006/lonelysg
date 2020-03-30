@@ -30,7 +30,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class IndividualChatUI extends AppCompatActivity {
+public class ActivityIndividualChat extends AppCompatActivity {
 
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
