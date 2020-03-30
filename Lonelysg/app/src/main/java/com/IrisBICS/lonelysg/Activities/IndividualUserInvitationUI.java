@@ -22,15 +22,25 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.squareup.picasso.Picasso;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class IndividualUserInvitationUI extends AppCompatActivity {
+public class IndividualUserInvitationUI extends AppCompatActivity implements OnMapReadyCallback {
 
-    private Button editInvitation, deleteInvitation;
-    private TextView activityTitle, activityDateTime,activityDesc;
+
     private Uri imageUri;
     private ImageView userInvImage;
+
+    private Button editInvitation, deleteInvitation, back;
+    private TextView activityTitle, activityDateTime,activityDesc, activityLocation;
+
 
     private Invitation invitation;
     private String invitationID;
@@ -44,14 +54,27 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
         invitationID = receivedIntent.getStringExtra("invitationID");
         invitation = new Invitation("","","","","","","",invitationID,"","","",imageUri);
 
+        back = findViewById(R.id.backButton);
         activityDateTime = findViewById(R.id.activityDateTime);
         activityDesc = findViewById(R.id.activityDesc);
         activityTitle = findViewById(R.id.activityTitle);
+
         userInvImage = findViewById(R.id.indUserInvImage);
+
+        activityLocation = findViewById(R.id.activityLocation);
+
         updateTextView();
 
         editInvitation = findViewById(R.id.editInvitation);
         deleteInvitation = findViewById(R.id.deleteInvitation);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), UserInvitationsUI.class);
+                startActivity(intent);
+            }
+        });
 
         // Click edit button
         editInvitation.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +113,7 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
                             invitation.setHost(response.getString("Host"));
                             invitation.setDesc(response.getString("Description"));
                             invitation.setDate(response.getString("Date"));
+                            invitation.setLocationName(response.getString("Location"));
                             invitation.setInvitationID(invitationID);
                             if (response.has("Image")!=false) {
                                 String InvPicUri = response.getString("Image");
@@ -97,6 +121,10 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
                                 invitation.setInvPic(imageUri);
                             }
                             updateTextView();
+                            //MAP
+                            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                                    .findFragmentById(R.id.map);
+                            mapFragment.getMapAsync(IndividualUserInvitationUI.this);
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
@@ -132,13 +160,24 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
     }
 
     public void updateTextView(){
-        System.out.println(invitation.getInvitationID());
         activityDateTime.setText(invitation.getDate()+" "+invitation.getStartTime()+" - " +invitation.getEndTime());
         activityTitle.setText(invitation.getTitle());
         activityDesc.setText(invitation.getDesc());
+
         if (invitation.getInvPic()!=null) {
             Picasso.get().load(invitation.getInvPic()).into(userInvImage);
         }
+
+        activityLocation.setText(invitation.getLocationName());
+
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng latLng = new LatLng(Double.parseDouble(invitation.getLatitude()),Double.parseDouble(invitation.getLongitude()));
+        googleMap.addMarker(new MarkerOptions().position(latLng)
+                .title(invitation.getLocationName()));
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,13));
+    }
 }

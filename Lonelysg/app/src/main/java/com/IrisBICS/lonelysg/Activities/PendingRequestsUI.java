@@ -1,9 +1,11 @@
 package com.IrisBICS.lonelysg.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ public class PendingRequestsUI extends AppCompatActivity implements RequestCance
     private ArrayList<User> hosts;
     private ListView pendingRequestsList;
     private int clickedPos = -1;
+    private Button back;
 
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
     RequestListAdapter requestListAdapter;
@@ -45,6 +48,15 @@ public class PendingRequestsUI extends AppCompatActivity implements RequestCance
 
         requests = new ArrayList<>();
         hosts = new ArrayList<>();
+
+        back = findViewById(R.id.backButton);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ManageRequestsUI.class);
+                startActivity(intent);
+            }
+        });
 
         pendingRequestsList = findViewById(R.id.pendingRequestsListView);
         requestListAdapter = new RequestListAdapter(this, requests, hosts,"pending");

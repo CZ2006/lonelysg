@@ -1,9 +1,11 @@
 package com.IrisBICS.lonelysg.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.IrisBICS.lonelysg.Adapters.RequestListAdapter;
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.FirebaseAuthHelper;
+import com.IrisBICS.lonelysg.Models.Invitation;
 import com.IrisBICS.lonelysg.Models.Request;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
@@ -21,7 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.pusher.pushnotifications.PushNotifications;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +37,8 @@ public class ReceivedRequestsUI extends AppCompatActivity implements RequestActi
     private ArrayList<User> participants;
     private ListView receivedRequestsList;
     private int clickedPos = -1;
+    private String activityDetails;
+    private Button back;
 
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
     RequestListAdapter requestListAdapter;
@@ -46,6 +50,15 @@ public class ReceivedRequestsUI extends AppCompatActivity implements RequestActi
 
         requests = new ArrayList<>();
         participants = new ArrayList<>();
+
+        back = findViewById(R.id.backButton);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ManageRequestsUI.class);
+                startActivity(intent);
+            }
+        });
 
         receivedRequestsList = findViewById(R.id.receivedRequestsListView);
         requestListAdapter = new RequestListAdapter(this, requests, participants,"received");
@@ -79,6 +92,7 @@ public class ReceivedRequestsUI extends AppCompatActivity implements RequestActi
                         Request request = new Request();
                         request.setHost(jsonObject.getString("Host"));
                         request.setInvitation(jsonObject.getString("Invitation"));
+                        request.setInvitationID(jsonObject.getString("InvitationID"));
                         request.setParticipant(jsonObject.getString("Participant"));
                         request.setRequestID(jsonObject.getString("RequestID"));
                         requests.add(request);
@@ -124,7 +138,7 @@ public class ReceivedRequestsUI extends AppCompatActivity implements RequestActi
             String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/sendMessage";
             JSONObject jsonBody = new JSONObject();
 
-            jsonBody.put("Message", "Hello! I have accepted your request!");
+            jsonBody.put("Message", activityDetails);
             jsonBody.put("Receiver", requests.get(clickedPos).getParticipant());
             jsonBody.put("Sender", currentUserID);
 
@@ -152,11 +166,10 @@ public class ReceivedRequestsUI extends AppCompatActivity implements RequestActi
 
     public void approveRequest(){
         if (clickedPos!=-1){
+            getInvitation(requests.get(clickedPos).getInvitationID());
             deleteRequest(requests.get(clickedPos).getRequestID());
-            sendAcceptRequestMessage();
             //insert xq send notif
         }
-
     }
 
     public void rejectRequest(){
@@ -193,6 +206,40 @@ public class ReceivedRequestsUI extends AppCompatActivity implements RequestActi
                     }
                 });
         AppController.getInstance(this).addToRequestQueue(getUserProfileRequest);
+    }
+
+    private void getInvitation(String invitationID) {
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getInvitation/"+invitationID;
+
+        JsonObjectRequest getInvitationRequest = new JsonObjectRequest
+                (com.android.volley.Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Invitation invitation = new Invitation();
+                            invitation.setTitle(response.getString("Title"));
+                            invitation.setStartTime(response.getString("Start Time"));
+                            invitation.setEndTime(response.getString("End Time"));
+                            invitation.setDate(response.getString("Date"));
+                            invitation.setLocationName(response.getString("Location"));
+                            invitation.setInvitationID(response.getString("InvitationID"));
+                            activityDetails = "Hello! I have accepted your request!" + "\n" +
+                                              "Title: " + invitation.getTitle() + "\n" +
+                                              "Date: " + invitation.getDate() + "\n" +
+                                              "Time: " + invitation.getStartTime() + " - " + invitation.getEndTime() + "\n" +
+                                              "Location" + invitation.getLocationName();
+                            sendAcceptRequestMessage();
+                        } catch (JSONException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley", error.toString());
+                    }
+                });
+        AppController.getInstance(this).addToRequestQueue(getInvitationRequest);
     }
 
 }

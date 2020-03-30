@@ -25,17 +25,6 @@
             app:expandedTitleMarginEnd="64dp"
             android:background="@drawable/map_sample">
 
-            <ImageButton
-                android:id="@+id/reportInvitation"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="370dp"
-                android:layout_marginTop="2dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerInside"
-                android:background="@drawable/report_icon"/>
-
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarid"
                 android:layout_width="match_parent"
@@ -116,7 +105,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Activity Description "
+                        android:text="Description "
                         android:fontFamily="sans-serif-medium"
                         android:textColor="@color/darkblue"
                         android:textSize="24sp"/>
@@ -126,6 +115,38 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Description of activity"
+                        android:textSize="18sp"
+                        android:textColor="#000000"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="5dp"
+                        android:background="#D3D3D3"/>
+                </LinearLayout>
+
+                // For Location
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Location"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/darkblue"
+                        android:textSize="20sp"/>
+
+                    <TextView
+                        android:id="@+id/activityLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
                         android:textSize="18sp"
                         android:textColor="#000000"/>
 
@@ -148,9 +169,22 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:layout_width="150dp"
+                    android:layout_width="120dp"
                     android:layout_height="35dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/backButton"
+                    android:text="BACK "
+                    android:textColor="@color/white"
+                    android:textAlignment="textEnd"
+                    android:textSize="18sp"
+                    android:drawableRight="@drawable/cancel_icon"
+                    android:paddingRight="29dp"
+                    android:background="@drawable/borders3"/>
+
+                <Button
+                    android:layout_width="120dp"
+                    android:layout_height="35dp"
+                    android:layout_marginRight="10dp"
                     android:id="@+id/deleteInvitation"
                     android:text="DELETE "
                     android:textColor="@color/white"
@@ -161,7 +195,7 @@
                     android:background="@drawable/borders3"/>
 
                 <Button
-                    android:layout_width="150dp"
+                    android:layout_width="120dp"
                     android:layout_height="35dp"
                     android:id="@+id/editInvitation"
                     android:text="EDIT "

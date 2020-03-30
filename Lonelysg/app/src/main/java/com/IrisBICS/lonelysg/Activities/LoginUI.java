@@ -20,10 +20,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.messaging.RemoteMessage;
-import com.pusher.pushnotifications.PushNotificationReceivedListener;
-import com.pusher.pushnotifications.PushNotifications;
-import com.pusher.pushnotifications.api.PushNotificationService;
 
 public class LoginUI extends AppCompatActivity {
     RelativeLayout loginStuff, passwordSignUpBar;

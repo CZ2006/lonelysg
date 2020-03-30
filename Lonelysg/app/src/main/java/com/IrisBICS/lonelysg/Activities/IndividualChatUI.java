@@ -21,16 +21,12 @@ import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.util.ArrayList;
 
@@ -40,7 +36,7 @@ public class IndividualChatUI extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private EditText typeMessage;
-    private Button sendButton;
+    private Button sendButton, back;
     private TextView receiverName;
     private ImageButton refresh;
     private String receiverID, receiver;
@@ -64,6 +60,15 @@ public class IndividualChatUI extends AppCompatActivity {
         sendButton = findViewById(R.id.sendButton);
         refresh = findViewById(R.id.refreshButton);
         recyclerView = findViewById(R.id.chatView);
+        back = findViewById(R.id.backButton);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), NavigationBarUI.class);
+                startActivity(intent);
+            }
+        });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         chatAdapter = new ChatRecyclerAdapter(this, messages);

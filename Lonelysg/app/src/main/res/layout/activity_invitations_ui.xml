@@ -29,6 +29,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -82,7 +83,7 @@
             <ListView
                 android:id="@+id/invitationsListView"
                 android:layout_width="300dp"
-                android:layout_height="550dp"
+                android:layout_height="500dp"
                 android:layout_marginTop="15dp"
                 android:layout_weight="1"
                 android:nestedScrollingEnabled="true"
@@ -96,6 +97,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sortDropBox"
                 app:layout_constraintVertical_bias="0.292" />
+
+            <Button
+                android:layout_width="140dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:id="@+id/backButton"
+                android:text="BACK "
+                android:textColor="@color/white"
+                android:textAlignment="textEnd"
+                android:textSize="18sp"
+                android:drawableRight="@drawable/cancel_icon"
+                android:paddingRight="29dp"
+                android:background="@drawable/borders3"/>
 
         </LinearLayout>
 

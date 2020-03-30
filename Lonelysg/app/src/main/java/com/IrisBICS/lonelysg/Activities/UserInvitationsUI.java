@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 public class UserInvitationsUI extends AppCompatActivity {
 
     private ListView userInvitationsList;
+    private Button back;
 
     private ArrayList<Invitation> userInvitations;
     InvitationsListAdapter invitationsListAdapter;
@@ -40,6 +42,13 @@ public class UserInvitationsUI extends AppCompatActivity {
 
         userInvitations = new ArrayList<>();
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ManageInvitationsUI.class);
+                startActivity(intent);
+            }
+        });
         userInvitationsList = findViewById(R.id.userInvitationsListView);
         invitationsListAdapter = new InvitationsListAdapter(this, userInvitations);
         userInvitationsList.setAdapter(invitationsListAdapter);
@@ -74,6 +83,7 @@ public class UserInvitationsUI extends AppCompatActivity {
                         invitation.setDate(jsonObject.getString("Date"));
                         invitation.setCategory(jsonObject.getString("Category"));
                         invitation.setInvitationID(jsonObject.getString("InvitationID"));
+                        invitation.setLocationName(jsonObject.getString("Location"));
                         userInvitations.add(invitation);
                     } catch (JSONException e) {
                         e.printStackTrace();

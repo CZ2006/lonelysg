@@ -7,10 +7,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.IrisBICS.lonelysg.Fragments.ManageActivitiesUI;
 import com.IrisBICS.lonelysg.Fragments.AccountUI;
 import com.IrisBICS.lonelysg.Fragments.ChatUI;
 import com.IrisBICS.lonelysg.Fragments.DiscoveryPageUI;
+import com.IrisBICS.lonelysg.Fragments.ManageActivitiesUI;
 import com.IrisBICS.lonelysg.R;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.google.firebase.messaging.RemoteMessage;
@@ -37,7 +37,8 @@ public class NavigationBarUI extends AppCompatActivity {
         meo.add(new MeowBottomNavigation.Model(3, R.drawable.chat_black));
         meo.add(new MeowBottomNavigation.Model(4, R.drawable.account_circle));
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AccountUI()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DiscoveryPageUI()).commit();
+
 
         meo.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override
