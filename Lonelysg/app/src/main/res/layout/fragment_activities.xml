@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.ManageActivitiesUI"
+    tools:context=".Fragments.FragmentActivities"
     android:orientation="vertical"
     android:background="@color/backgroundcolor">
     >
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:gravity="center"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:padding="10dp"
             app:layout_anchor="@+id/constraintLayout"
             app:layout_anchorGravity="center"

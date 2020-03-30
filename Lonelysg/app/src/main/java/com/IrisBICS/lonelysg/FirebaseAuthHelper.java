@@ -5,14 +5,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class FirebaseAuthHelper {
 
-    private static FirebaseUser currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
+//    public static String getCurrentUser() {
+//        return currentUser.getEmail();
+//    }
 
-
-    public static String getCurrentUser() {
-        return currentUser.getEmail();
-    }
-
-    public static String getUserID() {
+    public static String getCurrentUserID() {
+        FirebaseUser currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
         return currentUser.getUid();
     }
 
@@ -53,5 +51,7 @@ public class FirebaseAuthHelper {
 //    }
 
 
+
 }
+
 

@@ -8,58 +8,64 @@ router.get("/getMessages/:user1/:user2", (req,res)=>{
     var ref = database.ref('Messages');
     var user1 = req.params.user1;
     var user2 = req.params.user2;
+
+    function compare(a, b) {
+        if (a.MessageID > b.MessageID) return 1;
+        if (b.MessageID > a.MessageID) return -1;
+      
+        return 0;
+      }
     
     ref.once("value", function(snapshot){
         var messages = snapshot.val();
-        console.log(messages); //View response value in the command line
         var messagesArray = [];
         for (var i in messages){
-            if ((messages[i].receiver==(user2))&(messages[i].sender==(user1))){
+            if ((messages[i].Receiver==(user2))&(messages[i].Sender==(user1))){
                 messagesArray.push(messages[i]);
             }
-            else if ((messages[i].sender==(user2))&(messages[i].receiver==(user1))){
+            else if ((messages[i].Sender==(user2))&(messages[i].Receiver==(user1))){
                 messagesArray.push(messages[i]);
             }
         }
-        res.json(messagesArray); //Returned in the browser or postman
+        messagesArray.sort(compare);
+        res.json(messagesArray); 
     })
 })
 
-router.get("/getChatUsersList/:email", (req,res)=>{ 
+router.get("/getChatUsersList/:userID", (req,res)=>{ 
     //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getChatUsersList after running firebase serve
     
     let database = req.app.get("database")
     var ref = database.ref('Messages');
-    var user = req.params.email;
-    console.log(user);
+    var user = req.params.userID;
     
     ref.once("value", function(snapshot){
         var messages = snapshot.val();
         var chatUsersArray = [];
         for (var i in messages){
             var exists = 0;
-            if (messages[i].sender == user){
+            if (messages[i].Sender == user){
                 for(var j in chatUsersArray){
                     exists = 0;
-                    if (messages[i].receiver==(chatUsersArray[j])){
+                    if (messages[i].Receiver==(chatUsersArray[j])){
                         exists = 1;
                         break;
                     }
                 }
                 if (exists==0){
-                    chatUsersArray.push(messages[i].receiver);
+                    chatUsersArray.push(messages[i].Receiver);
                 }
             }
-            if (messages[i].receiver==user){
+            if (messages[i].Receiver==user){
                 exists = 0;
                 for(var k in chatUsersArray){
-                    if (messages[i].sender==(chatUsersArray[k])){
+                    if (messages[i].Sender==(chatUsersArray[k])){
                         exists = 1;
                         break;
                     }
                 }
                 if (exists==0){
-                    chatUsersArray.push(messages[i].sender);
+                    chatUsersArray.push(messages[i].Sender);
                 }
             }
         }
@@ -70,21 +76,21 @@ router.get("/getChatUsersList/:email", (req,res)=>{
 
 })
 
-router.post("/sendMessage", (req, res) => { //Sample function adding new user to realtime DB on firebase
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/sendMessage in postman with sample data in the body after running firebase serve
+router.post("/sendMessage", (req, res) => { 
+    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/sendMessage 
     let database = req.app.get("database")
     let msgRef = database.ref("Messages")
     
     msgRef.once("value", function(snapshot){
         var messages = snapshot.val();
-        var newID = 1;
+        var newID = 0;
         for (var i in messages){
             newID++;
         }
-        const newMessage = msgRef.child("Message" + newID) //Requires information sent in JSON format
+        const newMessage = msgRef.child("Message" + newID) 
+        req.body.MessageID = newID; 
         newMessage.set(req.body)
-
-        res.end("Message sent."); //Returned in postman
+        res.json(req.body); 
     })
 
 })
@@ -97,18 +103,28 @@ router.get("/getInvitation/:invitationID", (req,res) => {
     })
 })
 
-router.get("/getInvitations/:category", (req,res)=>{ 
+router.get("/getInvitations/:category/:user", (req,res)=>{ 
     //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getInvitations after running firebase serve
     let database = req.app.get("database")
     var ref = database.ref('Invitations');
     var category = req.params.category;
+    var user = req.params.user;
     
     ref.once("value", function(snapshot){
         var invitations = snapshot.val();
         var invitationsArray = [];
-        for (var i in invitations){
-            if ((invitations[i].Category==(category))){
-                invitationsArray.push(invitations[i]);
+        if (category=="All"){
+            for (var i in invitations){
+                if ((invitations[i].Host!=user)&invitations[i].Category!="test"){
+                    invitationsArray.push(invitations[i]);
+                }
+            }
+        }
+        else{
+            for (var i in invitations){
+                if ((invitations[i].Category==(category))&(invitations[i].Host!=user)){
+                    invitationsArray.push(invitations[i]);
+                }
             }
         }
         res.json(invitationsArray); //Returned in the browser or postman
@@ -140,7 +156,7 @@ router.post("/addInvitation", (req, res) => {
 
     ref.once("value", function(snapshot){
         var invitations = snapshot.val();
-        var newID = 1;
+        var newID = 0;
         for (var i in invitations){
             newID++;
         }
@@ -205,10 +221,10 @@ router.post("/sendRequest", (req, res) => {
     let ref = database.ref("Requests")
 
     ref.once("value", function(snapshot){
-		var newID = 1;
-        var requests = snapshot.val();  
+		var newID = 0;
+        var requests = snapshot.val(); 
         for (var i in requests){
-			newID++;
+            newID++;
         }
         const newReq = ref.child("Request" + newID) //Requires information sent in JSON format
         req.body.RequestID = newID; 

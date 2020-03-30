@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.IndividualUserInvitationUI"
+    tools:context=".Activities.ActivityIndividualUserInvitation"
     android:background="@color/backgroundcolor">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -24,17 +24,6 @@
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleMarginEnd="64dp"
             android:background="@drawable/map_sample">
-
-            <ImageButton
-                android:id="@+id/reportInvitation"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="370dp"
-                android:layout_marginTop="2dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerInside"
-                android:background="@drawable/report_icon"/>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarid"
@@ -62,6 +51,7 @@
             android:layout_marginBottom="8dp"
             android:layout_gravity="center"
             android:src="@drawable/user_sample"
+            android:id="@+id/indUserInvImage"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"/>
 
@@ -71,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageUser"
             android:layout_gravity="center_horizontal"
-            android:text="Lunch at Orchard"
+            android:text="Activity Title"
             android:textSize="27sp"
             android:textStyle="bold"/>
 
@@ -115,7 +105,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Activity Description "
+                        android:text="Description "
                         android:fontFamily="sans-serif-medium"
                         android:textColor="@color/darkblue"
                         android:textSize="24sp"/>
@@ -124,7 +114,7 @@
                         android:id="@+id/activityDesc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Just a normal lunch where we can talk about politics and how important social distancing is"
+                        android:text="Description of activity"
                         android:textSize="18sp"
                         android:textColor="#000000"/>
 
@@ -135,7 +125,7 @@
                         android:background="#D3D3D3"/>
                 </LinearLayout>
 
-                // For Name
+                // For Location
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -147,46 +137,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="User Information"
+                        android:text="Location"
                         android:fontFamily="sans-serif-medium"
                         android:textColor="@color/darkblue"
                         android:textSize="20sp"/>
 
                     <TextView
+                        android:id="@+id/activityLocation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="User 01, Male, Architect"
-                        android:textSize="18sp"
-                        android:textColor="#000000"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="5dp"
-                        android:background="#D3D3D3"/>
-                </LinearLayout>
-
-                // For interests
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="User Interests"
-                        android:fontFamily="sans-serif-medium"
-                        android:textColor="@color/darkblue"
-                        android:textSize="20sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Eating, Sleeping"
+                        android:text=""
                         android:textSize="18sp"
                         android:textColor="#000000"/>
 
@@ -209,9 +169,22 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:layout_width="150dp"
+                    android:layout_width="120dp"
                     android:layout_height="35dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/backButton"
+                    android:text="BACK "
+                    android:textColor="@color/white"
+                    android:textAlignment="textEnd"
+                    android:textSize="18sp"
+                    android:drawableRight="@drawable/cancel_icon"
+                    android:paddingRight="29dp"
+                    android:background="@drawable/borders3"/>
+
+                <Button
+                    android:layout_width="120dp"
+                    android:layout_height="35dp"
+                    android:layout_marginRight="10dp"
                     android:id="@+id/deleteInvitation"
                     android:text="DELETE "
                     android:textColor="@color/white"
@@ -222,7 +195,7 @@
                     android:background="@drawable/borders3"/>
 
                 <Button
-                    android:layout_width="150dp"
+                    android:layout_width="120dp"
                     android:layout_height="35dp"
                     android:id="@+id/editInvitation"
                     android:text="EDIT "

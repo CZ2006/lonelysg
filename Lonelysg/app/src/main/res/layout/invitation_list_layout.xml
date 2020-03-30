@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Activities.LoginUI">
+    tools:context=".Activities.ActivityLogin">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,11 +14,11 @@
         android:padding="15dp">
 
         <ImageView
-            android:id="@+id/userImage"
+            android:id="@+id/invListImage"
             android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/ic_launcher"
-            android:layout_gravity="center"/>
+            android:layout_height="41dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_launcher" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,6 +44,16 @@
                 android:layout_weight="1"
                 android:text="Invitation Date and Time"
                 android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/invitationLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:text="Invitation Location"
+                android:textSize="16sp" />
+
         </LinearLayout>
 
     </LinearLayout>

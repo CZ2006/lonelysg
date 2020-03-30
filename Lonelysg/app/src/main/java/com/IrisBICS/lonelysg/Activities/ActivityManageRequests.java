@@ -6,24 +6,34 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.IrisBICS.lonelysg.R;
 
-public class ManageRequestsUI extends AppCompatActivity {
+public class ActivityManageRequests extends AppCompatActivity {
 
-    private Button viewPending, viewReceived;
+    private CardView viewPending, viewReceived;
+    private Button back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_requests_ui);
 
+        back = findViewById(R.id.backButton);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         viewPending = findViewById(R.id.pendingRequests);
         viewPending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent;
-                intent = new Intent(ManageRequestsUI.this, PendingRequestsUI.class);
+                intent = new Intent(ActivityManageRequests.this, ActivityPendingRequests.class);
                 startActivity(intent);
             }
         });
@@ -33,7 +43,7 @@ public class ManageRequestsUI extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent;
-                intent = new Intent(ManageRequestsUI.this, ReceivedRequestsUI.class);
+                intent = new Intent(ActivityManageRequests.this, ActivityReceivedRequests.class);
                 startActivity(intent);
             }
         });

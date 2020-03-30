@@ -1,17 +1,18 @@
 package com.IrisBICS.lonelysg.Activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.IrisBICS.lonelysg.AppController;
-import com.IrisBICS.lonelysg.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Invitation;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
@@ -19,18 +20,30 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.squareup.picasso.Picasso;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class IndividualUserInvitationUI extends AppCompatActivity {
+public class ActivityIndividualUserInvitation extends AppCompatActivity implements OnMapReadyCallback {
 
-    private Button editInvitation, deleteInvitation;
-    private TextView activityTitle, activityDateTime,activityDesc;
+
+    private Uri imageUri;
+    private ImageView userInvImage;
+
+    private Button editInvitation, deleteInvitation, back;
+    private TextView activityTitle, activityDateTime,activityDesc, activityLocation;
+
 
     private Invitation invitation;
     private String invitationID;
-    String currentUser = FirebaseAuthHelper.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,21 +52,34 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
 
         Intent receivedIntent = getIntent();
         invitationID = receivedIntent.getStringExtra("invitationID");
-        invitation = new Invitation("","","","","","",invitationID);
+        invitation = new Invitation("","","","","","","",invitationID,"","","",imageUri);
 
+        back = findViewById(R.id.backButton);
         activityDateTime = findViewById(R.id.activityDateTime);
         activityDesc = findViewById(R.id.activityDesc);
         activityTitle = findViewById(R.id.activityTitle);
+
+        userInvImage = findViewById(R.id.indUserInvImage);
+
+        activityLocation = findViewById(R.id.activityLocation);
+
         updateTextView();
 
         editInvitation = findViewById(R.id.editInvitation);
         deleteInvitation = findViewById(R.id.deleteInvitation);
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         // Click edit button
         editInvitation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), EditInvitationUI.class);
+                Intent intent = new Intent(getApplicationContext(), ActivityEditInvitation.class);
                 intent.putExtra("invitationID", invitationID);
                 startActivity(intent);
             }
@@ -82,11 +108,22 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
                             invitation.setCategory(response.getString("Category"));
                             invitation.setTitle(response.getString("Title"));
                             invitation.setStartTime(response.getString("Start Time"));
+                            invitation.setEndTime(response.getString("End Time"));
                             invitation.setHost(response.getString("Host"));
                             invitation.setDesc(response.getString("Description"));
                             invitation.setDate(response.getString("Date"));
+                            invitation.setLocationName(response.getString("Location"));
                             invitation.setInvitationID(invitationID);
+                            if (response.has("Image")!=false) {
+                                String InvPicUri = response.getString("Image");
+                                imageUri = Uri.parse(InvPicUri);
+                                invitation.setInvPic(imageUri);
+                            }
                             updateTextView();
+                            //MAP
+                            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                                    .findFragmentById(R.id.map);
+                            mapFragment.getMapAsync(ActivityIndividualUserInvitation.this);
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
@@ -107,8 +144,8 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 // response
-                Toast.makeText(IndividualUserInvitationUI.this, "Invitation deleted.", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), UserInvitationsUI.class);
+                Toast.makeText(ActivityIndividualUserInvitation.this, "Invitation deleted.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), ActivityUserInvitations.class);
                 startActivity(intent);
             }
         },
@@ -122,10 +159,24 @@ public class IndividualUserInvitationUI extends AppCompatActivity {
     }
 
     public void updateTextView(){
-        System.out.println(invitation.getInvitationID());
-        activityDateTime.setText(invitation.getDate()+" "+invitation.getStartTime());
+        activityDateTime.setText(invitation.getDate()+" "+invitation.getStartTime()+" - " +invitation.getEndTime());
         activityTitle.setText(invitation.getTitle());
         activityDesc.setText(invitation.getDesc());
+
+        if (invitation.getInvPic()!=null) {
+            Picasso.get().load(invitation.getInvPic()).into(userInvImage);
+        }
+
+        activityLocation.setText(invitation.getLocationName());
+
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng latLng = new LatLng(Double.parseDouble(invitation.getLatitude()),Double.parseDouble(invitation.getLongitude()));
+        googleMap.addMarker(new MarkerOptions().position(latLng)
+                .title(invitation.getLocationName()));
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,13));
+    }
 }

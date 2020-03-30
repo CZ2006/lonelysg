@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.AccountUI"
+    tools:context=".Fragments.FragmentAccount"
     android:background="@color/backgroundcolor">
 
     <RelativeLayout
@@ -19,15 +19,13 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="170dp"
                 android:layout_height="170dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="15dp"
                 android:src="@drawable/user_sample"
-                android:adjustViewBounds="true"
-                android:padding="5dp"
-                android:scaleType="centerInside"/>
+                android:id="@+id/accountProfilePic" />
 
         </RelativeLayout>
 

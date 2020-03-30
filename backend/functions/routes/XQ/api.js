@@ -105,7 +105,7 @@ router.put("/updateUser/:userID", (req, res) => {
 			userToUpdate.update(req.body)
         })
 	
-	res.end("User-" + userToUpdate.userID + " updated!")
+	res.json(req.body)
 
     /*{
         "userID": 2,
@@ -144,5 +144,19 @@ router.post("/addUser/:newID", (req, res) => { //Sample function adding new user
     } */
 //Update user
 //Delete user
+
+router.put("/updateInvitation/:invitationID", (req, res) => {
+
+    let database = req.app.get("database")
+    var invitationToUpdate = database.ref('Invitations/Invitation' + req.param('invitationID'));
+
+	userToUpdate.once("value", function(snapshot){
+            newData = snapshot.val()
+			invitationToUpdate.update(req.body)
+        })
+	
+	res.end("Invitation" + invitationToUpdate.invitationID + " updated!")
+
+})
 
 module.exports = router;

@@ -2,6 +2,7 @@ package com.IrisBICS.lonelysg.Fragments;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,8 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.IrisBICS.lonelysg.Activities.EditProfileUI;
-import com.IrisBICS.lonelysg.Activities.LoginUI;
+import com.IrisBICS.lonelysg.Activities.ActivityEditProfile;
+import com.IrisBICS.lonelysg.Activities.ActivityLogin;
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
@@ -27,18 +28,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AccountUI extends Fragment {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class FragmentAccount extends Fragment {
     TextView profileName;
     TextView profileGender;
     TextView profileAge;
     TextView profileOccupation;
     TextView profileInterest;
     TextView profileUsername;
+    Uri imageUri;
     Spinner dropDownIcon;
+    CircleImageView profilePic;
     String moreSettings[] = {"Change Password", "Delete Account"};
     ArrayAdapter<String> arrayAdapter;
 
@@ -46,7 +52,6 @@ public class AccountUI extends Fragment {
     Button editProfile;
 
     private Button logout;
-//    private FirebaseAuth mAuth;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     User user= new User();
@@ -61,6 +66,7 @@ public class AccountUI extends Fragment {
         profileOccupation = v.findViewById(R.id.accountOccupation);
         profileInterest = v.findViewById(R.id.accountInterests);
         profileUsername = v.findViewById(R.id.userName);
+        profilePic = v.findViewById(R.id.accountProfilePic);
 
         // For dropdown icon (category selection)
         dropDownIcon = (Spinner) v.findViewById(R.id.moreSettingsicon);
@@ -69,14 +75,13 @@ public class AccountUI extends Fragment {
         // For edit profile pop-up
         editProfile = (Button) v.findViewById(R.id.editProfileButton);
 
-//        String userID = FirebaseAuthHelper.getUserID();
         String userID = mAuth.getCurrentUser().getUid();
         getUserProfile(userID);
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent (v.getContext(), EditProfileUI.class);
+                Intent i = new Intent (v.getContext(), ActivityEditProfile.class);
                 startActivity(i);
             }
         });
@@ -93,7 +98,7 @@ public class AccountUI extends Fragment {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(getActivity(), "Logging out!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), LoginUI.class);
+                Intent intent = new Intent(getActivity(), ActivityLogin.class);
                 startActivity(intent);
             }
         });
@@ -105,18 +110,21 @@ public class AccountUI extends Fragment {
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        System.out.println("reached manager inside");
                         try {
                             user.setUsername(response.getString("username"));
                             user.setGender(response.getString("gender"));
                             user.setAge(response.getString("age"));
                             user.setOccupation(response.getString("occupation"));
                             user.setInterests(response.getString("interests"));
+                            if (response.has("image")!=false) {
+                                String profilePicUri = response.getString("image");
+                                imageUri = Uri.parse(profilePicUri);
+                                user.setProfilePic(imageUri);
+                            }
                             setUserProfile();
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
-//                        arrayAdapter.notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {
 
@@ -126,7 +134,7 @@ public class AccountUI extends Fragment {
                     }
                 });
         AppController.getInstance(this.getContext()).addToRequestQueue(getUserProfileRequest);
-    };
+    }
 
     private void setUserProfile(){
         profileName.setText(user.getUsername());
@@ -135,5 +143,8 @@ public class AccountUI extends Fragment {
         profileOccupation.setText(user.getOccupation());
         profileInterest.setText(user.getInterests());
         profileUsername.setText(user.getUsername());
+        if (user.getProfilePic()!=null) {
+            Picasso.get().load(user.getProfilePic()).into(profilePic);
+        }
     }
 }
