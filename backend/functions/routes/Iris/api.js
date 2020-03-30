@@ -9,7 +9,7 @@ router.get("/getUser/:userID", (req,res) => {
     let database = req.app.get("database")
     var targetUser = database.ref('User/User' + req.param('userID'));
     targetUser.once("value", function(snapshot){
-        res.end(JSON.stringify(snapshot.val()));
+        res.json(snapshot.val());
     })
 })
 
@@ -77,7 +77,8 @@ router.post("/updateUser", (req, res) => {
     {
         "userID": 2,
         "password": "newPa55w0rd...",
-        "interests": "Youtube, Marvel"
+        "interests": "Youtube, Marvel",
+        "newAttribute": "Value"
     } */
 
 })
