@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "685604784156-p7tivf9r3hc0obe5t92fvt7ad91l4imp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.IrisBICS.lonelysg",
+            "certificate_hash": "48c568441f7e855f7c0f700886e698c251a35f2c"
+          }
+        },
+        {
+          "client_id": "685604784156-04it7r1a44u8l9ih6apf1fq3onq1gdao.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.IrisBICS.lonelysg",
+            "certificate_hash": "753172db173bbefc1c670afa3c208d762bf4b667"
+          }
+        },
+        {
           "client_id": "685604784156-5v4bt2udln5cgc943lajscn1pd0j3adn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@drawable/splash_screen"
-    tools:context=".SignUpPage">
+    tools:context=".Activities.ActivitySignUp">
 
     <RelativeLayout
         android:id="@+id/loginPlaceholder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_width="248dp"
+        android:layout_height="467dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp">
 
@@ -23,7 +23,7 @@
             android:layout_centerHorizontal="true"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/logo" />
 
         <LinearLayout
             android:id="@+id/signUpStuff"
@@ -34,7 +34,7 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/usernameInputS"
+                android:id="@+id/emailInputS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -52,8 +52,20 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:ems="11"
-                android:hint="New Password"
-                android:inputType="textPassword"/>
+                android:hint="Password"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/userNameInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/usernameInputS"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:ems="11"
+                android:hint="Username"
+                android:inputType="text" />
 
         </LinearLayout>
 
@@ -62,30 +74,30 @@
             android:layout_width="180dp"
             android:layout_height="30dp"
             android:layout_below="@+id/signUpStuff"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="15dp"
             android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:text="SIGN UP"
-            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/borders4"
-            android:layout_gravity="center"/>
+            android:text="SIGN UP"
+            android:textAlignment="center"
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/backButton"
             android:layout_width="180dp"
             android:layout_height="30dp"
             android:layout_below="@+id/signUpButtonS"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="12dp"
             android:layout_marginRight="15dp"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:text="GO BACK TO LOGIN"
-            android:textColor="@color/black"
             android:background="@drawable/borders4"
-            android:layout_gravity="center"/>
+            android:text="GO BACK TO LOGIN"
+            android:textAlignment="center"
+            android:textColor="@color/black" />
 
     </RelativeLayout>
 
