@@ -156,7 +156,11 @@ public class ActivityCreateInvitation extends AppCompatActivity {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(ActivityCreateInvitation.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                        startTimeString = hour + ":" + minute;
+                        if (minute<10)
+                            startTimeString = hour + ":0" + minute;
+                        else
+                            startTimeString = hour + ":" + minute;
+                        startTimePick.setText(startTimeString);
                         startTimePick.setText(startTimeString);
                     }
                 }, HOUR, MINUTE, true);
@@ -178,7 +182,10 @@ public class ActivityCreateInvitation extends AppCompatActivity {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(ActivityCreateInvitation.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                        endTimeString = hour + ":" + minute;
+                        if (minute<10)
+                            endTimeString = hour + ":0" + minute;
+                        else
+                            endTimeString = hour + ":" + minute;
                         endTimePick.setText(endTimeString);
                     }
                 }, HOUR, MINUTE, true);
@@ -195,7 +202,7 @@ public class ActivityCreateInvitation extends AppCompatActivity {
 
         // Specify the types of place data to return.
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG));
-
+        autocompleteFragment.setCountries("SG");
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
