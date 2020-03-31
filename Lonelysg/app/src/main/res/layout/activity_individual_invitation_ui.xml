@@ -251,10 +251,10 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="20dp"
                 android:layout_centerHorizontal="true"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <Button
-                    android:layout_width="140dp"
+                    android:layout_width="190dp"
                     android:layout_height="35dp"
                     android:layout_marginRight="20dp"
                     android:id="@+id/backButton"
@@ -263,11 +263,12 @@
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:drawableRight="@drawable/cancel_icon"
-                    android:paddingRight="29dp"
-                    android:background="@drawable/borders3"/>
+                    android:paddingRight="53dp"
+                    android:background="@drawable/borders3"
+                    />
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="190dp"
                     android:layout_height="35dp"
                     android:id="@+id/acceptInvitation"
                     android:text="SEND REQUEST "
@@ -275,6 +276,7 @@
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:drawableRight="@drawable/chat_white"
+                    android:layout_marginTop="15dp"
                     android:paddingRight="15dp"
                     android:paddingLeft="15dp"
                     android:background="@drawable/borders3"
