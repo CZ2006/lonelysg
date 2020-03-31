@@ -20,6 +20,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class InvitationsListAdapter extends ArrayAdapter<Invitation> implements Filterable {
 
@@ -50,9 +52,9 @@ public class InvitationsListAdapter extends ArrayAdapter<Invitation> implements 
             viewHolder.invitationTitle.setText(displayedInvitationsList.get(position).getTitle());
             viewHolder.invitationDateTime.setText(displayedInvitationsList.get(position).getDate()+" " + displayedInvitationsList.get(position).getStartTime()+" - " + displayedInvitationsList.get(position).getEndTime());
             viewHolder.invitationLocation.setText(displayedInvitationsList.get(position).getLocationName());
-            Picasso.get().load(displayedInvitationsList.get(position).getInvPic()).into(viewHolder.invitationImage);
-//            viewHolder.invitationImage.setImageURI(displayedInvitationsList.get(position).getInvPic());
-//            viewHolder.userImage.setImageResource(userImage[position]);
+            if (displayedInvitationsList.get(position).getInvPic()!=null) {
+                Picasso.get().load(displayedInvitationsList.get(position).getInvPic()).into(viewHolder.invitationImage);
+            }
             return r;
         }
 
@@ -60,7 +62,7 @@ public class InvitationsListAdapter extends ArrayAdapter<Invitation> implements 
             TextView invitationTitle;
             TextView invitationDateTime;
             TextView invitationLocation;
-            ImageView invitationImage;
+            CircleImageView invitationImage;
 
             ViewHolder(View v) {
                 invitationTitle = v.findViewById(R.id.invitationTitle);
@@ -82,7 +84,7 @@ public class InvitationsListAdapter extends ArrayAdapter<Invitation> implements 
                     if (constraint != null) {
                         if (invitationsList != null && invitationsList.size() > 0) {
                             for (final Invitation i : invitationsList) {
-                                if (i.getTitle().toLowerCase().contains(constraint.toString()))
+                                if ((i.getTitle().toLowerCase().contains(constraint.toString()))|(i.getLocationName().toLowerCase().contains(constraint.toString())))
                                     results.add(i);
                             }
                         }
