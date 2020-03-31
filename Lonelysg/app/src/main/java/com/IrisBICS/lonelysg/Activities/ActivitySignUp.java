@@ -8,9 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
@@ -21,9 +18,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ActivitySignUp extends AppCompatActivity {
     private EditText emailInput;
@@ -53,7 +54,6 @@ public class ActivitySignUp extends AppCompatActivity {
                 final String pwd = passwordInput.getText().toString();
                 final String username = usernameInput.getText().toString();
 
-                //to do: error handling. for now just assume input will be correct
                 if (!email.isEmpty() && !pwd.isEmpty()) {
                     //FIREBASE LOGIN AUTHENTICATION
                     mAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(ActivitySignUp.this, new OnCompleteListener<AuthResult>() {
@@ -64,8 +64,17 @@ public class ActivitySignUp extends AppCompatActivity {
                                 Log.d("MainActivity", "createUserWithEmail:success");
                                 Toast.makeText(ActivitySignUp.this, "Sign up success!", Toast.LENGTH_SHORT).show();
 //                                String userID = FirebaseAuthHelper.getUserID();
-                                String userID = mAuth.getCurrentUser().getUid();
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                String userID = user.getUid();
                                 createUser(userID);
+                                user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d("ActivitySignUp", "Email sent.");
+                                        }
+                                    }
+                                });
                                 Intent intent = new Intent(ActivitySignUp.this, ActivityEditProfile.class);
                                 startActivity(intent);
                                 finish();
@@ -76,6 +85,9 @@ public class ActivitySignUp extends AppCompatActivity {
                             }
                         }
                     });
+                }
+                else {
+                    Toast.makeText(ActivitySignUp.this, "Error occured. Please try again!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

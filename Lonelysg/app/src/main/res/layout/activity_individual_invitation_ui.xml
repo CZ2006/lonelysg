@@ -64,16 +64,14 @@
         android:layout_centerHorizontal="true"
         android:orientation="vertical">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="8dp"
             android:layout_gravity="center"
             android:id="@+id/invImage"
-            android:src="@drawable/user_sample"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"/>
+            android:src="@drawable/user_sample" />
 
         <TextView
             android:id="@+id/activityTitle"

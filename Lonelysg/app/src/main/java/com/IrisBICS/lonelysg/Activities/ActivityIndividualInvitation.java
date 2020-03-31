@@ -37,6 +37,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ActivityIndividualInvitation extends AppCompatActivity implements OnMapReadyCallback {
 
     private Button acceptInvitation, backButton;
@@ -45,7 +47,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
     private Uri imageUri;
     private Invitation invitation;
     private String invitationID;
-    private ImageView indInvImage;
+    private CircleImageView indInvImage;
     private ArrayList<com.IrisBICS.lonelysg.Models.Request> userSentRequests;
 
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
