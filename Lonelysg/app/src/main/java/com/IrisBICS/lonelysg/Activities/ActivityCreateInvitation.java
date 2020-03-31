@@ -19,10 +19,6 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.R;
@@ -46,13 +42,15 @@ import com.google.firebase.storage.UploadTask;
 import com.pusher.pushnotifications.PushNotifications;
 import com.squareup.picasso.Picasso;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Calendar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ActivityCreateInvitation extends AppCompatActivity {
@@ -158,7 +156,11 @@ public class ActivityCreateInvitation extends AppCompatActivity {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(ActivityCreateInvitation.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                        startTimeString = hour + ":" + minute;
+                        if (minute<10)
+                            startTimeString = hour + ":0" + minute;
+                        else
+                            startTimeString = hour + ":" + minute;
+                        startTimePick.setText(startTimeString);
                         startTimePick.setText(startTimeString);
                     }
                 }, HOUR, MINUTE, true);
@@ -180,7 +182,10 @@ public class ActivityCreateInvitation extends AppCompatActivity {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(ActivityCreateInvitation.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                        endTimeString = hour + ":" + minute;
+                        if (minute<10)
+                            endTimeString = hour + ":0" + minute;
+                        else
+                            endTimeString = hour + ":" + minute;
                         endTimePick.setText(endTimeString);
                     }
                 }, HOUR, MINUTE, true);
@@ -190,14 +195,14 @@ public class ActivityCreateInvitation extends AppCompatActivity {
         });
 
         //Places API
-        Places.initialize(getApplicationContext(), "AIzaSyDf5AJqzMTUa6kYEqyl19TAOyAeS_v5Y3c");
+        Places.initialize(getApplicationContext(), getString(R.string.places_api_key));
         PlacesClient placesClient = Places.createClient(this);
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
         // Specify the types of place data to return.
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG));
-
+        autocompleteFragment.setCountries("SG");
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
