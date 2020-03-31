@@ -12,14 +12,22 @@
         android:background="#ffffff"
         android:padding="15dp">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/chatListImage"
+            android:layout_width="60dp"
+            android:layout_height="41dp"
+            android:layout_gravity="center"
+            android:src="@drawable/user_sample" />
+
         <TextView
             android:id="@+id/chatUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
             android:layout_weight="1"
             android:text="Username"
             android:textSize="24sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
 
     </RelativeLayout>

@@ -237,15 +237,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:layout_marginLeft="70dp"
-                    android:layout_marginRight="70dp"
                     android:layout_marginTop="40dp"
+                    android:layout_marginRight="70dp"
                     android:background="@drawable/borders3"
                     android:paddingLeft="60dp"
                     android:paddingRight="60dp"
                     android:text="EDIT PROFILE"
                     android:textColor="@color/white"
                     android:textSize="21sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/logoutButton"

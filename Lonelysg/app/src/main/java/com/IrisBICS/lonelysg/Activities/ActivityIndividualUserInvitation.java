@@ -32,11 +32,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ActivityIndividualUserInvitation extends AppCompatActivity implements OnMapReadyCallback {
 
 
     private Uri imageUri;
-    private ImageView userInvImage;
+    private CircleImageView userInvImage;
 
     private Button editInvitation, deleteInvitation, back;
     private TextView activityTitle, activityDateTime,activityDesc, activityLocation;

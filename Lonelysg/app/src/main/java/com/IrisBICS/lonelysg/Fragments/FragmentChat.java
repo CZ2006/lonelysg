@@ -1,6 +1,7 @@
 package com.IrisBICS.lonelysg.Fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.IrisBICS.lonelysg.Activities.ActivityIndividualChat;
 import com.IrisBICS.lonelysg.Adapters.ChatListAdapter;
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.FirebaseAuthHelper;
+import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -32,7 +34,8 @@ import java.util.ArrayList;
 public class FragmentChat extends Fragment {
 
     private ListView chatList;
-    private ArrayList<String> chatUsersList, chatUsersIDList;
+//    private ArrayList<String> chatUsersList, chatUsersIDList;
+    private ArrayList<User> chatUsersList;
     ChatListAdapter chatListAdapter;
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
@@ -42,7 +45,6 @@ public class FragmentChat extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_chat, container, false);
         chatUsersList = new ArrayList<>();
-        chatUsersIDList = new ArrayList<>();
         chatList = v.findViewById(R.id.chatList);
         chatListAdapter = new ChatListAdapter(this.getActivity(),chatUsersList);
         chatList.setAdapter(chatListAdapter);
@@ -53,8 +55,8 @@ public class FragmentChat extends Fragment {
                 Intent intent;
                 intent = new Intent(FragmentChat.this.getActivity(), ActivityIndividualChat.class);
                 Bundle extras = new Bundle();
-                extras.putString("receiver_name", chatUsersList.get(i));
-                extras.putString("receiver_id", chatUsersIDList.get(i));
+                extras.putString("receiver_name", chatUsersList.get(i).getUsername());
+                extras.putString("receiver_id", chatUsersList.get(i).getUserID());
                 intent.putExtras(extras);
                 startActivity(intent);
             }
@@ -73,8 +75,9 @@ public class FragmentChat extends Fragment {
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         String chatUser = response.getString(i);
-                        chatUsersIDList.add(chatUser);
+//                        chatUsersIDList.add(chatUser);
                         getChatUsers(chatUser);
+                        System.out.println("user gotten2");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -100,7 +103,16 @@ public class FragmentChat extends Fragment {
 //                            host.setAge(response.getString("age"));
 //                            host.setOccupation(response.getString("occupation"));
 //                            host.setInterests(response.getString("interests"));
-                            chatUsersList.add(response.getString("username"));
+                            User receiver = new User();
+                            receiver.setUsername(response.getString("username"));
+                            receiver.setUserID(response.getString("UserID"));
+                            if (response.has("image")!=false) {
+                                String profilePicUri = response.getString("image");
+                                Uri imageUri = Uri.parse(profilePicUri);
+                                receiver.setProfilePic(imageUri);
+                            }
+                            chatUsersList.add(receiver);
+                            System.out.println("user gotten");
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
