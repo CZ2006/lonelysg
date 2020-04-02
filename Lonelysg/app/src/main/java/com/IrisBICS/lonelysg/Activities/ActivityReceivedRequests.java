@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.pusher.pushnotifications.PushNotifications;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -167,6 +168,9 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
             getInvitation(requests.get(clickedPos).getInvitationID());
             deleteRequest(requests.get(clickedPos).getRequestID());
             //insert xq send notif
+            String notifID = requests.get(clickedPos).getInvitationID()+"_RequestsBy_"+requests.get(clickedPos).getParticipant();
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendAcceptReqNotif/"+notifID;
+            sendNotifToParticipant(URL);
         }
     }
 
@@ -174,6 +178,9 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
         if (clickedPos!=-1){
             deleteRequest(requests.get(clickedPos).getRequestID());
             //insert xq send notif
+            String notifID = requests.get(clickedPos).getInvitationID()+"_RequestsBy_"+requests.get(clickedPos).getParticipant();
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendRejectReqNotif/"+notifID;
+            sendNotifToParticipant(URL);
         }
     }
 
@@ -240,4 +247,19 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
         AppController.getInstance(this).addToRequestQueue(getInvitationRequest);
     }
 
+    private void sendNotifToParticipant(String URL){
+        StringRequest sendNotifRequest = new StringRequest(com.android.volley.Request.Method.POST, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(ActivityReceivedRequests.this,"Notification sent to participant!",Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("NotifToParticipant", error.toString());
+            }
+        });
+        AppController.getInstance(this).addToRequestQueue(sendNotifRequest);
+    }
 }

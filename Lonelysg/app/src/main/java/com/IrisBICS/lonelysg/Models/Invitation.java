@@ -5,7 +5,7 @@ import android.net.Uri;
 public class Invitation {
 
     private String category, date, desc, host, startTime, endTime, title, invitationID, latitude, longitude, locationName;
-    private Uri invPic;
+       private Uri invPic;
 
     public Invitation() {
     }

@@ -10,16 +10,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
+import com.google.android.gms.maps.model.Circle;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ChatListAdapter extends ArrayAdapter<String> {
+import de.hdodenhof.circleimageview.CircleImageView;
 
-    private List<String> chatUsers;
+public class ChatListAdapter extends ArrayAdapter<User> {
+
+    private ArrayList<User> chatUsers;
     private Activity context;
 
-    public ChatListAdapter(Activity context, List<String> users) {
+    public ChatListAdapter(Activity context, ArrayList<User> users) {
         super(context, R.layout.chat_list_layout, users);
         this.context = context;
         this.chatUsers = users;
@@ -39,15 +45,19 @@ public class ChatListAdapter extends ArrayAdapter<String> {
         }
         else
             viewHolder = (ViewHolder) r.getTag();
-        viewHolder.chatUser.setText(chatUsers.get(position));
-
+        viewHolder.chatUser.setText(chatUsers.get(position).getUsername());
+        if (chatUsers.get(position).getProfilePic()!=null) {
+            Picasso.get().load(chatUsers.get(position).getProfilePic()).into(viewHolder.chatUserProfilePic);
+        }
         return r;
     }
 
     class ViewHolder {
         TextView chatUser;
+        CircleImageView chatUserProfilePic;
         ViewHolder(View v) {
             chatUser = (TextView) v.findViewById(R.id.chatUser);
+            chatUserProfilePic = v.findViewById(R.id.chatListImage);
         }
     }
 

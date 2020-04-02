@@ -19,6 +19,10 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.R;
@@ -48,9 +52,6 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ActivityCreateInvitation extends AppCompatActivity {
@@ -260,9 +261,12 @@ public class ActivityCreateInvitation extends AppCompatActivity {
                     else {addInvWithoutPic();}
 //                    addInvitation();
                     Toast.makeText(ActivityCreateInvitation.this, "New Invitation Created", Toast.LENGTH_SHORT).show();
+                    String requestInterest = currentUserID+"request";
+                    PushNotifications.addDeviceInterest(currentUserID+"_Host");
+                    Intent i = new Intent (ActivityCreateInvitation.this, ActivityUserInvitations.class);
+                    startActivity(i);
+                    finish();
                 }
-                String requestInterest = currentUserID+"request";
-                PushNotifications.addDeviceInterest(requestInterest);
             }
         });
 
@@ -271,9 +275,10 @@ public class ActivityCreateInvitation extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(ActivityCreateInvitation.this, "Cancelled", Toast.LENGTH_SHORT).show();
-                Intent intent;
-                intent = new Intent(ActivityCreateInvitation.this, ActivityManageInvitations.class);
-                startActivity(intent);
+//                Intent intent;
+//                intent = new Intent(ActivityCreateInvitation.this, ActivityManageInvitations.class);
+//                startActivity(intent);
+                finish();
             }
         });
     }

@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -189,11 +190,11 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
 
     @Override
     public boolean onQueryTextChange(String newText) {
-
+        Filter filter = invitationsListAdapter.getFilter();
         if (TextUtils.isEmpty(newText)) {
-            invitationsList.clearTextFilter();
+            filter.filter("");
         } else {
-            invitationsList.setFilterText(newText);
+            filter.filter(newText);
         }
         return true;
     }
