@@ -29,6 +29,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.pusher.pushnotifications.PushNotifications;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -184,7 +185,8 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
                 }
             });
             AppController.getInstance(this).addToRequestQueue(sendRequestRequest);
-
+            PushNotifications.addDeviceInterest(invitation.getInvitationID()+"_RequestBy_"+currentUserID);
+            sendNotifToHost(invitation.getHost()+"Host");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -272,23 +274,22 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
         AppController.getInstance(this).addToRequestQueue(getUserRequestsRequest);
     }
 
-    private void sendNotif(){
-        String url ="https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendNotif";
+    private void sendNotifToHost(String hostNotifID){
+        String url ="https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendNotifToHost/"+hostNotifID;
 
         // Request a string response from the provided URL.
         StringRequest sendNotifRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        Toast.makeText(ApiTest.this,"You received a request", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActivityIndividualInvitation.this,"You have sent a request!", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.e("NotifToHost", error.toString());
             }
         });
         AppController.getInstance(this).addToRequestQueue(sendNotifRequest);
     }
-
-
 }
