@@ -109,6 +109,13 @@ router.get("/getInvitations/:category/:user", (req,res)=>{
     var ref = database.ref('Invitations');
     var category = req.params.category;
     var user = req.params.user;
+
+    function compare(a, b) {
+        if (a.InvitationID > b.InvitationID) return 1;
+        if (b.InvitationID > a.InvitationID) return -1;
+      
+        return 0;
+      }
     
     ref.once("value", function(snapshot){
         var invitations = snapshot.val();
@@ -127,6 +134,7 @@ router.get("/getInvitations/:category/:user", (req,res)=>{
                 }
             }
         }
+        invitationsArray.sort(compare);
         res.json(invitationsArray); //Returned in the browser or postman
     })
 })
@@ -136,6 +144,13 @@ router.get("/getUserInvitations/:user", (req,res)=>{
     let database = req.app.get("database")
     var ref = database.ref('Invitations');
     var user = req.params.user;
+
+    function compare(a, b) {
+        if (a.InvitationID > b.InvitationID) return 1;
+        if (b.InvitationID > a.InvitationID) return -1;
+      
+        return 0;
+      }
     
     ref.once("value", function(snapshot){
         var invitations = snapshot.val();
@@ -145,6 +160,7 @@ router.get("/getUserInvitations/:user", (req,res)=>{
                 invitationsArray.push(invitations[i]);
             }
         }
+        invitationsArray.sort(compare);
         res.json(invitationsArray); //Returned in the browser or postman
     })
 })
@@ -157,9 +173,11 @@ router.post("/addInvitation", (req, res) => {
     ref.once("value", function(snapshot){
         var invitations = snapshot.val();
         var newID = 0;
+        var invitationsArray = [];
         for (var i in invitations){
-            newID++;
+            invitationsArray.push(invitations[i]);
         }
+        newID = invitationsArray[invitationsArray.length-1].InvitationID + 1;
         const newInvitation = ref.child("Invitation" + newID) //Requires information sent in JSON format
         req.body.InvitationID = newID; 
         newInvitation.set(req.body)
@@ -183,7 +201,14 @@ router.get("/getReceivedRequests/:user", (req,res)=>{
     //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getReceivedRequests after running firebase serve
     let database = req.app.get("database")
     var ref = database.ref('Requests');
-	var user = req.params.user;
+    var user = req.params.user;
+    
+    function compare(a, b) {
+        if (a.RequestID > b.RequestID) return 1;
+        if (b.RequestID > a.RequestID) return -1;
+      
+        return 0;
+      }
     
     ref.once("value", function(snapshot){
         var requests = snapshot.val();  
@@ -193,6 +218,7 @@ router.get("/getReceivedRequests/:user", (req,res)=>{
 				requestsArray.push(requests[i]);
 			}
         }
+        requestsArray.sort(compare);
         res.json(requestsArray); //Returned in the browser or postman
     })
 })
@@ -201,7 +227,14 @@ router.get("/getPendingRequests/:user", (req,res)=>{
     //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getPendingRequests after running firebase serve
     let database = req.app.get("database")
     var ref = database.ref('Requests');
-	var user = req.params.user;
+    var user = req.params.user;
+    
+    function compare(a, b) {
+        if (a.RequestID > b.RequestID) return 1;
+        if (b.RequestID > a.RequestID) return -1;
+      
+        return 0;
+      }
     
     ref.once("value", function(snapshot){
         var requests = snapshot.val();  
@@ -211,6 +244,7 @@ router.get("/getPendingRequests/:user", (req,res)=>{
 				requestsArray.push(requests[i]);
 			}
         }
+        requestsArray.sort(compare);
         res.json(requestsArray); //Returned in the browser or postman
     })
 })
@@ -221,15 +255,17 @@ router.post("/sendRequest", (req, res) => {
     let ref = database.ref("Requests")
 
     ref.once("value", function(snapshot){
-		var newID = 0;
         var requests = snapshot.val(); 
+        var newID = 0;
+        var requestsArray = [];
         for (var i in requests){
-            newID++;
+            requestsArray.push(requests[i]);
         }
+        newID = requestsArray[requestsArray.length-1].RequestID + 1;
         const newReq = ref.child("Request" + newID) //Requires information sent in JSON format
         req.body.RequestID = newID; 
         newReq.set(req.body);
-		res.end("Request sent."); //Returned in postman
+		res.json(req.body)
     })
     
 })
@@ -245,44 +281,5 @@ router.delete("/deleteRequest/:RequestID", (req, res) => {
 })
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-router.get("/getStuff", (req,res)=>{ //Sample function fetching data from the realtime DB on firebase
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getStuff after running firebase serve
-    let database = req.app.get("database")
-    var ref = database.ref('User');
-    ref.once("value", function(snapshot){
-        console.log(snapshot.val()); //View response value in the command line
-        res.end("OK Min Hui!") //Returned in the browser or postman
-    })
-})
-
-router.post("/addUser", (req, res) => { //Sample function adding new user to realtime DB on firebase
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/addUser in postman with sample data in the body after running firebase serve
-    let database = req.app.get("database")
-    let userRef = database.ref("User")
-
-    const newUser = userRef.child("User" + req.body.userID) //Requires information sent in JSON format and containing at least userID
-    newUser.set(req.body)
-
-    res.end("Posted!"); //Returned in postman
-
-    /* Sample data to test this function:
-
-    {
-        "userID": 2,
-        "username": "RayRay",
-        "password": "00ThisIs@GreatPassword!",
-        "name": "Raymond",
-        "email": "ray@email.com",
-        "gender": "M",
-        "birthday": "Undefined",
-        "profilePic": "fantasticURL",
-        "job": "NTU Student",
-        "interests": "No idea"
-    } */
-})
-
-//Update user
-//Delete user
 
 module.exports = router;

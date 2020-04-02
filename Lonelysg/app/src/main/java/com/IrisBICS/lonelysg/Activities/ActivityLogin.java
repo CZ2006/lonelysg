@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.pusher.pushnotifications.PushNotifications;
 
 public class ActivityLogin extends AppCompatActivity {
     RelativeLayout loginStuff, passwordSignUpBar;
@@ -57,7 +58,7 @@ public class ActivityLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_screen);
+        setContentView(R.layout.activity_login);
 
         loginStuff = (RelativeLayout) findViewById(R.id.loginStuff);
         passwordSignUpBar = (RelativeLayout) findViewById(R.id.passwordSignUpBar);
@@ -91,6 +92,8 @@ public class ActivityLogin extends AppCompatActivity {
                                 Log.d("LoginUI", "signInWithEmail:success");
                                 Toast.makeText(ActivityLogin.this, "Sign in success!", Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
+                                PushNotifications.start(getApplicationContext(), "211e38a9-4bc8-40c5-958a-4a7f9aa91547");
+                                PushNotifications.addDeviceInterest(user.getUid());
                                 Intent intent = new Intent(ActivityLogin.this, ActivityNavigationBar.class);
                                 startActivity(intent);
                             } else {

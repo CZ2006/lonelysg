@@ -17,9 +17,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -120,9 +122,11 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
             }
         });
 
+        TextView emptyText = findViewById(android.R.id.empty);
         invitationsList = findViewById(R.id.invitationsListView);
         invitationsListAdapter = new InvitationsListAdapter(this, invitations);
         invitationsList.setAdapter(invitationsListAdapter);
+        invitationsList.setEmptyView(emptyText);
         invitationsList.setTextFilterEnabled(true);
 
         invitationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -189,11 +193,11 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
 
     @Override
     public boolean onQueryTextChange(String newText) {
-
+        Filter filter = invitationsListAdapter.getFilter();
         if (TextUtils.isEmpty(newText)) {
-            invitationsList.clearTextFilter();
+            filter.filter("");
         } else {
-            invitationsList.setFilterText(newText);
+            filter.filter(newText);
         }
         return true;
     }

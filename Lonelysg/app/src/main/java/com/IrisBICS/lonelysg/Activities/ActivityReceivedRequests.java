@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,9 +59,11 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
             }
         });
 
+        TextView emptyText = findViewById(android.R.id.empty);
         receivedRequestsList = findViewById(R.id.receivedRequestsListView);
         requestListAdapter = new RequestListAdapter(this, requests, participants,"received");
         receivedRequestsList.setAdapter(requestListAdapter);
+        receivedRequestsList.setEmptyView(emptyText);
 
         receivedRequestsList.setClickable(true);
         receivedRequestsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -167,6 +170,9 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
             getInvitation(requests.get(clickedPos).getInvitationID());
             deleteRequest(requests.get(clickedPos).getRequestID());
             //insert xq send notif
+            String notifID = requests.get(clickedPos).getInvitationID()+"_RequestsBy_"+requests.get(clickedPos).getParticipant();
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendAcceptReqNotif/"+notifID;
+            sendNotifToParticipant(URL);
         }
     }
 
@@ -174,6 +180,9 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
         if (clickedPos!=-1){
             deleteRequest(requests.get(clickedPos).getRequestID());
             //insert xq send notif
+            String notifID = requests.get(clickedPos).getInvitationID()+"_RequestsBy_"+requests.get(clickedPos).getParticipant();
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendRejectReqNotif/"+notifID;
+            sendNotifToParticipant(URL);
         }
     }
 
@@ -240,4 +249,19 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
         AppController.getInstance(this).addToRequestQueue(getInvitationRequest);
     }
 
+    private void sendNotifToParticipant(String URL){
+        StringRequest sendNotifRequest = new StringRequest(com.android.volley.Request.Method.POST, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(ActivityReceivedRequests.this,"Notification sent to participant!",Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("NotifToParticipant", error.toString());
+            }
+        });
+        AppController.getInstance(this).addToRequestQueue(sendNotifRequest);
+    }
 }

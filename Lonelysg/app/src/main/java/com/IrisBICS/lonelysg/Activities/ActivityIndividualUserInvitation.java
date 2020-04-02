@@ -32,11 +32,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ActivityIndividualUserInvitation extends AppCompatActivity implements OnMapReadyCallback {
 
 
     private Uri imageUri;
-    private ImageView userInvImage;
+    private CircleImageView userInvImage;
 
     private Button editInvitation, deleteInvitation, back;
     private TextView activityTitle, activityDateTime,activityDesc, activityLocation;
@@ -113,6 +115,8 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
                             invitation.setDesc(response.getString("Description"));
                             invitation.setDate(response.getString("Date"));
                             invitation.setLocationName(response.getString("Location"));
+                            invitation.setLatitude(response.getString("Latitude"));
+                            invitation.setLongitude(response.getString("Longitude"));
                             invitation.setInvitationID(invitationID);
                             if (response.has("Image")!=false) {
                                 String InvPicUri = response.getString("Image");

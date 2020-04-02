@@ -22,8 +22,16 @@
             app:contentScrim="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp"
-            android:background="@drawable/map_sample">
+            app:expandedTitleMarginEnd="64dp">
+            //android:background="@drawable/map_sample">
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.IrisBICS.lonelysg.Activities.ActivityIndividualUserInvitation" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarid"
@@ -44,16 +52,14 @@
         android:layout_centerHorizontal="true"
         android:orientation="vertical">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="8dp"
             android:layout_gravity="center"
             android:src="@drawable/user_sample"
-            android:id="@+id/indUserInvImage"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"/>
+            android:id="@+id/indUserInvImage" />
 
         <TextView
             android:id="@+id/activityTitle"
