@@ -186,7 +186,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
             });
             AppController.getInstance(this).addToRequestQueue(sendRequestRequest);
             PushNotifications.addDeviceInterest(invitation.getInvitationID()+"_RequestBy_"+currentUserID);
-            sendNotifToHost(invitation.getHost()+"Host");
+            sendNotifToHost(invitation.getHost()+"_Host");
         } catch (JSONException e) {
             e.printStackTrace();
         }
