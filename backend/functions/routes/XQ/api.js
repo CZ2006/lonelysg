@@ -60,8 +60,10 @@ router.post("/sendAcceptReqNotif/:notifID", (req,res)=>{
 		instanceId: '211e38a9-4bc8-40c5-958a-4a7f9aa91547',
 		secretKey: '899F51F33EF49FF687ABA0D6512A626B8A62AE96BBBAB4A217F4411925AAF348'
 	});
+	
+	var interest = req.param('notifID')
 
-	beamsClient.publishToInterests([req.params(notifID)], {
+	beamsClient.publishToInterests([interest], {
 		fcm: {
 		notification: {
 		title: 'Notification',
@@ -85,7 +87,9 @@ router.post("/sendRejectReqNotif/:notifID", (req,res)=>{
 		secretKey: '899F51F33EF49FF687ABA0D6512A626B8A62AE96BBBAB4A217F4411925AAF348'
 	});
 
-	beamsClient.publishToInterests([req.params(notifID)], {
+	var interest = req.param('notifID')
+
+	beamsClient.publishToInterests([interest], {
 		fcm: {
 		notification: {
 		title: 'Notification',
@@ -108,8 +112,10 @@ router.post("/sendNotifToHost/:notifID", (req,res)=>{
 		instanceId: '211e38a9-4bc8-40c5-958a-4a7f9aa91547',
 		secretKey: '899F51F33EF49FF687ABA0D6512A626B8A62AE96BBBAB4A217F4411925AAF348'
 	});
+	
+	var interest = req.param('notifID')
 
-	beamsClient.publishToInterests([req.params(notifID)], {
+	beamsClient.publishToInterests([interest], {
 		fcm: {
 		notification: {
 		title: 'Notification',
