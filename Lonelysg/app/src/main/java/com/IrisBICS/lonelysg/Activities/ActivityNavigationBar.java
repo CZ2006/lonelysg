@@ -66,8 +66,6 @@ public class ActivityNavigationBar extends AppCompatActivity {
             }
         });
 
-        PushNotifications.start(getApplicationContext(), "211e38a9-4bc8-40c5-958a-4a7f9aa91547");
-        PushNotifications.addDeviceInterest("debug-apple");
         PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
             @Override
             public void onMessageReceived(RemoteMessage remoteMessage) {
