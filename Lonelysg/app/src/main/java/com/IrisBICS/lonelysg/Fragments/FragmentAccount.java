@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -36,24 +37,15 @@ import org.json.JSONObject;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FragmentAccount extends Fragment {
-    TextView profileName;
-    TextView profileGender;
-    TextView profileAge;
-    TextView profileOccupation;
-    TextView profileInterest;
-    TextView profileUsername;
-    Uri imageUri;
-    Spinner dropDownIcon;
-    CircleImageView profilePic;
-    String moreSettings[] = {"Change Password", "Delete Account"};
-    ArrayAdapter<String> arrayAdapter;
+    private TextView profileName, profileGender, profileAge, profileOccupation, profileInterest, profileUsername;
+    private Uri imageUri;
+    private Spinner settingsIcon;
+    private CircleImageView profilePic;
+    private String settings[] = {"Change Password", "Delete Account", "Log Out"};
+    private ArrayAdapter<String> arrayAdapter;
 
-
-    Button editProfile;
-
-    private Button logout;
+    private Button editProfile;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
     User user= new User();
 
     @Nullable
@@ -68,16 +60,39 @@ public class FragmentAccount extends Fragment {
         profileUsername = v.findViewById(R.id.userName);
         profilePic = v.findViewById(R.id.accountProfilePic);
 
-        // For dropdown icon (category selection)
-        dropDownIcon = (Spinner) v.findViewById(R.id.moreSettingsicon);
-        arrayAdapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.simple_list_item_1, moreSettings);
-        dropDownIcon.setAdapter(arrayAdapter);
-        // For edit profile pop-up
-        editProfile = (Button) v.findViewById(R.id.editProfileButton);
+        // For dropdown settings icon
+        settingsIcon = (Spinner) v.findViewById(R.id.moreSettingsicon);
+        arrayAdapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.simple_list_item_1, settings);
+        settingsIcon.setAdapter(arrayAdapter);
+        settingsIcon.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+               @Override
+               public void onItemSelected(AdapterView parent, View view, int position, long id) {
+                   // On selecting a spinner item
+                   String next = parent.getItemAtPosition(position).toString();
+                   switch (next) {
+                       case "Change Password":
+                           // insert function
+                           break;
+                       case "Delete Account":
+                           // insert function
+                           break;
+                       case "Log Out":
+                           FirebaseAuth.getInstance().signOut();
+                           Toast.makeText(getActivity(), "Logging out!", Toast.LENGTH_SHORT).show();
+                           Intent intent = new Intent(getActivity(), ActivityLogin.class);
+                           startActivity(intent);
+                           break;
+                       default:
+                           break;
+                   }
+               }
 
-        String userID = mAuth.getCurrentUser().getUid();
-        getUserProfile(userID);
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+           });
 
+        editProfile = v.findViewById(R.id.editProfileButton);
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,22 +101,10 @@ public class FragmentAccount extends Fragment {
             }
         });
 
+        String userID = mAuth.getCurrentUser().getUid();
+        getUserProfile(userID);
+
         return v;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        logout = (Button) getView().findViewById(R.id.logoutButton);
-
-        logout.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Toast.makeText(getActivity(), "Logging out!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), ActivityLogin.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void getUserProfile(String userID) {
