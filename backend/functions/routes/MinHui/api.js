@@ -229,7 +229,7 @@ router.post("/sendRequest", (req, res) => {
         const newReq = ref.child("Request" + newID) //Requires information sent in JSON format
         req.body.RequestID = newID; 
         newReq.set(req.body);
-		res.end("Request sent."); //Returned in postman
+		res.json(req.body)
     })
     
 })

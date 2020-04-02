@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -146,6 +148,7 @@ public class ActivityIndividualChat extends AppCompatActivity {
                     message.setSender(currentUserID);
                     messages.add(message);
                     chatAdapter.notifyDataSetChanged();
+                    sendChatNotif();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -155,13 +158,29 @@ public class ActivityIndividualChat extends AppCompatActivity {
                 }
             });
             AppController.getInstance(this).addToRequestQueue(sendMessageRequest);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+    private void sendChatNotif(){
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendChatNotif/"+receiverID;
+        StringRequest sendChatNotifRequest = new StringRequest(com.android.volley.Request.Method.POST, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //Toast.makeText(ActivityIndividualChat.this,"C!",Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ChatNotif", error.toString());
+            }
+        });
+        AppController.getInstance(this).addToRequestQueue(sendChatNotifRequest);
+    }
 }
+
 
 
 
