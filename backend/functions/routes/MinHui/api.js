@@ -182,7 +182,7 @@ router.post("/addInvitation", (req, res) => {
         req.body.InvitationID = newID; 
         newInvitation.set(req.body)
 
-        res.end("Invitation added."); //Returned in postman
+        res.json(req.body); //Returned in postman
     })
 
 })
