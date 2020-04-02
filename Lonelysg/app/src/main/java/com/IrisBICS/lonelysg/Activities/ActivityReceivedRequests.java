@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.pusher.pushnotifications.PushNotifications;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,9 +59,11 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
             }
         });
 
+        TextView emptyText = findViewById(android.R.id.empty);
         receivedRequestsList = findViewById(R.id.receivedRequestsListView);
         requestListAdapter = new RequestListAdapter(this, requests, participants,"received");
         receivedRequestsList.setAdapter(requestListAdapter);
+        receivedRequestsList.setEmptyView(emptyText);
 
         receivedRequestsList.setClickable(true);
         receivedRequestsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

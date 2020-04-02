@@ -21,6 +21,7 @@ import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -121,9 +122,11 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
             }
         });
 
+        TextView emptyText = findViewById(android.R.id.empty);
         invitationsList = findViewById(R.id.invitationsListView);
         invitationsListAdapter = new InvitationsListAdapter(this, invitations);
         invitationsList.setAdapter(invitationsListAdapter);
+        invitationsList.setEmptyView(emptyText);
         invitationsList.setTextFilterEnabled(true);
 
         invitationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -40,14 +41,16 @@ public class ActivityChat extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_chat_ui);
 
         chatUsersList = new ArrayList<>();
         refresh = findViewById(R.id.refreshButton);
         back = findViewById(R.id.backButton);
+        TextView emptyText = findViewById(android.R.id.empty);
         chatList = findViewById(R.id.chatList);
         chatListAdapter = new ChatListAdapter(this,chatUsersList);
         chatList.setAdapter(chatListAdapter);
+        chatList.setEmptyView(emptyText);
         chatList.setClickable(true);
         chatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

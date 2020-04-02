@@ -46,6 +46,17 @@
             android:scrollingCache="true"
             android:smoothScrollbar="true"/>
 
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No invitations yet."
+            android:textSize="18dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="400dp"
+            android:textColor="@color/white"/>
+
         <Button
             android:layout_width="140dp"
             android:layout_height="35dp"

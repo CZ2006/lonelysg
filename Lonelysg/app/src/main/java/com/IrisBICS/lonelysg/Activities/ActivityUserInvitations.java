@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -45,16 +46,18 @@ public class ActivityUserInvitations extends AppCompatActivity {
         userInvitations = new ArrayList<>();
 
         back = findViewById(R.id.backButton);
-
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+
+        TextView emptyText = findViewById(android.R.id.empty);
         userInvitationsList = findViewById(R.id.userInvitationsListView);
         invitationsListAdapter = new InvitationsListAdapter(this, userInvitations);
         userInvitationsList.setAdapter(invitationsListAdapter);
+        userInvitationsList.setEmptyView(emptyText);
 
         userInvitationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
