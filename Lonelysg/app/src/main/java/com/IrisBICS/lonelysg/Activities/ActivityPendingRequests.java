@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,9 +57,11 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
             }
         });
 
+        TextView emptyText = findViewById(android.R.id.empty);
         pendingRequestsList = findViewById(R.id.pendingRequestsListView);
         requestListAdapter = new RequestListAdapter(this, requests, hosts,"pending");
         pendingRequestsList.setAdapter(requestListAdapter);
+        pendingRequestsList.setEmptyView(emptyText);
 
         pendingRequestsList.setClickable(true);
         pendingRequestsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
