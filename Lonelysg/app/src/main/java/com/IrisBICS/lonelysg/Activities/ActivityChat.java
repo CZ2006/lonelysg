@@ -14,8 +14,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.IrisBICS.lonelysg.Adapters.ChatListAdapter;
-import com.IrisBICS.lonelysg.AppController;
-import com.IrisBICS.lonelysg.FirebaseAuthHelper;
+import com.IrisBICS.lonelysg.Utils.AppController;
+import com.IrisBICS.lonelysg.Utils.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Response;
@@ -29,7 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityChat extends AppCompatActivity {
+public class ActivityChat extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private ListView chatList;
     private ImageButton refresh;
@@ -52,32 +52,10 @@ public class ActivityChat extends AppCompatActivity {
         chatList.setAdapter(chatListAdapter);
         chatList.setEmptyView(emptyText);
         chatList.setClickable(true);
-        chatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent;
-                intent = new Intent(ActivityChat.this, ActivityIndividualChat.class);
-                Bundle extras = new Bundle();
-                extras.putString("receiver_name", chatUsersList.get(i).getUsername());
-                extras.putString("receiver_id", chatUsersList.get(i).getUserID());
-                intent.putExtras(extras);
-                startActivity(intent);
-            }
-        });
+        chatList.setOnItemClickListener(this);
 
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recreate();
-            }
-        });
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        refresh.setOnClickListener(this);
+        back.setOnClickListener(this);
 
         getChatUsersList();
 
@@ -92,7 +70,6 @@ public class ActivityChat extends AppCompatActivity {
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         String chatUser = response.getString(i);
-//                        chatUsersIDList.add(chatUser);
                         getChatUsers(chatUser);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -115,10 +92,6 @@ public class ActivityChat extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-//                            host.setGender(response.getString("gender"));
-//                            host.setAge(response.getString("age"));
-//                            host.setOccupation(response.getString("occupation"));
-//                            host.setInterests(response.getString("interests"));
                             User receiver = new User();
                             receiver.setUsername(response.getString("username"));
                             receiver.setUserID(response.getString("UserID"));
@@ -128,7 +101,6 @@ public class ActivityChat extends AppCompatActivity {
                                 receiver.setProfilePic(imageUri);
                             }
                             chatUsersList.add(receiver);
-                            System.out.println("user gotten");
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
@@ -144,4 +116,30 @@ public class ActivityChat extends AppCompatActivity {
         AppController.getInstance(this).addToRequestQueue(getChatUserRequest);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.backButton :
+                finish();
+                break;
+
+            case R.id.refreshButton :
+                recreate();
+                break;
+
+            default :
+                break;
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Intent intent;
+        intent = new Intent(ActivityChat.this, ActivityIndividualChat.class);
+        Bundle extras = new Bundle();
+        extras.putString("receiver_name", chatUsersList.get(i).getUsername());
+        extras.putString("receiver_id", chatUsersList.get(i).getUserID());
+        intent.putExtras(extras);
+        startActivity(intent);
+    }
 }

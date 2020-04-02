@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".PusherMessagingService">
+        <service android:name=".Utils.PusherMessagingService">
             <intent-filter android:priority="1">
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
