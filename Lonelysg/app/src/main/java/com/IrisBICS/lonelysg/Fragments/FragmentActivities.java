@@ -6,47 +6,52 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.IrisBICS.lonelysg.Activities.ActivityManageInvitations;
-import com.IrisBICS.lonelysg.Activities.ActivityManageRequests;
-import com.IrisBICS.lonelysg.R;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-public class FragmentActivities extends Fragment {
+import com.IrisBICS.lonelysg.Activities.ActivityChat;
+import com.IrisBICS.lonelysg.Activities.ActivityManageRequests;
+import com.IrisBICS.lonelysg.R;
 
-    private CardView invitationsIcon, requestsIcon;
+public class FragmentActivities extends Fragment implements View.OnClickListener{
+
+    private CardView requestsIcon, chatIcon;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_activities, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        // Defining cards
-        invitationsIcon = v.findViewById(R.id.invitationsIcon);
+        View v = inflater.inflate(R.layout.fragment_activities, container, false);
+
         requestsIcon = v.findViewById(R.id.requestsIcon);
+        requestsIcon.setOnClickListener(this);
+        chatIcon = v.findViewById(R.id.chatIcon);
+        chatIcon.setOnClickListener(this);
 
-        // Add Click listener to the cards
-        invitationsIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent;
-                intent = new Intent(FragmentActivities.this.getActivity(), ActivityManageInvitations.class);
-                startActivity(intent);
-            }
-        });
-        requestsIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent;
-                intent = new Intent(FragmentActivities.this.getActivity(), ActivityManageRequests.class);
-                startActivity(intent);
-            }
-        });
 
         return v;
     }
 
+
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+
+        switch (v.getId()) {
+            case R.id.requestsIcon:
+                intent = new Intent(this.getActivity(), ActivityManageRequests.class);
+                startActivity(intent);
+                break;
+
+            case R.id.chatIcon:
+                intent = new Intent(this.getActivity(), ActivityChat.class);
+                startActivity(intent);
+                break;
+
+            default :
+                break;
+        }
+    }
 }

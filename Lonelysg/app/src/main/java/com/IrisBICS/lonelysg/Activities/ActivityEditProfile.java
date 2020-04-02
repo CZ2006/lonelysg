@@ -76,7 +76,7 @@ public class ActivityEditProfile extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.editprofile);
+        setContentView(R.layout.activity_edit_profile);
 
         editProfilePic = findViewById(R.id.editProfilePic);
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");

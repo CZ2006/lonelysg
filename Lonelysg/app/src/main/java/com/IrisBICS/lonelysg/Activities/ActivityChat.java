@@ -1,20 +1,17 @@
-package com.IrisBICS.lonelysg.Fragments;
+package com.IrisBICS.lonelysg.Activities;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.IrisBICS.lonelysg.Activities.ActivityIndividualChat;
 import com.IrisBICS.lonelysg.Adapters.ChatListAdapter;
 import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.FirebaseAuthHelper;
@@ -31,29 +28,32 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class FragmentChat extends Fragment {
+public class ActivityChat extends AppCompatActivity {
 
     private ListView chatList;
-//    private ArrayList<String> chatUsersList, chatUsersIDList;
+    private ImageButton refresh;
+    private Button back;
     private ArrayList<User> chatUsersList;
     ChatListAdapter chatListAdapter;
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chat);
 
-        View v = inflater.inflate(R.layout.fragment_chat, container, false);
         chatUsersList = new ArrayList<>();
-        chatList = v.findViewById(R.id.chatList);
-        chatListAdapter = new ChatListAdapter(this.getActivity(),chatUsersList);
+        refresh = findViewById(R.id.refreshButton);
+        back = findViewById(R.id.backButton);
+        chatList = findViewById(R.id.chatList);
+        chatListAdapter = new ChatListAdapter(this,chatUsersList);
         chatList.setAdapter(chatListAdapter);
         chatList.setClickable(true);
         chatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent;
-                intent = new Intent(FragmentChat.this.getActivity(), ActivityIndividualChat.class);
+                intent = new Intent(ActivityChat.this, ActivityIndividualChat.class);
                 Bundle extras = new Bundle();
                 extras.putString("receiver_name", chatUsersList.get(i).getUsername());
                 extras.putString("receiver_id", chatUsersList.get(i).getUserID());
@@ -61,9 +61,23 @@ public class FragmentChat extends Fragment {
                 startActivity(intent);
             }
         });
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recreate();
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         getChatUsersList();
 
-        return v;
     }
 
     private void getChatUsersList() {
@@ -77,7 +91,6 @@ public class FragmentChat extends Fragment {
                         String chatUser = response.getString(i);
 //                        chatUsersIDList.add(chatUser);
                         getChatUsers(chatUser);
-                        System.out.println("user gotten2");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -89,7 +102,7 @@ public class FragmentChat extends Fragment {
                 Log.e("Volley", error.toString());
             }
         });
-        AppController.getInstance(this.getContext()).addToRequestQueue(getChatUsersListRequest);
+        AppController.getInstance(this).addToRequestQueue(getChatUsersListRequest);
     }
 
     private void getChatUsers(String userID) {
@@ -125,7 +138,7 @@ public class FragmentChat extends Fragment {
                         Log.e("Volley", error.toString());
                     }
                 });
-        AppController.getInstance(this.getContext()).addToRequestQueue(getChatUserRequest);
+        AppController.getInstance(this).addToRequestQueue(getChatUserRequest);
     }
 
 }

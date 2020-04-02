@@ -190,11 +190,11 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
 
     @Override
     public boolean onQueryTextChange(String newText) {
-
+        Filter filter = invitationsListAdapter.getFilter();
         if (TextUtils.isEmpty(newText)) {
-            invitationsList.clearTextFilter();
+            filter.filter("");
         } else {
-            invitationsList.setFilterText(newText);
+            filter.filter(newText);
         }
         return true;
     }
