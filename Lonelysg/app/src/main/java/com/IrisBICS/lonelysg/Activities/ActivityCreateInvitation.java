@@ -261,8 +261,7 @@ public class ActivityCreateInvitation extends AppCompatActivity {
 //                    addInvitation();
                     Toast.makeText(ActivityCreateInvitation.this, "New Invitation Created", Toast.LENGTH_SHORT).show();
                 }
-                String requestInterest = currentUserID+"request";
-                PushNotifications.addDeviceInterest(requestInterest);
+                PushNotifications.addDeviceInterest(currentUserID+"_Host");
             }
         });
 
