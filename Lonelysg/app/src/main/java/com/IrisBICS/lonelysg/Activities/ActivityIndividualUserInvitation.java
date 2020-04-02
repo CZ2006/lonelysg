@@ -115,6 +115,8 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
                             invitation.setDesc(response.getString("Description"));
                             invitation.setDate(response.getString("Date"));
                             invitation.setLocationName(response.getString("Location"));
+                            invitation.setLatitude(response.getString("Latitude"));
+                            invitation.setLongitude(response.getString("Longitude"));
                             invitation.setInvitationID(invitationID);
                             if (response.has("Image")!=false) {
                                 String InvPicUri = response.getString("Image");
