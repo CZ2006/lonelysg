@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.IrisBICS.lonelysg.FirebaseAuthHelper;
+import com.IrisBICS.lonelysg.Utils.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Message;
 import com.IrisBICS.lonelysg.R;
 

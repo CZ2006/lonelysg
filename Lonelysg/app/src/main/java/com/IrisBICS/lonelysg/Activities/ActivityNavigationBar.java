@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.IrisBICS.lonelysg.Utils.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Fragments.FragmentAccount;
 import com.IrisBICS.lonelysg.Fragments.FragmentActivities;
 import com.IrisBICS.lonelysg.Fragments.FragmentDiscoveryPage;
@@ -23,6 +24,7 @@ public class ActivityNavigationBar extends AppCompatActivity implements MeowBott
     private final static int ID_INVITATION = 2;
     private final static int ID_CHAT = 3;
     private final static int ID_ACCOUNT = 4;
+    String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class ActivityNavigationBar extends AppCompatActivity implements MeowBott
         meo.setOnShowListener(this);
 
         PushNotifications.start(getApplicationContext(), "211e38a9-4bc8-40c5-958a-4a7f9aa91547");
+        PushNotifications.addDeviceInterest(currentUserID);
         PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
             @Override
             public void onMessageReceived(RemoteMessage remoteMessage) {

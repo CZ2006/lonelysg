@@ -20,7 +20,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.pusher.pushnotifications.PushNotifications;
 
 public class ActivityLogin extends AppCompatActivity implements View.OnClickListener {
     RelativeLayout loginStuff, passwordSignUpBar;
@@ -103,9 +102,6 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("LoginUI", "signInWithEmail:success");
                                 Toast.makeText(ActivityLogin.this, "Sign in success!", Toast.LENGTH_SHORT).show();
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                PushNotifications.start(getApplicationContext(), "211e38a9-4bc8-40c5-958a-4a7f9aa91547");
-                                PushNotifications.addDeviceInterest(user.getUid());
                                 Intent intent = new Intent(ActivityLogin.this, ActivityNavigationBar.class);
                                 startActivity(intent);
                             } else {

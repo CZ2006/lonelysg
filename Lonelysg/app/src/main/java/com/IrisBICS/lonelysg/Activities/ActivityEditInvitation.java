@@ -20,7 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.IrisBICS.lonelysg.AppController;
+import com.IrisBICS.lonelysg.Utils.AppController;
 import com.IrisBICS.lonelysg.Models.Invitation;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;

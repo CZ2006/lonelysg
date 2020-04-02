@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.IrisBICS.lonelysg.AppController;
-import com.IrisBICS.lonelysg.FirebaseAuthHelper;
+import com.IrisBICS.lonelysg.Utils.AppController;
+import com.IrisBICS.lonelysg.Utils.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Invitation;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
@@ -136,8 +136,6 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
         }
         if (exists==false){
             sendRequest();
-            Toast.makeText(ActivityIndividualInvitation.this, "Request Sent", Toast.LENGTH_SHORT).show();
-//                    sendNotif();
             finish();
         }
         else{
@@ -263,7 +261,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(ActivityIndividualInvitation.this,"You have sent a request!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActivityIndividualInvitation.this,"Request sent successfully.", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
