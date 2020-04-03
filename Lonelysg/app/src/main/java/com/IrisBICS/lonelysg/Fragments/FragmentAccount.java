@@ -15,10 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
+import com.IrisBICS.lonelysg.Activities.ActivityChangePassword;
 import com.IrisBICS.lonelysg.Activities.ActivityEditProfile;
 import com.IrisBICS.lonelysg.Activities.ActivityLogin;
 import com.IrisBICS.lonelysg.AppController;
@@ -28,12 +25,18 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FragmentAccount extends Fragment {
@@ -71,16 +74,27 @@ public class FragmentAccount extends Fragment {
                    String next = parent.getItemAtPosition(position).toString();
                    switch (next) {
                        case "Change Password":
-                           // insert function
+                           Intent intent = new Intent(getActivity(), ActivityChangePassword.class);
+                           startActivity(intent);
                            break;
                        case "Delete Account":
-                           // insert function
+                           FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                           user.delete()
+                                   .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                       @Override
+                                       public void onComplete(@NonNull Task<Void> task) {
+                                           if (task.isSuccessful()) {
+                                               Log.d("FragmentAccount", "User account deleted.");
+                                           }
+                                       }
+                                   });
                            break;
                        case "Log Out":
                            FirebaseAuth.getInstance().signOut();
                            Toast.makeText(getActivity(), "Logging out!", Toast.LENGTH_SHORT).show();
-                           Intent intent = new Intent(getActivity(), ActivityLogin.class);
-                           startActivity(intent);
+                           Intent i = new Intent(getActivity(), ActivityLogin.class);
+                           startActivity(i);
                            break;
                        default:
                            break;
