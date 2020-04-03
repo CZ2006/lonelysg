@@ -159,7 +159,7 @@ router.post("/addUser/:newID", (req, res) => {
     let userRef = database.ref("User")
 
 	const newReq = userRef.child("User" + req.params.newID)
-	req.body.userID = req.params.newID; 
+	req.body.UserID = req.params.newID; 
 	newReq.set(req.body);
 	res.json(req.body);
     })
