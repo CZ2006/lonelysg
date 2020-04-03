@@ -30,7 +30,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityPendingRequests extends AppCompatActivity implements RequestCancelDialog.DialogListener, View.OnClickListener, AdapterView.OnItemClickListener{
+public class ActivityPendingRequests extends AppCompatActivity implements RequestCancelDialog.DialogListener{
 
     private ArrayList<Request> requests;
     private ArrayList<User> hosts;
@@ -50,7 +50,12 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
         hosts = new ArrayList<>();
 
         back = findViewById(R.id.backButton);
-        back.setOnClickListener(this);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         TextView emptyText = findViewById(android.R.id.empty);
         pendingRequestsList = findViewById(R.id.pendingRequestsListView);
@@ -59,7 +64,13 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
         pendingRequestsList.setEmptyView(emptyText);
 
         pendingRequestsList.setClickable(true);
-        pendingRequestsList.setOnItemClickListener(this);
+        pendingRequestsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                clickedPos = i;
+                openDialog();
+            }
+        });
 
         getPendingRequests();
     }
@@ -161,14 +172,4 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
         AppController.getInstance(this).addToRequestQueue(getUserProfileRequest);
     }
 
-    @Override
-    public void onClick(View view) {
-        finish();
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        clickedPos = i;
-        openDialog();
-    }
 }

@@ -31,7 +31,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityReceivedRequests extends AppCompatActivity implements RequestActionDialog.DialogListener, View.OnClickListener, AdapterView.OnItemClickListener{
+public class ActivityReceivedRequests extends AppCompatActivity implements RequestActionDialog.DialogListener{
 
     private ArrayList<Request> requests;
     private ArrayList<User> participants;
@@ -52,7 +52,12 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
         participants = new ArrayList<>();
 
         back = findViewById(R.id.backButton);
-        back.setOnClickListener(this);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         TextView emptyText = findViewById(android.R.id.empty);
         receivedRequestsList = findViewById(R.id.receivedRequestsListView);
@@ -61,7 +66,13 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
         receivedRequestsList.setEmptyView(emptyText);
 
         receivedRequestsList.setClickable(true);
-        receivedRequestsList.setOnItemClickListener(this);
+        receivedRequestsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                clickedPos = i;
+                openDialog();
+            }
+        });
 
         getReceivedRequests();
     }
@@ -252,16 +263,5 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
             }
         });
         AppController.getInstance(this).addToRequestQueue(sendNotifRequest);
-    }
-
-    @Override
-    public void onClick(View view) {
-        finish();
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        clickedPos = i;
-        openDialog();
     }
 }

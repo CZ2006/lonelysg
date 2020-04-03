@@ -31,7 +31,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityIndividualChat extends AppCompatActivity implements View.OnClickListener {
+public class ActivityIndividualChat extends AppCompatActivity {
 
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
@@ -63,13 +63,38 @@ public class ActivityIndividualChat extends AppCompatActivity implements View.On
         recyclerView = findViewById(R.id.chatView);
         back = findViewById(R.id.backButton);
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         chatAdapter = new ChatRecyclerAdapter(this, messages);
+//        chatAdapter.setClickListener((ChatRecyclerAdapter.ItemClickListener) this);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
+//        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(chatAdapter);
 
-        sendButton.setOnClickListener(this);
-        back.setOnClickListener(this);
-        refresh.setOnClickListener(this);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String text = typeMessage.getText().toString().trim();
+                if ((text!="")&(text!=null)){
+                    sendMessage(text);
+                    typeMessage.setText("");
+                }
+            }
+        });
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recreate();
+            }
+        });
 
         getMessages();
 
@@ -152,30 +177,6 @@ public class ActivityIndividualChat extends AppCompatActivity implements View.On
             }
         });
         AppController.getInstance(this).addToRequestQueue(sendChatNotifRequest);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.backButton :
-                finish();
-                break;
-
-            case R.id.refreshButton :
-                recreate();
-                break;
-
-            case R.id.sendButton:
-                String text = typeMessage.getText().toString().trim();
-                if ((text!="")&(text!=null)){
-                    sendMessage(text);
-                    typeMessage.setText("");
-                }
-                break;
-
-            default :
-                break;
-        }
     }
 }
 
