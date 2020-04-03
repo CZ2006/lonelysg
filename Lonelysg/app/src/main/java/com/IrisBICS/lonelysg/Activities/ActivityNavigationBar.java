@@ -33,7 +33,7 @@ public class ActivityNavigationBar extends AppCompatActivity implements MeowBott
 
         meo = findViewById(R.id.bottom_nav);
         meo.add(new MeowBottomNavigation.Model(1, R.drawable.search_black));
-        meo.add(new MeowBottomNavigation.Model(2, R.drawable.add_button));
+        meo.add(new MeowBottomNavigation.Model(2, R.drawable.invitation_black));
         meo.add(new MeowBottomNavigation.Model(3, R.drawable.chat_black));
         meo.add(new MeowBottomNavigation.Model(4, R.drawable.account_circle));
 

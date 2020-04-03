@@ -70,7 +70,7 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
     }
 
     private void getInvitation() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getInvitation/"+invitationID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/getInvitation/"+invitationID;
 
         JsonObjectRequest getInvitationRequest = new JsonObjectRequest
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
@@ -112,7 +112,7 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
     }
 
     private void deleteInvitation() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/deleteInvitation/"+invitationID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/deleteInvitation/"+invitationID;
         StringRequest deleteInvitationRequest = new StringRequest(com.android.volley.Request.Method.DELETE,URL, new Response.Listener<String>()
         {
             @Override

@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-
 router.get("/getMessages/:user1/:user2", (req,res)=>{ 
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getMessages after running firebase serve
+    
     let database = req.app.get("database")
     var ref = database.ref('Messages');
     var user1 = req.params.user1;
@@ -33,8 +32,7 @@ router.get("/getMessages/:user1/:user2", (req,res)=>{
 })
 
 router.get("/getChatUsersList/:userID", (req,res)=>{ 
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getChatUsersList after running firebase serve
-    
+  
     let database = req.app.get("database")
     var ref = database.ref('Messages');
     var user = req.params.userID;
@@ -69,7 +67,7 @@ router.get("/getChatUsersList/:userID", (req,res)=>{
                 }
             }
         }
-        res.json(chatUsersArray); //Returned in the browser or postman
+        res.json(chatUsersArray); 
     })
 
     
@@ -77,7 +75,7 @@ router.get("/getChatUsersList/:userID", (req,res)=>{
 })
 
 router.post("/sendMessage", (req, res) => { 
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/sendMessage 
+   
     let database = req.app.get("database")
     let msgRef = database.ref("Messages")
     
@@ -104,7 +102,7 @@ router.get("/getInvitation/:invitationID", (req,res) => {
 })
 
 router.get("/getInvitations/:category/:user", (req,res)=>{ 
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getInvitations after running firebase serve
+  
     let database = req.app.get("database")
     var ref = database.ref('Invitations');
     var category = req.params.category;
@@ -135,12 +133,12 @@ router.get("/getInvitations/:category/:user", (req,res)=>{
             }
         }
         invitationsArray.sort(compare);
-        res.json(invitationsArray); //Returned in the browser or postman
+        res.json(invitationsArray); 
     })
 })
 
 router.get("/getUserInvitations/:user", (req,res)=>{ 
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getUserInvitations after running firebase serve
+   
     let database = req.app.get("database")
     var ref = database.ref('Invitations');
     var user = req.params.user;
@@ -161,12 +159,12 @@ router.get("/getUserInvitations/:user", (req,res)=>{
             }
         }
         invitationsArray.sort(compare);
-        res.json(invitationsArray); //Returned in the browser or postman
+        res.json(invitationsArray); 
     })
 })
 
 router.post("/addInvitation", (req, res) => { 
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/addInvitation in postman with sample data in the body after running firebase serve
+   
     let database = req.app.get("database")
     let ref = database.ref("Invitations")
 
@@ -178,11 +176,11 @@ router.post("/addInvitation", (req, res) => {
             invitationsArray.push(invitations[i]);
         }
         newID = invitationsArray[invitationsArray.length-1].InvitationID + 1;
-        const newInvitation = ref.child("Invitation" + newID) //Requires information sent in JSON format
+        const newInvitation = ref.child("Invitation" + newID) 
         req.body.InvitationID = newID; 
         newInvitation.set(req.body)
 
-        res.json(req.body); //Returned in postman
+        res.json(req.body); 
     })
 
 })
@@ -197,87 +195,16 @@ router.delete("/deleteInvitation/:InvitationID", (req, res) => {
 
 })
 
-router.get("/getReceivedRequests/:user", (req,res)=>{ 
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getReceivedRequests after running firebase serve
-    let database = req.app.get("database")
-    var ref = database.ref('Requests');
-    var user = req.params.user;
-    
-    function compare(a, b) {
-        if (a.RequestID > b.RequestID) return 1;
-        if (b.RequestID > a.RequestID) return -1;
-      
-        return 0;
-      }
-    
-    ref.once("value", function(snapshot){
-        var requests = snapshot.val();  
-        var requestsArray = [];
-        for (var i in requests){
-			if (requests[i].Host==user){
-				requestsArray.push(requests[i]);
-			}
-        }
-        requestsArray.sort(compare);
-        res.json(requestsArray); //Returned in the browser or postman
-    })
-})
-
-router.get("/getPendingRequests/:user", (req,res)=>{ 
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/getPendingRequests after running firebase serve
-    let database = req.app.get("database")
-    var ref = database.ref('Requests');
-    var user = req.params.user;
-    
-    function compare(a, b) {
-        if (a.RequestID > b.RequestID) return 1;
-        if (b.RequestID > a.RequestID) return -1;
-      
-        return 0;
-      }
-    
-    ref.once("value", function(snapshot){
-        var requests = snapshot.val();  
-        var requestsArray = [];
-        for (var i in requests){
-			if (requests[i].Participant==user){
-				requestsArray.push(requests[i]);
-			}
-        }
-        requestsArray.sort(compare);
-        res.json(requestsArray); //Returned in the browser or postman
-    })
-})
-
-router.post("/sendRequest", (req, res) => {
-    //Call using http://localhost:5001/lonely-4a186/us-central1/app/MinHui/sendRequest
-    let database = req.app.get("database")
-    let ref = database.ref("Requests")
-
-    ref.once("value", function(snapshot){
-        var requests = snapshot.val(); 
-        var newID = 0;
-        var requestsArray = [];
-        for (var i in requests){
-            requestsArray.push(requests[i]);
-        }
-        newID = requestsArray[requestsArray.length-1].RequestID + 1;
-        const newReq = ref.child("Request" + newID) //Requires information sent in JSON format
-        req.body.RequestID = newID; 
-        newReq.set(req.body);
-		res.json(req.body)
-    })
-    
-})
-
-router.delete("/deleteRequest/:RequestID", (req, res) => {
+router.put("/updateInvitation/:invitationID", (req, res) => {
 
     let database = req.app.get("database")
-    let reqToDel = database.ref('Requests/Request' + req.param('RequestID'))
-    reqToDel.set({})
+    var invitationToUpdate = database.ref('Invitations/Invitation' + req.param('invitationID'));
 
-    res.end("Request deleted.")
-
+	invitationToUpdate.once("value", function(snapshot){
+            newData = snapshot.val()
+			invitationToUpdate.update(req.body)
+        })
+	res.json(req.body)
 })
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

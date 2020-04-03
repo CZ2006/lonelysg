@@ -62,7 +62,7 @@ public class ActivityChat extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getChatUsersList() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getChatUsersList/"+currentUserID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MessagesDAO/getChatUsersList/"+currentUserID;
 
         final JsonArrayRequest getChatUsersListRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -86,7 +86,7 @@ public class ActivityChat extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getChatUsers(String userID) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/getUser/"+userID;
         JsonObjectRequest getChatUserRequest = new JsonObjectRequest
                 (com.android.volley.Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override

@@ -21,9 +21,10 @@ import androidx.fragment.app.Fragment;
 
 import com.IrisBICS.lonelysg.Activities.ActivityEditProfile;
 import com.IrisBICS.lonelysg.Activities.ActivityLogin;
-import com.IrisBICS.lonelysg.Utils.AppController;
+import com.IrisBICS.lonelysg.Activities.ActivityChangePassword;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
+import com.IrisBICS.lonelysg.Utils.AppController;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -41,12 +42,12 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
     private Uri imageUri;
     private Spinner settingsIcon;
     private CircleImageView profilePic;
-    private String settings[] = {"Change Password", "Delete Account", "Log Out"};
+    private String settings[] = {"Settings", "Change Password", "Delete Account", "Log Out"};
     private ArrayAdapter<String> arrayAdapter;
 
     private Button editProfile;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    User user= new User();
+    private User user= new User();
 
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,7 +77,7 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
     }
 
     private void getUserProfile(String userID) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/getUser/"+userID;
         JsonObjectRequest getUserProfileRequest = new JsonObjectRequest
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -128,17 +129,31 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String next = adapterView.getItemAtPosition(i).toString();
+        Intent intent;
         switch (next) {
+            case "Settings":
+                break;
             case "Change Password":
-                // insert function
+                intent = new Intent(getActivity(), ActivityChangePassword.class);
+                startActivity(intent);
                 break;
             case "Delete Account":
-                // insert function
+                           /*FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                           user.delete()
+                                   .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                       @Override
+                                       public void onComplete(@NonNull Task<Void> task) {
+                                           if (task.isSuccessful()) {
+                                               Log.d("FragmentAccount", "User account deleted.");
+                                           }
+                                       }
+                                   });*/
                 break;
             case "Log Out":
                 FirebaseAuth.getInstance().signOut();
                 Toast.makeText(getActivity(), "Logging out!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), ActivityLogin.class);
+                intent = new Intent(getActivity(), ActivityLogin.class);
                 startActivity(intent);
                 break;
             default:

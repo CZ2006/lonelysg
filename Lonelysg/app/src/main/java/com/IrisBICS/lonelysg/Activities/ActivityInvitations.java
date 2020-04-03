@@ -108,7 +108,7 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
     }
 
     private void getInvitations() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getInvitations/"+category+"/"+currentUserID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/getInvitations/"+category+"/"+currentUserID;
 
         final JsonArrayRequest getInvitationsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override

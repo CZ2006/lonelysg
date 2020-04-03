@@ -136,7 +136,7 @@ public class ActivityCreateInvitation extends AppCompatActivity implements View.
                 if (task.isSuccessful()) {
                     downloadInvPicUri = task.getResult();
                     try {
-                        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/addInvitation";
+                        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/addInvitation";
                         JSONObject jsonBody = new JSONObject();
 
                         jsonBody.put("Category", category);
@@ -179,7 +179,7 @@ public class ActivityCreateInvitation extends AppCompatActivity implements View.
 
     private void addInvWithoutPic() {
         try {
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/addInvitation";
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/addInvitation";
             JSONObject jsonBody = new JSONObject();
 
             jsonBody.put("Category", category);

@@ -164,8 +164,8 @@ public class ActivityEditInvitation extends AppCompatActivity implements View.On
                         jsonBody.put("End Time", editEndTime.getText());
                         jsonBody.put("Date", editInvDate.getText());
                         jsonBody.put("Image",downloadInvPicUri.toString());
-                        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateInvitation/" + invitationID;
-                        JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
+                        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/updateInvitation/" + invitationID;
+                        JsonObjectRequest updateInvitationRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
                                 new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
@@ -177,7 +177,7 @@ public class ActivityEditInvitation extends AppCompatActivity implements View.On
                                 Log.e("Volley", error.toString());
                             }
                         });
-                        AppController.getInstance(ActivityEditInvitation.this).addToRequestQueue(updateUserRequest);
+                        AppController.getInstance(ActivityEditInvitation.this).addToRequestQueue(updateInvitationRequest);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -209,8 +209,8 @@ public class ActivityEditInvitation extends AppCompatActivity implements View.On
             jsonBody.put("Start Time", editStartTime.getText());
             jsonBody.put("End Time", editEndTime.getText());
             jsonBody.put("Date", editInvDate.getText());
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateInvitation/"+invitationID;
-            JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/updateInvitation/"+invitationID;
+            JsonObjectRequest updateInvitationRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -221,14 +221,14 @@ public class ActivityEditInvitation extends AppCompatActivity implements View.On
                     Log.e("Volley", error.toString());
                 }
             });
-            AppController.getInstance(ActivityEditInvitation.this).addToRequestQueue(updateUserRequest);
+            AppController.getInstance(ActivityEditInvitation.this).addToRequestQueue(updateInvitationRequest);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     private void setInvitationHint(String invitationID) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getInvitation/"+invitationID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/getInvitation/"+invitationID;
 
         JsonObjectRequest getInvitationRequest = new JsonObjectRequest
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
