@@ -29,8 +29,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.IrisBICS.lonelysg.Adapters.InvitationsListAdapter;
-import com.IrisBICS.lonelysg.Utils.AppController;
-import com.IrisBICS.lonelysg.Utils.FirebaseAuthHelper;
+import com.IrisBICS.lonelysg.AppController;
+import com.IrisBICS.lonelysg.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Invitation;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Response;
@@ -52,7 +52,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class ActivityInvitations extends AppCompatActivity implements SearchView.OnQueryTextListener, AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener, View.OnClickListener {
+public class ActivityInvitations extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     int PERMISSION_ID = 1;
 
@@ -60,7 +60,7 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
     private SearchView searchView;
     private Spinner sortBy;
     private Button back;
-    String sortChoices[] = {"Recent", "Title", "Distance from current location"};
+    String sortChoices[] = {"Recent", "Title", "Date", "Distance from current location"};
     private ArrayList<Invitation> invitations;
     private String category, sort;
 //    int userImage[] = {R.drawable.user_sample, R.drawable.user_sample, R.drawable.user_sample, R.drawable.user_sample, R.drawable.user_sample};
@@ -87,12 +87,40 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
         sortBy = findViewById(R.id.sortDropBox);
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sortChoices);
         sortBy.setAdapter(arrayAdapter);
-        sortBy.setOnItemSelectedListener(this);
+
+        sortBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView parent, View view, int position, long id) {
+                // On selecting a spinner item
+                sort = parent.getItemAtPosition(position).toString();
+                switch(sort){
+                    case "Recent":
+                        sortByRecent();
+                        break;
+                    case "Title":
+                        sortByTitle();
+                        break;
+                    case "Date":
+                        sortByDate();
+                    case "Distance from current location":
+                        sortByDistance();
+                    default:
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView adapterView) {
+            }});
 
         searchView = findViewById(R.id.searchView);
 
         back = findViewById(R.id.backButton);
-        back.setOnClickListener(this);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         TextView emptyText = findViewById(android.R.id.empty);
         invitationsList = findViewById(R.id.invitationsListView);
@@ -100,7 +128,15 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
         invitationsList.setAdapter(invitationsListAdapter);
         invitationsList.setEmptyView(emptyText);
         invitationsList.setTextFilterEnabled(true);
-        invitationsList.setOnItemClickListener(this);
+
+        invitationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                    Intent intent = new Intent(getApplicationContext(), ActivityIndividualInvitation.class);
+                    intent.putExtra("invitationID", invitations.get(i).getInvitationID());
+                    startActivity(intent);
+            }
+        });
 
         setupSearchView();
         getInvitations();
@@ -138,7 +174,6 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
                         e.printStackTrace();
                     }
                 }
-                sortByRecent();
                 invitationsListAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
@@ -173,18 +208,16 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
     }
 
     private void sortByRecent(){
-        invitations = invitationsListAdapter.getDisplayedList();
         Collections.sort(invitations, new Comparator<Invitation>(){
             @Override
             public int compare(Invitation a, Invitation b){
-                return -(a.getInvitationID().compareTo(b.getInvitationID()));
+                return a.getInvitationID().compareTo(b.getInvitationID());
             }
         });
         invitationsListAdapter.notifyDataSetChanged();
     }
 
     private void sortByTitle(){
-        invitations = invitationsListAdapter.getDisplayedList();
         Collections.sort(invitations, new Comparator<Invitation>(){
             @Override
             public int compare(Invitation a, Invitation b){
@@ -195,13 +228,22 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
     }
 
     private void sortByDistance(){
-        invitations = invitationsListAdapter.getDisplayedList();
         Collections.sort(invitations, new Comparator<Invitation>(){
             @Override
             public int compare(Invitation a, Invitation b){
                 double distA = Math.sqrt(Math.pow(Double.valueOf(a.getLatitude())-userLat, 2) + Math.pow(Double.valueOf(a.getLongitude())-userLong, 2));
                 double distB = Math.sqrt(Math.pow(Double.valueOf(b.getLatitude())-userLat, 2) + Math.pow(Double.valueOf(b.getLongitude())-userLong, 2));
                 return Double.compare(distA,distB);
+            }
+        });
+        invitationsListAdapter.notifyDataSetChanged();
+    }
+
+    private void sortByDate(){
+        Collections.sort(invitations, new Comparator<Invitation>(){
+            @Override
+            public int compare(Invitation a, Invitation b){
+                return a.getDate().compareTo(b.getDate());
             }
         });
         invitationsListAdapter.notifyDataSetChanged();
@@ -288,36 +330,4 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
         }
     };
 
-    @Override
-    public void onClick(View view) {
-        finish();
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Intent intent = new Intent(getApplicationContext(), ActivityIndividualInvitation.class);
-        intent.putExtra("invitationID", invitations.get(i).getInvitationID());
-        startActivity(intent);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        sort = adapterView.getItemAtPosition(i).toString();
-        switch(sort){
-            case "Recent":
-                sortByRecent();
-                break;
-            case "Title":
-                sortByTitle();
-                break;
-            case "Distance from current location":
-                sortByDistance();
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-    }
 }

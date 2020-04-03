@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.IrisBICS.lonelysg.Activities.ActivityChangePassword;
 import com.IrisBICS.lonelysg.Activities.ActivityEditProfile;
 import com.IrisBICS.lonelysg.Activities.ActivityLogin;
-import com.IrisBICS.lonelysg.Utils.AppController;
+import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
@@ -39,7 +39,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FragmentAccount extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class FragmentAccount extends Fragment {
     private TextView profileName, profileGender, profileAge, profileOccupation, profileInterest, profileUsername;
     private Uri imageUri;
     private Spinner settingsIcon;
@@ -64,8 +64,8 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
         profilePic = v.findViewById(R.id.accountProfilePic);
 
         // For dropdown settings icon
-        settingsIcon = v.findViewById(R.id.moreSettingsicon);
-        arrayAdapter = new ArrayAdapter<>(v.getContext(), android.R.layout.simple_list_item_1, settings);
+        settingsIcon = (Spinner) v.findViewById(R.id.moreSettingsicon);
+        arrayAdapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.simple_list_item_1, settings);
         settingsIcon.setAdapter(arrayAdapter);
 
         settingsIcon.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -110,7 +110,13 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
         //settingsIcon.setOnItemSelectedListener(this);
 
         editProfile = v.findViewById(R.id.editProfileButton);
-        editProfile.setOnClickListener(this);
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent (v.getContext(), ActivityEditProfile.class);
+                startActivity(i);
+            }
+        });
 
         String userID = mAuth.getCurrentUser().getUid();
         getUserProfile(userID);
@@ -160,37 +166,5 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
         if (user.getProfilePic()!=null) {
             Picasso.get().load(user.getProfilePic()).into(profilePic);
         }
-    }
-
-    @Override
-    public void onClick(View view) {
-        Intent i = new Intent (getContext(), ActivityEditProfile.class);
-        startActivity(i);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String next = adapterView.getItemAtPosition(i).toString();
-        switch (next) {
-            case "Change Password":
-                // insert function
-                break;
-            case "Delete Account":
-                // insert function
-                break;
-            case "Log Out":
-                FirebaseAuth.getInstance().signOut();
-                Toast.makeText(getActivity(), "Logging out!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), ActivityLogin.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 }

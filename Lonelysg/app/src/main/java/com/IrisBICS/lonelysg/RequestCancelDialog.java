@@ -1,4 +1,4 @@
-package com.IrisBICS.lonelysg.Utils;
+package com.IrisBICS.lonelysg;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

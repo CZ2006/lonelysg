@@ -2,7 +2,7 @@ package com.IrisBICS.lonelysg.Models;
 
 import android.net.Uri;
 
-import java.util.ArrayList;
+import java.net.URI;
 
 public class User {
     private String username;
@@ -14,9 +14,14 @@ public class User {
     private String password;
     private String email;
     private Uri profilePic;
-    private ArrayList<Invitation> userInvitations;
-    private ArrayList<Request> userRequests;
-    private ArrayList<Message> userMessages;
+
+//    public User(String username, String gender, String age, String occupation, String interests) {
+//        this.username = username;
+//        this.gender = gender;
+//        this.age = age;
+//        this.occupation = occupation;
+//        this.interests = interests;
+//    }
 
     public String getUserID() { return userID; }
 
@@ -71,28 +76,4 @@ public class User {
     public Uri getProfilePic() { return profilePic; }
 
     public void setProfilePic(Uri profilePic) { this.profilePic = profilePic; }
-
-    public ArrayList<Invitation> getUserInvitations() {
-        return userInvitations;
-    }
-
-    public void setUserInvitations(ArrayList<Invitation> userInvitations) {
-        this.userInvitations = userInvitations;
-    }
-
-    public ArrayList<Request> getUserRequests() {
-        return userRequests;
-    }
-
-    public void setUserRequests(ArrayList<Request> userRequests) {
-        this.userRequests = userRequests;
-    }
-
-    public ArrayList<Message> getUserMessages() {
-        return userMessages;
-    }
-
-    public void setUserMessages(ArrayList<Message> userMessages) {
-        this.userMessages = userMessages;
-    }
 }

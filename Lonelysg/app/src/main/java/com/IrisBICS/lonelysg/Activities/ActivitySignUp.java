@@ -8,10 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.IrisBICS.lonelysg.Utils.AppController;
+import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -26,7 +23,10 @@ import com.google.firebase.auth.FirebaseUser;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ActivitySignUp extends AppCompatActivity implements View.OnClickListener {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ActivitySignUp extends AppCompatActivity {
     private EditText emailInput;
     private EditText passwordInput;
     private EditText usernameInput;
@@ -44,41 +44,12 @@ public class ActivitySignUp extends AppCompatActivity implements View.OnClickLis
         passwordInput = findViewById(R.id.passwordInputS);
         usernameInput = findViewById(R.id.userNameInput);
 
-        back = findViewById(R.id.backButton);
-        signUp = findViewById(R.id.signUpButtonS);
+        back = (Button)findViewById(R.id.backButton);
+        signUp = (Button)findViewById(R.id.signUpButtonS);
 
-        signUp.setOnClickListener(this);
-        back.setOnClickListener(this);
-    }
-
-    private void createUser(String userUserID){
-        try {
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("email", emailInput.getText().toString());
-            jsonBody.put("username",usernameInput.getText().toString());
-            jsonBody.put("password",passwordInput.getText().toString());
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/addUser/"+userUserID;
-            JsonObjectRequest createUserRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e("Volley", error.toString());
-                        }
-                    });
-            AppController.getInstance(this).addToRequestQueue(createUserRequest);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.signUpButtonS :
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
                 final String email = emailInput.getText().toString();
                 final String pwd = passwordInput.getText().toString();
                 final String username = usernameInput.getText().toString();
@@ -118,15 +89,39 @@ public class ActivitySignUp extends AppCompatActivity implements View.OnClickLis
                 else {
                     Toast.makeText(ActivitySignUp.this, "Error occured. Please try again!", Toast.LENGTH_SHORT).show();
                 }
-                break;
+            }
+        });
 
-            case R.id.backButton :
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
                 Intent intent = new Intent(ActivitySignUp.this, ActivityLogin.class);
                 startActivity(intent);
-                break;
+            }
+        });
+    }
 
-            default :
-                break;
+    private void createUser(String userUserID){
+        try {
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("email", emailInput.getText().toString());
+            jsonBody.put("username",usernameInput.getText().toString());
+            jsonBody.put("password",passwordInput.getText().toString());
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/addUser/"+userUserID;
+            JsonObjectRequest createUserRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("Volley", error.toString());
+                        }
+                    });
+            AppController.getInstance(this).addToRequestQueue(createUserRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }
