@@ -20,8 +20,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.pusher.pushnotifications.PushNotifications;
 
-public class ActivityLogin extends AppCompatActivity implements View.OnClickListener {
+public class ActivityLogin extends AppCompatActivity {
     RelativeLayout loginStuff, passwordSignUpBar;
 
     private EditText username;
@@ -59,38 +60,26 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginStuff = findViewById(R.id.loginStuff);
-        passwordSignUpBar = findViewById(R.id.passwordSignUpBar);
+        loginStuff = (RelativeLayout) findViewById(R.id.loginStuff);
+        passwordSignUpBar = (RelativeLayout) findViewById(R.id.passwordSignUpBar);
 
-        ImageView logo = findViewById(R.id.logo);
+        ImageView logo = (ImageView) findViewById(R.id.logo);
         logo.animate().alpha(0f).setDuration(2600);
 
         handler.postDelayed(runnable, 3000); // Timeout for the splash
 
         mAuth = FirebaseAuth.getInstance();
-        username = findViewById(R.id.usernameInput);
-        password = findViewById(R.id.passwordInput);
-        signIn = findViewById(R.id.signInButton);
-        signUp = findViewById(R.id.signUpButton);
-        forgotPW = findViewById(R.id.forgotPasswordButton);
+        username = (EditText) findViewById(R.id.usernameInput);
+        password = (EditText) findViewById(R.id.passwordInput);
+        signIn = (Button) findViewById(R.id.signInButton);
+        signUp = (Button) findViewById(R.id.signUpButton);
+        forgotPW = (Button) findViewById(R.id.forgotPasswordButton);
 
-        signIn.setOnClickListener(this);
-        signUp.setOnClickListener(this);
-        forgotPW.setOnClickListener(this);
+        signIn.setOnClickListener(new View.OnClickListener() {
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        moveTaskToBack(true);
-    }
-
-    @Override
-    public void onClick(View v) {
-        String email;
-        switch (v.getId()) {
-            case R.id.signInButton :
-                email = username.getText().toString();
+            @Override
+            public void onClick(View view) {
+                String email = username.getText().toString();
                 String pwd = password.getText().toString();
                 //to do: error handling. for now just assume input will be correct
                 if (!email.isEmpty() && !pwd.isEmpty()) {
@@ -102,26 +91,35 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("LoginUI", "signInWithEmail:success");
                                 Toast.makeText(ActivityLogin.this, "Sign in success!", Toast.LENGTH_SHORT).show();
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                PushNotifications.start(getApplicationContext(), "211e38a9-4bc8-40c5-958a-4a7f9aa91547");
+                                PushNotifications.addDeviceInterest(user.getUid());
                                 Intent intent = new Intent(ActivityLogin.this, ActivityNavigationBar.class);
                                 startActivity(intent);
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("LoginUI", "signInWithEmail:failure", task.getException());
-                                Toast.makeText(ActivityLogin.this, task.getException().getLocalizedMessage()+ " Please try again.", Toast.LENGTH_SHORT).show();
-//                                Toast.makeText(ActivityLogin.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ActivityLogin.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
                 }
-                break;
+            }
+        });
 
-            case R.id.signUpButton :
-                Intent intent = new Intent(ActivityLogin.this, ActivitySignUp.class);
-                startActivity(intent);
-                break;
 
-            case R.id.forgotPasswordButton:
-                email = username.getText().toString();
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentS = new Intent(ActivityLogin.this, ActivitySignUp.class);
+                startActivity(intentS);
+            }
+        });
+
+        forgotPW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = username.getText().toString();
                 if (email.isEmpty()) { //dk why this isn't showing
                     Toast.makeText(ActivityLogin.this, "Please enter your registered email first.", Toast.LENGTH_SHORT).show();
                 }
@@ -143,10 +141,49 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
                 } else {
                     Toast.makeText(ActivityLogin.this, "Error occurred :(", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
 
-            default :
-                break;
-        }
+//        PushNotifications.start(getApplicationContext(), "211e38a9-4bc8-40c5-958a-4a7f9aa91547");
+//        PushNotifications.addDeviceInterest("debug-apple");
+//        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
+//            @Override
+//            public void onMessageReceived(RemoteMessage remoteMessage) {
+//                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
+//                if (messagePayload == null) {
+//                    // Message payload was not set for this notification
+//                    Log.i("MyActivity", "Payload was missing");
+//                } else {
+//                    Log.i("MyActivity", messagePayload);
+//                    Toast.makeText(LoginUI.this, "You received a request", Toast.LENGTH_SHORT).show();
+//                    // Now update the UI based on your message payload!
+//                }
+//            }
+//        });
     }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
+//            @Override
+//            public void onMessageReceived(RemoteMessage remoteMessage) {
+//                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
+//                if (messagePayload == null) {
+//                    // Message payload was not set for this notification
+//                    Log.i("MyActivity", "Payload was missing");
+//                } else {
+//                    Log.i("MyActivity", messagePayload);
+//                    Toast.makeText(LoginUI.this, "You received a request", Toast.LENGTH_SHORT).show();
+//                    // Now update the UI based on your message payload!
+//                }
+//            }
+//        });
+//    }
 
 }
