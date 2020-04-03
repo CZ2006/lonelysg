@@ -35,6 +35,7 @@
         <activity android:name=".Activities.ActivityNavigationBar" />
         <activity android:name=".Activities.ActivityInvitations" />
         <activity android:name=".Activities.ActivitySignUp" />
+        <activity android:name=".Activities.ActivityChangePassword" />
         <activity android:name=".Activities.ActivityLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

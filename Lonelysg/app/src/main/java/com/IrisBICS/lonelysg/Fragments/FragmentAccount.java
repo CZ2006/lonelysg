@@ -18,17 +18,14 @@ import android.widget.Toast;
 import com.IrisBICS.lonelysg.Activities.ActivityChangePassword;
 import com.IrisBICS.lonelysg.Activities.ActivityEditProfile;
 import com.IrisBICS.lonelysg.Activities.ActivityLogin;
-import com.IrisBICS.lonelysg.Utils.AppController;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
+import com.IrisBICS.lonelysg.Utils.AppController;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -44,7 +41,7 @@ public class FragmentAccount extends Fragment {
     private Uri imageUri;
     private Spinner settingsIcon;
     private CircleImageView profilePic;
-    private String settings[] = {"Change Password", "Delete Account", "Log Out"};
+    private String settings[] = {"Settings Menu", "Change Password", "Delete Account", "Log Out"};
     private ArrayAdapter<String> arrayAdapter;
 
     private Button editProfile;
@@ -74,12 +71,14 @@ public class FragmentAccount extends Fragment {
                    // On selecting a spinner item
                    String next = parent.getItemAtPosition(position).toString();
                    switch (next) {
+                       case "Settings Menu":
+                           break;
                        case "Change Password":
                            Intent intent = new Intent(getActivity(), ActivityChangePassword.class);
                            startActivity(intent);
                            break;
                        case "Delete Account":
-                           FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                           /*FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                            user.delete()
                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -89,7 +88,7 @@ public class FragmentAccount extends Fragment {
                                                Log.d("FragmentAccount", "User account deleted.");
                                            }
                                        }
-                                   });
+                                   });*/
                            break;
                        case "Log Out":
                            FirebaseAuth.getInstance().signOut();
