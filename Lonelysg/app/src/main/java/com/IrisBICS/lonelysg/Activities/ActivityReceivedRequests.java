@@ -12,13 +12,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.IrisBICS.lonelysg.Adapters.RequestListAdapter;
-import com.IrisBICS.lonelysg.AppController;
-import com.IrisBICS.lonelysg.FirebaseAuthHelper;
+import com.IrisBICS.lonelysg.Utils.AppController;
+import com.IrisBICS.lonelysg.Utils.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Invitation;
 import com.IrisBICS.lonelysg.Models.Request;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
-import com.IrisBICS.lonelysg.RequestActionDialog;
+import com.IrisBICS.lonelysg.Utils.RequestActionDialog;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -31,7 +31,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityReceivedRequests extends AppCompatActivity implements RequestActionDialog.DialogListener{
+public class ActivityReceivedRequests extends AppCompatActivity implements RequestActionDialog.DialogListener, View.OnClickListener, AdapterView.OnItemClickListener{
 
     private ArrayList<Request> requests;
     private ArrayList<User> participants;
@@ -52,12 +52,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
         participants = new ArrayList<>();
 
         back = findViewById(R.id.backButton);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        back.setOnClickListener(this);
 
         TextView emptyText = findViewById(android.R.id.empty);
         receivedRequestsList = findViewById(R.id.receivedRequestsListView);
@@ -66,13 +61,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
         receivedRequestsList.setEmptyView(emptyText);
 
         receivedRequestsList.setClickable(true);
-        receivedRequestsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                clickedPos = i;
-                openDialog();
-            }
-        });
+        receivedRequestsList.setOnItemClickListener(this);
 
         getReceivedRequests();
     }
@@ -263,5 +252,16 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
             }
         });
         AppController.getInstance(this).addToRequestQueue(sendNotifRequest);
+    }
+
+    @Override
+    public void onClick(View view) {
+        finish();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        clickedPos = i;
+        openDialog();
     }
 }

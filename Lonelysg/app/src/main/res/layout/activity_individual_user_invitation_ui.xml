@@ -184,7 +184,7 @@
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:drawableRight="@drawable/cancel_icon"
-                    android:paddingRight="29dp"
+                    android:paddingRight="20dp"
                     android:background="@drawable/borders3"/>
 
                 <Button
@@ -197,7 +197,7 @@
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:drawableRight="@drawable/cancel_icon"
-                    android:paddingRight="21dp"
+                    android:paddingRight="10dp"
                     android:background="@drawable/borders3"/>
 
                 <Button
@@ -209,7 +209,7 @@
                     android:textAlignment="textEnd"
                     android:textSize="18sp"
                     android:drawableRight="@drawable/chat_white"
-                    android:paddingRight="34dp"
+                    android:paddingRight="25dp"
                     android:background="@drawable/borders3"
 
                     />
