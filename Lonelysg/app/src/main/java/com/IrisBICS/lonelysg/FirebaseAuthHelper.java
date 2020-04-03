@@ -1,4 +1,4 @@
-package com.IrisBICS.lonelysg.Utils;
+package com.IrisBICS.lonelysg;
 
 
 import com.google.firebase.auth.FirebaseUser;

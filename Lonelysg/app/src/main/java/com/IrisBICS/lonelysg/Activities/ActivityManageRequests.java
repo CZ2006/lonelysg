@@ -10,7 +10,7 @@ import androidx.cardview.widget.CardView;
 
 import com.IrisBICS.lonelysg.R;
 
-public class ActivityManageRequests extends AppCompatActivity implements View.OnClickListener {
+public class ActivityManageRequests extends AppCompatActivity {
 
     private CardView viewPending, viewReceived;
     private Button back;
@@ -29,29 +29,24 @@ public class ActivityManageRequests extends AppCompatActivity implements View.On
         });
 
         viewPending = findViewById(R.id.pendingRequests);
-        viewPending.setOnClickListener(this);
-
-        viewReceived = findViewById(R.id.receivedRequests);
-        viewReceived.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        Intent intent;
-        switch (v.getId()) {
-            case R.id.pendingRequests :
+        viewPending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent;
                 intent = new Intent(ActivityManageRequests.this, ActivityPendingRequests.class);
                 startActivity(intent);
-                break;
+            }
+        });
 
-            case R.id.receivedRequests :
+        viewReceived = findViewById(R.id.receivedRequestsTitle);
+        viewReceived.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent;
                 intent = new Intent(ActivityManageRequests.this, ActivityReceivedRequests.class);
                 startActivity(intent);
-                break;
+            }
+        });
 
-            default :
-                break;
-        }
     }
 }

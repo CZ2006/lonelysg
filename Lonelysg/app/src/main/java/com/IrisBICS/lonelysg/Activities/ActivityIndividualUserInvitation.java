@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.IrisBICS.lonelysg.Utils.AppController;
+import com.IrisBICS.lonelysg.AppController;
 import com.IrisBICS.lonelysg.Models.Invitation;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
@@ -19,26 +20,30 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.squareup.picasso.Picasso;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ActivityIndividualUserInvitation extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
+public class ActivityIndividualUserInvitation extends AppCompatActivity implements OnMapReadyCallback {
 
 
     private Uri imageUri;
     private CircleImageView userInvImage;
+
     private Button editInvitation, deleteInvitation, back;
     private TextView activityTitle, activityDateTime,activityDesc, activityLocation;
+
+
     private Invitation invitation;
     private String invitationID;
 
@@ -55,16 +60,41 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
         activityDateTime = findViewById(R.id.activityDateTime);
         activityDesc = findViewById(R.id.activityDesc);
         activityTitle = findViewById(R.id.activityTitle);
+
         userInvImage = findViewById(R.id.indUserInvImage);
+
         activityLocation = findViewById(R.id.activityLocation);
+
+        updateTextView();
+
         editInvitation = findViewById(R.id.editInvitation);
         deleteInvitation = findViewById(R.id.deleteInvitation);
 
-        back.setOnClickListener(this);
-        editInvitation.setOnClickListener(this);
-        deleteInvitation.setOnClickListener(this);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
-        updateTextView();
+        // Click edit button
+        editInvitation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ActivityEditInvitation.class);
+                intent.putExtra("invitationID", invitationID);
+                startActivity(intent);
+            }
+        });
+
+        // Click delete button
+        deleteInvitation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteInvitation();
+            }
+        });
+
         getInvitation();
 
     }
@@ -105,7 +135,7 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("Get Invitation", error.toString());
+                        Log.e("Volley", error.toString());
                     }
                 });
         AppController.getInstance(this).addToRequestQueue(getInvitationRequest);
@@ -121,7 +151,6 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
                 Toast.makeText(ActivityIndividualUserInvitation.this, "Invitation deleted.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), ActivityUserInvitations.class);
                 startActivity(intent);
-                finish();
             }
         },
             new Response.ErrorListener()
@@ -153,28 +182,5 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
                 .title(invitation.getLocationName()));
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,13));
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.backButton :
-                finish();
-                break;
-
-            case R.id.editInvitation :
-                Intent intent = new Intent(getApplicationContext(), ActivityEditInvitation.class);
-                intent.putExtra("invitationID", invitationID);
-                startActivity(intent);
-                finish();
-                break;
-
-            case R.id.deleteInvitation :
-                deleteInvitation();
-                break;
-
-            default :
-                break;
-        }
     }
 }
