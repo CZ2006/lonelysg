@@ -1,4 +1,4 @@
-package com.IrisBICS.lonelysg;
+package com.IrisBICS.lonelysg.Utils;
 
 import android.util.Log;
 import android.widget.Toast;

@@ -12,12 +12,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.IrisBICS.lonelysg.Adapters.RequestListAdapter;
-import com.IrisBICS.lonelysg.AppController;
-import com.IrisBICS.lonelysg.FirebaseAuthHelper;
+import com.IrisBICS.lonelysg.Utils.AppController;
+import com.IrisBICS.lonelysg.Utils.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Request;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
-import com.IrisBICS.lonelysg.RequestCancelDialog;
+import com.IrisBICS.lonelysg.Utils.RequestCancelDialog;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -30,7 +30,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityPendingRequests extends AppCompatActivity implements RequestCancelDialog.DialogListener{
+public class ActivityPendingRequests extends AppCompatActivity implements RequestCancelDialog.DialogListener, View.OnClickListener, AdapterView.OnItemClickListener{
 
     private ArrayList<Request> requests;
     private ArrayList<User> hosts;
@@ -50,12 +50,7 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
         hosts = new ArrayList<>();
 
         back = findViewById(R.id.backButton);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        back.setOnClickListener(this);
 
         TextView emptyText = findViewById(android.R.id.empty);
         pendingRequestsList = findViewById(R.id.pendingRequestsListView);
@@ -64,13 +59,7 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
         pendingRequestsList.setEmptyView(emptyText);
 
         pendingRequestsList.setClickable(true);
-        pendingRequestsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                clickedPos = i;
-                openDialog();
-            }
-        });
+        pendingRequestsList.setOnItemClickListener(this);
 
         getPendingRequests();
     }
@@ -172,4 +161,14 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
         AppController.getInstance(this).addToRequestQueue(getUserProfileRequest);
     }
 
+    @Override
+    public void onClick(View view) {
+        finish();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        clickedPos = i;
+        openDialog();
+    }
 }

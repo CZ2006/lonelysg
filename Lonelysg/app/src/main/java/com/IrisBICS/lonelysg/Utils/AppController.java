@@ -1,4 +1,4 @@
-package com.IrisBICS.lonelysg;
+package com.IrisBICS.lonelysg.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
