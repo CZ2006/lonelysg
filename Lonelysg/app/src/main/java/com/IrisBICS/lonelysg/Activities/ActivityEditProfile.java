@@ -14,74 +14,60 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-
 import androidx.annotation.NonNull;
 
 import com.IrisBICS.lonelysg.Utils.AppController;
-
-import com.IrisBICS.lonelysg.Utils.FirebaseAuthHelper;
-
 import com.IrisBICS.lonelysg.Models.User;
-
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ActivityEditProfile extends Activity {
+public class ActivityEditProfile extends Activity implements View.OnClickListener {
 
     private CircleImageView editProfilePic;
     private Uri imageUri;
-    private String downloadProfileUrlString;
     private Uri downloadProfileUri;
     private EditText editName;
     private EditText editAge;
     private EditText editOccupation;
     private EditText editInterest;
+    private Button confirmButton, cancelButton;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private static final int PICK_IMAGE = 1;
     private String userID = mAuth.getCurrentUser().getUid();
     private Task<Uri> downloadUrl;
-    private String userProfilePicUri;
     private User user = new User();
     private StorageReference mStorageRef;
-    private DatabaseReference mDatabaseRef;
-
-    String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
     // For dropdown box
     Spinner dropdownbox;
     String categories[] = {"Choose your Gender", "Male", "Female", "Non-binary", "Transgender", "Intersex", "Gender Non-Conforming", "Others"};
     ArrayAdapter<String> arrayAdapter;
 
-    Button confirmButton, cancelButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        editProfilePic = findViewById(R.id.editProfilePic);
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
-//        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Uploads");
 
         editName = findViewById(R.id.editProfileName);
         editAge = findViewById(R.id.editProfileAge);
@@ -91,41 +77,17 @@ public class ActivityEditProfile extends Activity {
         setProfileHint(userID);
 
         // For dropdown box (category selection)
-        dropdownbox = (Spinner) findViewById(R.id.genderCategoryDropBox);
-        arrayAdapter = new ArrayAdapter<String>(ActivityEditProfile.this, android.R.layout.simple_list_item_1, categories);
+        dropdownbox = findViewById(R.id.genderCategoryDropBox);
+        arrayAdapter = new ArrayAdapter<>(ActivityEditProfile.this, android.R.layout.simple_list_item_1, categories);
         dropdownbox.setAdapter(arrayAdapter);
 
-        confirmButton = (Button)findViewById(R.id.editProfileConfirmButton);
-        cancelButton = (Button)findViewById(R.id.editProfileCancelButton);
+        editProfilePic = findViewById(R.id.editProfilePic);
+        confirmButton = findViewById(R.id.editProfileConfirmButton);
+        cancelButton = findViewById(R.id.editProfileCancelButton);
 
-        editProfilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openImageChooser();
-            }
-        });
-
-        // Pressing confirm button
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (imageUri != null) {
-                    updateProfileWithPic();
-                }
-                else {updateProfileWithoutPic();}
-                Intent i = new Intent (ActivityEditProfile.this, ActivityNavigationBar.class);
-                startActivity(i);
-            }
-        });
-
-        // Pressing cancel button
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(ActivityEditProfile.this, "Process Cancelled", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
+        editProfilePic.setOnClickListener(this);
+        confirmButton.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
     }
 
     private void updateProfileWithPic() {
@@ -223,11 +185,13 @@ public class ActivityEditProfile extends Activity {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            Toast.makeText(ActivityEditProfile.this, "Profile updated successfully.", Toast.LENGTH_SHORT).show();
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("Volley", error.toString());
+                    Toast.makeText(ActivityEditProfile.this, "Profile update failed.", Toast.LENGTH_SHORT).show();
                 }
             });
             AppController.getInstance(ActivityEditProfile.this).addToRequestQueue(updateUserRequest);
@@ -291,5 +255,31 @@ public class ActivityEditProfile extends Activity {
         ContentResolver cR = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.editProfileCancelButton :
+                Toast.makeText(ActivityEditProfile.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                finish();
+                break;
+
+            case R.id.editProfileConfirmButton:
+                if (imageUri != null) {
+                    updateProfileWithPic();
+                }
+                else {updateProfileWithoutPic();}
+                Intent i = new Intent (ActivityEditProfile.this, ActivityNavigationBar.class);
+                startActivity(i);
+                break;
+
+            case R.id.editProfilePic :
+                openImageChooser();
+                break;
+
+            default :
+                break;
+        }
     }
 }

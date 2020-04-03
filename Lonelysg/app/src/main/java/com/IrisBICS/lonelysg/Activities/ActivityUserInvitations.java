@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityUserInvitations extends AppCompatActivity {
+public class ActivityUserInvitations extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private ListView userInvitationsList;
     private Button back;
@@ -46,12 +46,7 @@ public class ActivityUserInvitations extends AppCompatActivity {
         userInvitations = new ArrayList<>();
 
         back = findViewById(R.id.backButton);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        back.setOnClickListener(this);
 
         TextView emptyText = findViewById(android.R.id.empty);
         userInvitationsList = findViewById(R.id.userInvitationsListView);
@@ -59,14 +54,7 @@ public class ActivityUserInvitations extends AppCompatActivity {
         userInvitationsList.setAdapter(invitationsListAdapter);
         userInvitationsList.setEmptyView(emptyText);
 
-        userInvitationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                Intent intent = new Intent(getApplicationContext(), ActivityIndividualUserInvitation.class);
-                intent.putExtra("invitationID", userInvitations.get(i).getInvitationID());
-                startActivity(intent);
-            }
-        });
+        userInvitationsList.setOnItemClickListener(this);
 
         getUserInvitations();
     }
@@ -111,4 +99,15 @@ public class ActivityUserInvitations extends AppCompatActivity {
         AppController.getInstance(this).addToRequestQueue(getUserInvitationsRequest);
     }
 
+    @Override
+    public void onClick(View view) {
+        finish();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Intent intent = new Intent(getApplicationContext(), ActivityIndividualUserInvitation.class);
+        intent.putExtra("invitationID", userInvitations.get(i).getInvitationID());
+        startActivity(intent);
+    }
 }

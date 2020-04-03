@@ -18,7 +18,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.IrisBICS.lonelysg.Utils.AppController;
@@ -28,9 +27,16 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -40,11 +46,12 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ActivityEditInvitation extends AppCompatActivity {
+public class ActivityEditInvitation extends AppCompatActivity implements View.OnClickListener, PlaceSelectionListener {
 
     private EditText editInvTitle;
     private EditText editInvDesc;
@@ -52,7 +59,6 @@ public class ActivityEditInvitation extends AppCompatActivity {
 
     private StorageReference mStorage = FirebaseStorage.getInstance().getReference("invitations");
 
-    private String userID = mAuth.getCurrentUser().getUid();
     private Invitation invitation = new Invitation();
     private String invitationID;
 
@@ -61,25 +67,27 @@ public class ActivityEditInvitation extends AppCompatActivity {
     String categories[] = {"Choose your invitation category", "Games", "Food and Drinks", "Movies", "Sports", "Study", "Others"};
     ArrayAdapter<String >arrayAdapter;
 
-    private Button confirmButton, cancelButton;
-    private Button editInvTime, editInvDate;
-    private String dateString,timeString;
+    private Button confirmButton, cancelButton, editStartTime, editEndTime, editInvDate;
+    private String dateString,startTimeString,endTimeString,locationName,longitude,latitude;
     private CircleImageView editInvPic;
     private Uri imageUri;
     private Uri downloadInvPicUri;
     private Task<Uri> downloadUrl;
     private static final int PICK_IMAGE = 1;
 
+    Place location;
+    AutocompleteSupportFragment autocompleteFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_invitation_ui);
 
-
         editInvTitle = findViewById(R.id.editTitle);
         editInvDesc = findViewById(R.id.editDesc);
         editInvDate = findViewById(R.id.newDatePick);
-        editInvTime = findViewById(R.id.newTimePick);
+        editStartTime = findViewById(R.id.newStartTimePick);
+        editEndTime = findViewById(R.id.newEndTimePick);
         editInvPic = findViewById(R.id.editInvitationPic);
 
         Intent receivedIntent = getIntent();
@@ -95,87 +103,28 @@ public class ActivityEditInvitation extends AppCompatActivity {
         cancelButton = findViewById(R.id.cancelEditButton);
 
         // For invitation pic selection
-        editInvPic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openImageChooser();
-            }
-        });
-
+        editInvPic.setOnClickListener(this);
         // For date selection
-        editInvDate.setOnClickListener(new View.OnClickListener() {
-            @Nullable
-            @Override
-            public void onClick (View view){
-                Calendar calender = Calendar.getInstance();
-                // Current date shown when button is clicked
-                int YEAR = calender.get(Calendar.YEAR);
-                int MONTH = calender.get(Calendar.MONTH); // Month 0 is January
-                int DATE = calender.get(Calendar.DATE);
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(ActivityEditInvitation.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-                        dateString = year + " " + month + " " + date;
-                        editInvDate.setText(dateString);
-
-                    }
-                }, YEAR, MONTH, DATE);
-
-                datePickerDialog.show();
-            }
-        });
-
+        editInvDate.setOnClickListener(this);
         // For time selection
-        editInvTime.setOnClickListener(new View.OnClickListener() {
-            @Nullable
-            @Override
-            public void onClick (View view) {
-                Calendar calender = Calendar.getInstance();
-                // Current time shown when button is clicked
-                int HOUR = calender.get(Calendar.HOUR);
-                int MINUTE = calender.get(Calendar.MINUTE);
+        editStartTime.setOnClickListener(this);
+        editEndTime.setOnClickListener(this);
+        confirmButton.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(ActivityEditInvitation.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                        timeString = hour + ":" + minute;
-                        editInvTime.setText(timeString);
-                    }
-                }, HOUR, MINUTE, true);
+        //Places API
+        Places.initialize(getApplicationContext(), getString(R.string.places_api_key));
+        PlacesClient placesClient = Places.createClient(this);
+        autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
-                timePickerDialog.show();
-            }
-        });
-        // Pressing confirm button
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (imageUri != null) {
-                    updateInvWithPic();
-                }
-                else {updateInvWithoutPic();}
-                Intent intent = new Intent(getApplicationContext(), ActivityIndividualUserInvitation.class);
-                intent.putExtra("invitationID", invitation.getInvitationID());
-                startActivity(intent);
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG));
+        autocompleteFragment.setCountries("SG");
+        autocompleteFragment.setOnPlaceSelectedListener(this);
 
-            }
-        });
-
-        // Pressing cancel button
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(ActivityEditInvitation.this, "Cancelled", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), ActivityIndividualUserInvitation.class);
-                intent.putExtra("invitationID", invitation.getInvitationID());
-                startActivity(intent);
-            }
-        });
     }
 
     private void updateInvWithPic() {
-        System.out.println("updating invitation in progress");
         final StorageReference fileRef = mStorage.child(invitationID+ "." + getFileExtension(imageUri));
 
         UploadTask uploadTask = fileRef.putFile(imageUri);
@@ -195,30 +144,25 @@ public class ActivityEditInvitation extends AppCompatActivity {
                     downloadInvPicUri = task.getResult();
                     try {
                         JSONObject jsonBody = new JSONObject();
-                        if (editInvTitle.getText().toString().matches("")) {
-                            jsonBody.put("Title", editInvTitle.getHint());
-                        } else {
+                        if (!(editInvTitle.getText().toString().matches(""))) {
                             jsonBody.put("Title", editInvTitle.getText());
                         }
                         if (!editInvCategory.getSelectedItem().toString().matches("Choose your invitation category")) {
-
                             jsonBody.put("Category", editInvCategory.getSelectedItem().toString());
                         }
-                        if (editInvDesc.getText().toString().matches("")) {
-                            jsonBody.put("Description", editInvDesc.getHint());
-                        } else {
+                        if (!(editInvDesc.getText().toString().matches(""))) {
                             jsonBody.put("Description", editInvDesc.getText());
                         }
-                        if (editInvTime.getText().toString().matches("Select Time")) {
-                            jsonBody.put("Start Time", editInvTime.getText());
-                        } else {
-                            jsonBody.put("Start Time", editInvTime.getText());
+
+                        if (!(latitude==null)){
+                            jsonBody.put("Location", locationName);
+                            jsonBody.put("Latitude", latitude);
+                            jsonBody.put("Longitude", longitude);
                         }
-                        if (editInvDate.getText().toString().matches("Select Date")) {
-                            jsonBody.put("Date", editInvDate.getText());
-                        } else {
-                            jsonBody.put("Date", editInvDate.getText());
-                        }
+
+                        jsonBody.put("Start Time", editStartTime.getText());
+                        jsonBody.put("End Time", editEndTime.getText());
+                        jsonBody.put("Date", editInvDate.getText());
                         jsonBody.put("Image",downloadInvPicUri.toString());
                         String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateInvitation/" + invitationID;
                         JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
@@ -243,36 +187,33 @@ public class ActivityEditInvitation extends AppCompatActivity {
     }
 
     private void updateInvWithoutPic() {
-        System.out.println("updating invitation in progress");
         try {
             JSONObject jsonBody = new JSONObject();
-            if (editInvTitle.getText().toString().matches("")) {
-                jsonBody.put("Title", editInvTitle.getHint());
+            if (!(editInvTitle.getText().toString().matches(""))) {
+                jsonBody.put("Title", editInvTitle.getText());
             }
-            else{jsonBody.put("Title", editInvTitle.getText());}
           
             if (!editInvCategory.getSelectedItem().toString().matches("Choose your invitation category")) {
-
                 jsonBody.put("Category", editInvCategory.getSelectedItem().toString());
             }
-            if (editInvDesc.getText().toString().matches("")) {
-                jsonBody.put("Description", editInvDesc.getHint());
+            if (!(editInvDesc.getText().toString().matches(""))) {
+                jsonBody.put("Description", editInvDesc.getText());
             }
-            else{jsonBody.put("Description", editInvDesc.getText());}
-            if (editInvTime.getText().toString().matches("Select Time")) {
-                jsonBody.put("Start Time", editInvTime.getText());
+
+            if (!(latitude==null)){
+                jsonBody.put("Location", locationName);
+                jsonBody.put("Latitude", latitude);
+                jsonBody.put("Longitude", longitude);
             }
-            else{jsonBody.put("Start Time", editInvTime.getText());}
-            if (editInvDate.getText().toString().matches("Select Date")) {
-                jsonBody.put("Date", editInvDate.getText());
-            }
-            else{jsonBody.put("Date", editInvDate.getText());}
+
+            jsonBody.put("Start Time", editStartTime.getText());
+            jsonBody.put("End Time", editEndTime.getText());
+            jsonBody.put("Date", editInvDate.getText());
             String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateInvitation/"+invitationID;
             JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            System.out.println("updated");
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -297,13 +238,17 @@ public class ActivityEditInvitation extends AppCompatActivity {
                             invitation.setCategory(response.getString("Category"));
                             invitation.setTitle(response.getString("Title"));
                             invitation.setStartTime(response.getString("Start Time"));
+                            invitation.setEndTime(response.getString("End Time"));
                             invitation.setHost(response.getString("Host"));
                             invitation.setDesc(response.getString("Description"));
                             invitation.setDate(response.getString("Date"));
+                            invitation.setLocationName(response.getString("Location"));
                             editInvTitle.setHint(invitation.getTitle());
                             editInvDesc.setHint(invitation.getDesc());
-                            editInvTime.setText(invitation.getStartTime());
+                            editStartTime.setText(invitation.getStartTime());
+                            editEndTime.setText(invitation.getEndTime());
                             editInvDate.setText(invitation.getDate());
+                            autocompleteFragment.setHint(invitation.getLocationName());
                             if (invitation.getInvPic()!=null) {
                                 Picasso.get().load(invitation.getInvPic()).into(editInvPic);
                             }
@@ -341,5 +286,113 @@ public class ActivityEditInvitation extends AppCompatActivity {
         ContentResolver cR = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+        Calendar calendar;
+        TimePickerDialog timePickerDialog;
+        switch (v.getId()) {
+            case R.id.cancelEditButton :
+                Toast.makeText(ActivityEditInvitation.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, ActivityIndividualUserInvitation.class);
+                intent.putExtra("invitationID", invitationID);
+                startActivity(intent);
+                finish();
+                break;
+
+            case R.id.confirmButton :
+                if (imageUri != null) {
+                    updateInvWithPic();
+                }
+                else {updateInvWithoutPic();}
+                intent = new Intent(this, ActivityIndividualUserInvitation.class);
+                intent.putExtra("invitationID", invitationID);
+                startActivity(intent);
+                finish();
+                break;
+
+            case R.id.newStartTimePick:
+                calendar = Calendar.getInstance();
+                // Current time shown when button is clicked
+                int startHour = calendar.get(Calendar.HOUR);
+                int startMinute = calendar.get(Calendar.MINUTE);
+
+                timePickerDialog = new TimePickerDialog(ActivityEditInvitation.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                        if (minute<10)
+                            startTimeString = hour + ":0" + minute;
+                        else
+                            startTimeString = hour + ":" + minute;
+                        editStartTime.setText(startTimeString);
+                    }
+                }, startHour, startMinute, true);
+                timePickerDialog.show();
+                break;
+
+            case R.id.newEndTimePick:
+                calendar = Calendar.getInstance();
+                // Current time shown when button is clicked
+                int endHour = calendar.get(Calendar.HOUR);
+                int endMinute = calendar.get(Calendar.MINUTE);
+
+                timePickerDialog = new TimePickerDialog(ActivityEditInvitation.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                        if (minute<10)
+                            endTimeString = hour + ":0" + minute;
+                        else
+                            endTimeString = hour + ":" + minute;
+                        editEndTime.setText(endTimeString);
+                    }
+                }, endHour, endMinute, true);
+                timePickerDialog.show();
+                break;
+
+            case R.id.newDatePick:
+                calendar = Calendar.getInstance();
+                // Current date shown when button is clicked
+                int YEAR = calendar.get(Calendar.YEAR);
+                int MONTH = calendar.get(Calendar.MONTH); // Month 0 is January
+                int DATE = calendar.get(Calendar.DATE);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ActivityEditInvitation.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+                        int correctMonth = month+1;
+                        dateString = year + "/" + correctMonth + "/" + date;
+                        editInvDate.setText(dateString);
+                    }
+                }, YEAR, MONTH, DATE);
+
+                datePickerDialog.show();
+                break;
+
+            case R.id.editInvitationPic:
+                openImageChooser();
+                break;
+
+            default :
+                break;
+        }
+    }
+
+    @Override
+    public void onPlaceSelected(@NonNull Place place) {
+        location = place;
+        locationName = location.getName();
+        LatLng loc = location.getLatLng();
+        latitude = String.valueOf(loc.latitude);
+        longitude = String.valueOf(loc.longitude);
+        Toast.makeText(ActivityEditInvitation.this, "Location is: " + place.getName(), Toast.LENGTH_SHORT).show();
+        Log.i("Create Invitation UI", "Place: " + place.getName() + ", " + place.getId());
+    }
+
+    @Override
+    public void onError(@NonNull Status status) {
+        // TODO: Handle the error.
+        Log.i("Create Invitation UI", "An error occurred: " + status);
     }
 }
