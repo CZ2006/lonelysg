@@ -212,8 +212,11 @@ public class ActivityEditProfile extends Activity implements View.OnClickListene
                             user.setAge(response.getString("age"));
                             user.setOccupation(response.getString("occupation"));
                             user.setInterests(response.getString("interests"));
-                            String imageUrl = response.getString("image");
-                            user.setProfilePic(Uri.parse(imageUrl));
+                            if (response.has("image")!=false) {
+                                String profilePicUri = response.getString("image");
+                                imageUri = Uri.parse(profilePicUri);
+                                user.setProfilePic(imageUri);
+                            }
                             editName.setHint(user.getUsername());
                             editAge.setHint(user.getAge());
                             editOccupation.setHint(user.getOccupation());

@@ -243,6 +243,11 @@ public class ActivityEditInvitation extends AppCompatActivity implements View.On
                             invitation.setDesc(response.getString("Description"));
                             invitation.setDate(response.getString("Date"));
                             invitation.setLocationName(response.getString("Location"));
+                            if (response.has("Image")!=false) {
+                                String invPicUri = response.getString("image");
+                                imageUri = Uri.parse(invPicUri);
+                                invitation.setInvPic(imageUri);
+                            }
                             editInvTitle.setHint(invitation.getTitle());
                             editInvDesc.setHint(invitation.getDesc());
                             editStartTime.setText(invitation.getStartTime());
