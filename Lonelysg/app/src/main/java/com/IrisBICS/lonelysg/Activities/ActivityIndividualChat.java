@@ -31,7 +31,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityIndividualChat extends AppCompatActivity {
+public class ActivityIndividualChat extends AppCompatActivity implements View.OnClickListener {
 
     String currentUserID = FirebaseAuthHelper.getCurrentUserID();
 
@@ -63,45 +63,20 @@ public class ActivityIndividualChat extends AppCompatActivity {
         recyclerView = findViewById(R.id.chatView);
         back = findViewById(R.id.backButton);
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         chatAdapter = new ChatRecyclerAdapter(this, messages);
-//        chatAdapter.setClickListener((ChatRecyclerAdapter.ItemClickListener) this);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
-//        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(chatAdapter);
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String text = typeMessage.getText().toString().trim();
-                if ((text!="")&(text!=null)){
-                    sendMessage(text);
-                    typeMessage.setText("");
-                }
-            }
-        });
-
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recreate();
-            }
-        });
+        sendButton.setOnClickListener(this);
+        back.setOnClickListener(this);
+        refresh.setOnClickListener(this);
 
         getMessages();
 
     }
 
     private void getMessages() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getMessages/"+currentUserID+"/"+receiverID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MessagesDAO/getMessages/"+currentUserID+"/"+receiverID;
 
         final JsonArrayRequest getMessagesRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -131,7 +106,7 @@ public class ActivityIndividualChat extends AppCompatActivity {
 
     private void sendMessage(final String text) {
         try {
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/sendMessage";
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MessagesDAO/sendMessage";
             JSONObject jsonBody = new JSONObject();
 
             jsonBody.put("Message", text);
@@ -163,7 +138,7 @@ public class ActivityIndividualChat extends AppCompatActivity {
     }
 
     private void sendChatNotif(){
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendChatNotif/"+receiverID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/NotificationsAPI/sendChatNotif/"+receiverID;
         StringRequest sendChatNotifRequest = new StringRequest(com.android.volley.Request.Method.POST, URL,
                 new Response.Listener<String>() {
                     @Override
@@ -177,6 +152,30 @@ public class ActivityIndividualChat extends AppCompatActivity {
             }
         });
         AppController.getInstance(this).addToRequestQueue(sendChatNotifRequest);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.backButton :
+                finish();
+                break;
+
+            case R.id.refreshButton :
+                recreate();
+                break;
+
+            case R.id.sendButton:
+                String text = typeMessage.getText().toString().trim();
+                if ((text!="")&(text!=null)){
+                    sendMessage(text);
+                    typeMessage.setText("");
+                }
+                break;
+
+            default :
+                break;
+        }
     }
 }
 

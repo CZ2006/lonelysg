@@ -39,7 +39,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ActivityIndividualInvitation extends AppCompatActivity implements OnMapReadyCallback {
+public class ActivityIndividualInvitation extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
 
     private Button acceptInvitation, backButton;
 
@@ -62,11 +62,6 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
         participant = new User();
         userSentRequests = new ArrayList<>();
 
-//        //MAP
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
-
         Intent receivedIntent = getIntent();
         invitationID = receivedIntent.getStringExtra("invitationID");
         invitation = new Invitation("","","","","","","",invitationID,"","","",imageUri);
@@ -78,24 +73,11 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
         hostInfo = findViewById(R.id.hostInfo);
         hostInterests = findViewById(R.id.hostInterests);
         indInvImage = findViewById(R.id.invImage);
-
         acceptInvitation = findViewById(R.id.acceptInvitation);
         backButton = findViewById(R.id.backButton);
 
-        // Click request button
-        acceptInvitation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkRequest();
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        acceptInvitation.setOnClickListener(this);
+        backButton.setOnClickListener(this);
 
         getInvitation();
         getUserRequests();
@@ -103,7 +85,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
     }
 
     private void getInvitation() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getInvitation/"+invitationID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/getInvitation/"+invitationID;
 
         JsonObjectRequest getInvitationRequest = new JsonObjectRequest
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
@@ -154,8 +136,6 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
         }
         if (exists==false){
             sendRequest();
-            Toast.makeText(ActivityIndividualInvitation.this, "Request Sent", Toast.LENGTH_SHORT).show();
-//                    sendNotif();
             finish();
         }
         else{
@@ -165,7 +145,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
 
     private void sendRequest() {
         try {
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/sendRequest";
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/RequestsDAO/sendRequest";
             JSONObject jsonBody = new JSONObject();
 
             jsonBody.put("Host", invitation.getHost());
@@ -216,7 +196,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
     }
 
     private void getHost(String userID) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/getUser/"+userID;
         JsonObjectRequest getUserProfileRequest = new JsonObjectRequest
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -244,7 +224,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
     }
 
     private void getUserRequests() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getPendingRequests/"+currentUserID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/RequestsDAO/getPendingRequests/"+currentUserID;
 
         final JsonArrayRequest getUserRequestsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -274,14 +254,14 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
     }
 
     private void sendNotifToHost(String hostNotifID){
-        String url ="https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendNotifToHost/"+hostNotifID;
+        String url ="https://us-central1-lonely-4a186.cloudfunctions.net/app/NotificationsAPI/sendNotifToHost/"+hostNotifID;
 
         // Request a string response from the provided URL.
         StringRequest sendNotifRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(ActivityIndividualInvitation.this,"You have sent a request!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActivityIndividualInvitation.this,"Request sent successfully.", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -290,5 +270,21 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
             }
         });
         AppController.getInstance(this).addToRequestQueue(sendNotifRequest);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.backButton :
+                finish();
+                break;
+
+            case R.id.acceptInvitation :
+                checkRequest();
+                break;
+
+            default :
+                break;
+        }
     }
 }

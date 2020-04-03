@@ -31,7 +31,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityReceivedRequests extends AppCompatActivity implements RequestActionDialog.DialogListener{
+public class ActivityReceivedRequests extends AppCompatActivity implements RequestActionDialog.DialogListener, View.OnClickListener, AdapterView.OnItemClickListener{
 
     private ArrayList<Request> requests;
     private ArrayList<User> participants;
@@ -52,12 +52,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
         participants = new ArrayList<>();
 
         back = findViewById(R.id.backButton);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        back.setOnClickListener(this);
 
         TextView emptyText = findViewById(android.R.id.empty);
         receivedRequestsList = findViewById(R.id.receivedRequestsListView);
@@ -66,19 +61,13 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
         receivedRequestsList.setEmptyView(emptyText);
 
         receivedRequestsList.setClickable(true);
-        receivedRequestsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                clickedPos = i;
-                openDialog();
-            }
-        });
+        receivedRequestsList.setOnItemClickListener(this);
 
         getReceivedRequests();
     }
 
     private void getReceivedRequests() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getReceivedRequests/"+currentUserID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/RequestsDAO/getReceivedRequests/"+currentUserID;
 
         final JsonArrayRequest getReceivedRequestsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -114,7 +103,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
     }
 
     private void deleteRequest(final String reqID) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/deleteRequest/"+reqID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/RequestsDAO/deleteRequest/"+reqID;
         StringRequest deleteRequestRequest = new StringRequest(com.android.volley.Request.Method.DELETE,URL, new Response.Listener<String>()
         {
             @Override
@@ -122,6 +111,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
                 // response
                 requests.remove(requests.get(clickedPos));
                 requestListAdapter.notifyDataSetChanged();
+                recreate();
                 Toast.makeText(ActivityReceivedRequests.this, "Done!", Toast.LENGTH_LONG).show();
             }
         },
@@ -136,11 +126,11 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
 
     private void sendAcceptRequestMessage() {
         try {
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/sendMessage";
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MessagesDAO/sendMessage";
             JSONObject jsonBody = new JSONObject();
 
             jsonBody.put("Message", activityDetails);
-            jsonBody.put("Receiver", requests.get(clickedPos).getParticipant());
+            jsonBody.put("Receiver", participants.get(clickedPos).getUserID());
             jsonBody.put("Sender", currentUserID);
 
             JsonObjectRequest sendAcceptRequestMessageRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
@@ -170,7 +160,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
             getInvitation(requests.get(clickedPos).getInvitationID());
             deleteRequest(requests.get(clickedPos).getRequestID());
             //insert xq send notif
-            String notifID = requests.get(clickedPos).getInvitationID()+"_RequestsBy_"+requests.get(clickedPos).getParticipant();
+            String notifID = requests.get(clickedPos).getInvitationID()+"_RequestsBy_"+participants.get(clickedPos).getUserID();
             String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendAcceptReqNotif/"+notifID;
             sendNotifToParticipant(URL);
         }
@@ -187,7 +177,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
     }
 
     private void getParticipant(String userID, final int i) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/getUser/"+userID;
         JsonObjectRequest getUserProfileRequest = new JsonObjectRequest
                 (com.android.volley.Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -195,10 +185,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
                         try {
                             User participant = new User();
                             participant.setUsername(response.getString("username"));
-//                            host.setGender(response.getString("gender"));
-//                            host.setAge(response.getString("age"));
-//                            host.setOccupation(response.getString("occupation"));
-//                            host.setInterests(response.getString("interests"));
+                            participant.setUserID(response.getString("UserID"));
                             participants.set(i, participant);
                         } catch (JSONException ex) {
                             ex.printStackTrace();
@@ -216,7 +203,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
     }
 
     private void getInvitation(String invitationID) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getInvitation/"+invitationID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/getInvitation/"+invitationID;
 
         JsonObjectRequest getInvitationRequest = new JsonObjectRequest
                 (com.android.volley.Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
@@ -234,7 +221,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
                                               "Title: " + invitation.getTitle() + "\n" +
                                               "Date: " + invitation.getDate() + "\n" +
                                               "Time: " + invitation.getStartTime() + " - " + invitation.getEndTime() + "\n" +
-                                              "Location" + invitation.getLocationName();
+                                              "Location: " + invitation.getLocationName();
                             sendAcceptRequestMessage();
                         } catch (JSONException ex) {
                             ex.printStackTrace();
@@ -263,5 +250,16 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
             }
         });
         AppController.getInstance(this).addToRequestQueue(sendNotifRequest);
+    }
+
+    @Override
+    public void onClick(View view) {
+        finish();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        clickedPos = i;
+        openDialog();
     }
 }

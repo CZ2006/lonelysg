@@ -1,5 +1,6 @@
 package com.IrisBICS.lonelysg.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +25,7 @@ import org.json.JSONObject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ActivityChangePassword extends AppCompatActivity {
+public class ActivityChangePassword extends AppCompatActivity implements View.OnClickListener {
     private EditText oldPasswordInput;
     private EditText newPasswordInput;
     private EditText confirmPasswordInput;
@@ -43,13 +44,19 @@ public class ActivityChangePassword extends AppCompatActivity {
         newPasswordInput = findViewById(R.id.newPasswordInput);
         confirmPasswordInput = findViewById(R.id.confirmPasswordInput);
 
-        changePassword = (Button)findViewById(R.id.changePasswordButton);
-        forgotPassword = (Button)findViewById(R.id.forgotPasswordButton);
-        back = (Button)findViewById(R.id.backButton);
+        changePassword = findViewById(R.id.changePasswordButton);
+        forgotPassword = findViewById(R.id.forgotPasswordButton);
+        back = findViewById(R.id.backButton);
 
-        changePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        changePassword.setOnClickListener(this);
+        forgotPassword.setOnClickListener(this);
+        back.setOnClickListener(this);
+    };
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.changePasswordButton :
                 final String oldPw = oldPasswordInput.getText().toString();
                 final String newPw = newPasswordInput.getText().toString();
                 final String cfmPw = confirmPasswordInput.getText().toString();
@@ -96,12 +103,9 @@ public class ActivityChangePassword extends AppCompatActivity {
                 else {
                     Toast.makeText(ActivityChangePassword.this, "Error occured. Please try again!", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+                break;
 
-        forgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            case R.id.forgotPasswordButton :
                 FirebaseAuth auth = FirebaseAuth.getInstance();
                 FirebaseUser user = auth.getCurrentUser();
                 if (user != null) {
@@ -119,14 +123,14 @@ public class ActivityChangePassword extends AppCompatActivity {
                 else {
                     Toast.makeText(ActivityChangePassword.this, "Error occurred.", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+                break;
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
+            case R.id.backButton :
                 finish();
-            }
-        });
-    };
+                break;
+
+            default :
+                break;
+        }
+    }
 }

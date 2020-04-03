@@ -19,30 +19,26 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.squareup.picasso.Picasso;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ActivityIndividualUserInvitation extends AppCompatActivity implements OnMapReadyCallback {
+public class ActivityIndividualUserInvitation extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
 
 
     private Uri imageUri;
     private CircleImageView userInvImage;
-
     private Button editInvitation, deleteInvitation, back;
     private TextView activityTitle, activityDateTime,activityDesc, activityLocation;
-
-
     private Invitation invitation;
     private String invitationID;
 
@@ -59,47 +55,22 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
         activityDateTime = findViewById(R.id.activityDateTime);
         activityDesc = findViewById(R.id.activityDesc);
         activityTitle = findViewById(R.id.activityTitle);
-
         userInvImage = findViewById(R.id.indUserInvImage);
-
         activityLocation = findViewById(R.id.activityLocation);
-
-        updateTextView();
-
         editInvitation = findViewById(R.id.editInvitation);
         deleteInvitation = findViewById(R.id.deleteInvitation);
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        back.setOnClickListener(this);
+        editInvitation.setOnClickListener(this);
+        deleteInvitation.setOnClickListener(this);
 
-        // Click edit button
-        editInvitation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ActivityEditInvitation.class);
-                intent.putExtra("invitationID", invitationID);
-                startActivity(intent);
-            }
-        });
-
-        // Click delete button
-        deleteInvitation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteInvitation();
-            }
-        });
-
+        updateTextView();
         getInvitation();
 
     }
 
     private void getInvitation() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getInvitation/"+invitationID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/getInvitation/"+invitationID;
 
         JsonObjectRequest getInvitationRequest = new JsonObjectRequest
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
@@ -134,14 +105,14 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley", error.toString());
+                        Log.e("Get Invitation", error.toString());
                     }
                 });
         AppController.getInstance(this).addToRequestQueue(getInvitationRequest);
     }
 
     private void deleteInvitation() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/deleteInvitation/"+invitationID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/deleteInvitation/"+invitationID;
         StringRequest deleteInvitationRequest = new StringRequest(com.android.volley.Request.Method.DELETE,URL, new Response.Listener<String>()
         {
             @Override
@@ -150,6 +121,7 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
                 Toast.makeText(ActivityIndividualUserInvitation.this, "Invitation deleted.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), ActivityUserInvitations.class);
                 startActivity(intent);
+                finish();
             }
         },
             new Response.ErrorListener()
@@ -181,5 +153,28 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
                 .title(invitation.getLocationName()));
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,13));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.backButton :
+                finish();
+                break;
+
+            case R.id.editInvitation :
+                Intent intent = new Intent(getApplicationContext(), ActivityEditInvitation.class);
+                intent.putExtra("invitationID", invitationID);
+                startActivity(intent);
+                finish();
+                break;
+
+            case R.id.deleteInvitation :
+                deleteInvitation();
+                break;
+
+            default :
+                break;
+        }
     }
 }

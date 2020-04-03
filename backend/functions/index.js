@@ -2,11 +2,11 @@ const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 const express = require('express')
 
-const apirouteIris = require('./routes/Iris/api')
-const apirouteMinHui = require('./routes/MinHui/api')
-const apirouteCheyanne = require('./routes/Cheyanne/api')
-const apirouteWinnie = require('./routes/Winnie/api')
-const apirouteXQ = require('./routes/XQ/api')
+const apirouteInvitations = require('./routes/InvitationsDAO/api')
+const apirouteRequests = require('./routes/RequestsDAO/api')
+const apirouteMessages = require('./routes/MessagesDAO/api')
+const apirouteUsers = require('./routes/UsersDAO/api')
+const apirouteNotifications = require('./routes/NotificationsAPI/api')
 
 const app = express();
 app.use(require('cors')({ origin: true, credentials: true }))
@@ -22,11 +22,11 @@ admin.initializeApp({
 
 var db = admin.database();
 app.set('database',db)
-app.use('/Iris', apirouteIris) //Route to Iris' functions
-app.use('/MinHui', apirouteMinHui) //Route to Min Hui's functions
-app.use('/Cheyanne', apirouteCheyanne)
-app.use('/Winnie', apirouteWinnie)
-app.use('/XQ', apirouteXQ)
+app.use('/InvitationsDAO', apirouteInvitations) 
+app.use('/RequestsDAO', apirouteRequests) 
+app.use('/MessagesDAO', apirouteMessages)
+app.use('/UsersDAO', apirouteUsers)
+app.use('/NotificationsAPI', apirouteNotifications)
 exports.app = functions.https.onRequest(app)
 
 

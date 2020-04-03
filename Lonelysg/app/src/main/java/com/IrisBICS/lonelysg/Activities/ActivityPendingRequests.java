@@ -30,7 +30,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ActivityPendingRequests extends AppCompatActivity implements RequestCancelDialog.DialogListener{
+public class ActivityPendingRequests extends AppCompatActivity implements RequestCancelDialog.DialogListener, View.OnClickListener, AdapterView.OnItemClickListener{
 
     private ArrayList<Request> requests;
     private ArrayList<User> hosts;
@@ -50,12 +50,7 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
         hosts = new ArrayList<>();
 
         back = findViewById(R.id.backButton);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        back.setOnClickListener(this);
 
         TextView emptyText = findViewById(android.R.id.empty);
         pendingRequestsList = findViewById(R.id.pendingRequestsListView);
@@ -64,19 +59,13 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
         pendingRequestsList.setEmptyView(emptyText);
 
         pendingRequestsList.setClickable(true);
-        pendingRequestsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                clickedPos = i;
-                openDialog();
-            }
-        });
+        pendingRequestsList.setOnItemClickListener(this);
 
         getPendingRequests();
     }
 
     private void getPendingRequests() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getPendingRequests/"+currentUserID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/RequestsDAO/getPendingRequests/"+currentUserID;
 
         final JsonArrayRequest getPendingRequestsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -111,7 +100,7 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
     }
 
     private void deleteRequest(final String reqID) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/deleteRequest/"+reqID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/RequestsDAO/deleteRequest/"+reqID;
         StringRequest deleteRequestRequest = new StringRequest(com.android.volley.Request.Method.DELETE,URL, new Response.Listener<String>()
                 {
                     @Override
@@ -144,7 +133,7 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
     }
 
     private void getHost(String userID, final int i) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/getUser/"+userID;
         JsonObjectRequest getUserProfileRequest = new JsonObjectRequest
                 (com.android.volley.Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -172,4 +161,14 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
         AppController.getInstance(this).addToRequestQueue(getUserProfileRequest);
     }
 
+    @Override
+    public void onClick(View view) {
+        finish();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        clickedPos = i;
+        openDialog();
+    }
 }

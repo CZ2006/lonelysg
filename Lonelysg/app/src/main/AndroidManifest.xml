@@ -21,6 +21,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB_qsP8AOP_P0MdlPz-48TDaJYjTP3vbjo" />
 
+        <activity android:name=".Activities.ActivityChangePassword"></activity>
         <activity android:name=".Activities.ActivityPendingRequests" />
         <activity android:name=".Activities.ActivityEditInvitation" />
         <activity android:name=".Activities.ActivityIndividualUserInvitation" />
