@@ -17,14 +17,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.IrisBICS.lonelysg.AppController;
+import com.IrisBICS.lonelysg.Utils.AppController;
 
-import com.IrisBICS.lonelysg.FirebaseAuthHelper;
+import com.IrisBICS.lonelysg.Utils.FirebaseAuthHelper;
 
 import com.IrisBICS.lonelysg.Models.User;
 
 import com.IrisBICS.lonelysg.R;
-import com.IrisBICS.lonelysg.Utils.AppController;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -44,7 +43,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import androidx.annotation.NonNull;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ActivityEditProfile extends Activity {

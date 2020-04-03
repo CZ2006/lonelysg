@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.IrisBICS.lonelysg.Activities.ActivityChangePassword;
 import com.IrisBICS.lonelysg.Activities.ActivityEditProfile;
 import com.IrisBICS.lonelysg.Activities.ActivityLogin;
-import com.IrisBICS.lonelysg.AppController;
+import com.IrisBICS.lonelysg.Utils.AppController;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
