@@ -85,7 +85,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
     }
 
     private void getInvitation() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getInvitation/"+invitationID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/getInvitation/"+invitationID;
 
         JsonObjectRequest getInvitationRequest = new JsonObjectRequest
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
@@ -145,7 +145,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
 
     private void sendRequest() {
         try {
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/sendRequest";
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/RequestsDAO/sendRequest";
             JSONObject jsonBody = new JSONObject();
 
             jsonBody.put("Host", invitation.getHost());
@@ -196,7 +196,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
     }
 
     private void getHost(String userID) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/getUser/"+userID;
         JsonObjectRequest getUserProfileRequest = new JsonObjectRequest
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -224,7 +224,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
     }
 
     private void getUserRequests() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getPendingRequests/"+currentUserID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/RequestsDAO/getPendingRequests/"+currentUserID;
 
         final JsonArrayRequest getUserRequestsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -254,7 +254,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
     }
 
     private void sendNotifToHost(String hostNotifID){
-        String url ="https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendNotifToHost/"+hostNotifID;
+        String url ="https://us-central1-lonely-4a186.cloudfunctions.net/app/NotificationsAPI/sendNotifToHost/"+hostNotifID;
 
         // Request a string response from the provided URL.
         StringRequest sendNotifRequest = new StringRequest(Request.Method.POST, url,

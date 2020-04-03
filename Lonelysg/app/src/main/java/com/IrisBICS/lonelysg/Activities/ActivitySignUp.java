@@ -57,7 +57,7 @@ public class ActivitySignUp extends AppCompatActivity implements View.OnClickLis
             jsonBody.put("email", emailInput.getText().toString());
             jsonBody.put("username",usernameInput.getText().toString());
             jsonBody.put("password",passwordInput.getText().toString());
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/addUser/"+userUserID;
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/addUser/"+userUserID;
             JsonObjectRequest createUserRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody,
                     new Response.Listener<JSONObject>() {
                         @Override

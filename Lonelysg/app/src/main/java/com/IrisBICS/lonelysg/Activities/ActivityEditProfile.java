@@ -133,7 +133,7 @@ public class ActivityEditProfile extends Activity implements View.OnClickListene
                         }
                         else{jsonBody.put("interests", editInterest.getText());}
                         jsonBody.put("image",downloadProfileUri.toString());
-                        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateUser/"+userID;
+                        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/updateUser/"+userID;
 
                         JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
                                 new Response.Listener<JSONObject>() {
@@ -179,7 +179,7 @@ public class ActivityEditProfile extends Activity implements View.OnClickListene
                 jsonBody.put("interests", editInterest.getHint());
             }
             else{jsonBody.put("interests", editInterest.getText());}
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateUser/"+userID;
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/updateUser/"+userID;
 
             JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
                     new Response.Listener<JSONObject>() {
@@ -201,8 +201,8 @@ public class ActivityEditProfile extends Activity implements View.OnClickListene
     }
 
     private void setProfileHint(String userID) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
-        JsonObjectRequest setProfileHintRequest = new JsonObjectRequest
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/getUser/"+userID;
+        JsonObjectRequest getUserRequest = new JsonObjectRequest
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -232,7 +232,7 @@ public class ActivityEditProfile extends Activity implements View.OnClickListene
                         Log.e("Volley", error.toString());
                     }
                 });
-        AppController.getInstance(this).addToRequestQueue(setProfileHintRequest);
+        AppController.getInstance(this).addToRequestQueue(getUserRequest);
     };
 
     private void openImageChooser(){

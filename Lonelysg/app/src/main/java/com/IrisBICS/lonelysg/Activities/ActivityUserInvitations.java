@@ -60,7 +60,7 @@ public class ActivityUserInvitations extends AppCompatActivity implements View.O
     }
 
     private void getUserInvitations() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getUserInvitations/"+currentUserID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/getUserInvitations/"+currentUserID;
 
         final JsonArrayRequest getUserInvitationsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override

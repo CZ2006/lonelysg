@@ -76,7 +76,7 @@ public class ActivityIndividualChat extends AppCompatActivity implements View.On
     }
 
     private void getMessages() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getMessages/"+currentUserID+"/"+receiverID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MessagesDAO/getMessages/"+currentUserID+"/"+receiverID;
 
         final JsonArrayRequest getMessagesRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -106,7 +106,7 @@ public class ActivityIndividualChat extends AppCompatActivity implements View.On
 
     private void sendMessage(final String text) {
         try {
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/sendMessage";
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MessagesDAO/sendMessage";
             JSONObject jsonBody = new JSONObject();
 
             jsonBody.put("Message", text);
@@ -138,7 +138,7 @@ public class ActivityIndividualChat extends AppCompatActivity implements View.On
     }
 
     private void sendChatNotif(){
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendChatNotif/"+receiverID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/NotificationsAPI/sendChatNotif/"+receiverID;
         StringRequest sendChatNotifRequest = new StringRequest(com.android.volley.Request.Method.POST, URL,
                 new Response.Listener<String>() {
                     @Override

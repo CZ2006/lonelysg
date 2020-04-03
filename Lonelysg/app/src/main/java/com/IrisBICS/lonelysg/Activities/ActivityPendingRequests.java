@@ -65,7 +65,7 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
     }
 
     private void getPendingRequests() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/getPendingRequests/"+currentUserID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/RequestsDAO/getPendingRequests/"+currentUserID;
 
         final JsonArrayRequest getPendingRequestsRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
             @Override
@@ -100,7 +100,7 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
     }
 
     private void deleteRequest(final String reqID) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MinHui/deleteRequest/"+reqID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/RequestsDAO/deleteRequest/"+reqID;
         StringRequest deleteRequestRequest = new StringRequest(com.android.volley.Request.Method.DELETE,URL, new Response.Listener<String>()
                 {
                     @Override
@@ -133,7 +133,7 @@ public class ActivityPendingRequests extends AppCompatActivity implements Reques
     }
 
     private void getHost(String userID, final int i) {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/getUser/"+userID;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/getUser/"+userID;
         JsonObjectRequest getUserProfileRequest = new JsonObjectRequest
                 (com.android.volley.Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
                     @Override
