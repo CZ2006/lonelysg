@@ -64,8 +64,7 @@ public class ActivityChangePassword extends AppCompatActivity implements View.On
 
                 if (!oldPw.isEmpty() && !newPw.isEmpty() && !cfmPw.isEmpty()) {
                     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    AuthCredential credential = EmailAuthProvider
-                            .getCredential(user.getEmail(), oldPw);
+                    AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), oldPw);
 
                     user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -73,34 +72,12 @@ public class ActivityChangePassword extends AppCompatActivity implements View.On
                             if (task.isSuccessful()) {
                                 Log.d("ActivityChangePassword", "User re-authenticated.");
                                 if (newPw.equals(cfmPw)) {
-
                                     user.updatePassword(newPw).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Log.d("ActivityChangePassword", "User password updated.");
-
-                                                try {
-                                                    JSONObject jsonBody = new JSONObject();
-                                                    jsonBody.put("password", newPw);
-                                                    String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateUser/"+mAuth.getCurrentUser().getUid();
-                                                    JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
-                                                            new Response.Listener<JSONObject>() {
-                                                                @Override
-                                                                public void onResponse(JSONObject response) {
-                                                                }
-                                                            }, new Response.ErrorListener() {
-                                                        @Override
-                                                        public void onErrorResponse(VolleyError error) {
-                                                            Log.e("Volley", error.toString());
-                                                        }
-                                                    });
-                                                    AppController.getInstance(ActivityChangePassword.this).addToRequestQueue(updateUserRequest);
-                                                    Toast.makeText(ActivityChangePassword.this, "Password change successful!", Toast.LENGTH_SHORT).show();
-                                                    finish();
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
+                                                updatePassword(newPw);
                                             }
                                         }
                                     });
@@ -149,6 +126,30 @@ public class ActivityChangePassword extends AppCompatActivity implements View.On
 
             default :
                 break;
+        }
+    }
+
+    private void updatePassword(String pw) {
+        try {
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("password", pw);
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateUser/"+mAuth.getCurrentUser().getUid();
+            JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("Volley", error.toString());
+                }
+            });
+            AppController.getInstance(ActivityChangePassword.this).addToRequestQueue(updateUserRequest);
+            Toast.makeText(ActivityChangePassword.this, "Password change successful!", Toast.LENGTH_SHORT).show();
+            finish();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

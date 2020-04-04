@@ -15,13 +15,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
+import com.IrisBICS.lonelysg.Activities.ActivityChangePassword;
 import com.IrisBICS.lonelysg.Activities.ActivityEditProfile;
 import com.IrisBICS.lonelysg.Activities.ActivityLogin;
-import com.IrisBICS.lonelysg.Activities.ActivityChangePassword;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
 import com.IrisBICS.lonelysg.Utils.AppController;
@@ -35,6 +31,9 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FragmentAccount extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -146,6 +145,8 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
                                        public void onComplete(@NonNull Task<Void> task) {
                                            if (task.isSuccessful()) {
                                                Log.d("FragmentAccount", "User account deleted.");
+                                               Toast.makeText(getActivity(), "Your account has been deleted.", Toast.LENGTH_SHORT).show();
+                                               //go back to login page after that
                                            }
                                        }
                                    });*/
