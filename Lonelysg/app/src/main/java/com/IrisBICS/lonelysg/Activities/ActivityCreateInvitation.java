@@ -19,12 +19,9 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.IrisBICS.lonelysg.R;
 import com.IrisBICS.lonelysg.Utils.AppController;
 import com.IrisBICS.lonelysg.Utils.FirebaseAuthHelper;
-import com.IrisBICS.lonelysg.R;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -51,6 +48,8 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Calendar;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ActivityCreateInvitation extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, PlaceSelectionListener {

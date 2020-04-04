@@ -1,6 +1,5 @@
 package com.IrisBICS.lonelysg.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +15,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -62,43 +63,36 @@ public class ActivityChangePassword extends AppCompatActivity implements View.On
                 final String cfmPw = confirmPasswordInput.getText().toString();
 
                 if (!oldPw.isEmpty() && !newPw.isEmpty() && !cfmPw.isEmpty()) {
-                    if (newPw.equals(cfmPw)) {
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), oldPw);
 
-                        user.updatePassword(newPw)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Log.d("ActivityChangePassword", "User password updated.");
-                                            Toast.makeText(ActivityChangePassword.this, "Password change successful!", Toast.LENGTH_SHORT).show();
-
-                                            try {
-                                                JSONObject jsonBody = new JSONObject();
-                                                jsonBody.put("password", newPw);
-                                                String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateUser/"+mAuth.getCurrentUser().getUid();
-                                                JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
-                                                        new Response.Listener<JSONObject>() {
-                                                            @Override
-                                                            public void onResponse(JSONObject response) {
-                                                            }
-                                                        }, new Response.ErrorListener() {
-                                                    @Override
-                                                    public void onErrorResponse(VolleyError error) {
-                                                        Log.e("Volley", error.toString());
-                                                    }
-                                                });
-                                                AppController.getInstance(ActivityChangePassword.this).addToRequestQueue(updateUserRequest);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                    user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d("ActivityChangePassword", "User re-authenticated.");
+                                if (newPw.equals(cfmPw)) {
+                                    user.updatePassword(newPw).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d("ActivityChangePassword", "User password updated.");
+                                                updatePassword(newPw);
                                             }
                                         }
-                                    }
-                                });
-                    }
-                    else {
-                        Toast.makeText(ActivityChangePassword.this, "Error: New password does not match confirm password", Toast.LENGTH_SHORT).show();
-                    }
+                                    });
+                                }
+                                else {
+                                    Toast.makeText(ActivityChangePassword.this, "Error: New password does not match confirm password", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            else {
+                                Log.d("ActivityChangePassword", "Failed to re-authenticate user.");
+                                Toast.makeText(ActivityChangePassword.this, "Error: Incorrect existing password", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
                 }
                 else {
                     Toast.makeText(ActivityChangePassword.this, "Error occured. Please try again!", Toast.LENGTH_SHORT).show();
@@ -116,6 +110,7 @@ public class ActivityChangePassword extends AppCompatActivity implements View.On
                             if (task.isSuccessful()) {
                                 Log.d("ActivityChangePassword", "Email sent.");
                                 Toast.makeText(ActivityChangePassword.this, "Password reset sent to your email!", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                         }
                     });
@@ -131,6 +126,30 @@ public class ActivityChangePassword extends AppCompatActivity implements View.On
 
             default :
                 break;
+        }
+    }
+
+    private void updatePassword(String pw) {
+        try {
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("password", pw);
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/updateUser/"+mAuth.getCurrentUser().getUid();
+            JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("Volley", error.toString());
+                }
+            });
+            AppController.getInstance(ActivityChangePassword.this).addToRequestQueue(updateUserRequest);
+            Toast.makeText(ActivityChangePassword.this, "Password change successful!", Toast.LENGTH_SHORT).show();
+            finish();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }
