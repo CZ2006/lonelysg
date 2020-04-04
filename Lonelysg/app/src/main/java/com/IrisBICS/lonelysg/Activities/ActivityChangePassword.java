@@ -97,6 +97,7 @@ public class ActivityChangePassword extends AppCompatActivity implements View.On
                                                     });
                                                     AppController.getInstance(ActivityChangePassword.this).addToRequestQueue(updateUserRequest);
                                                     Toast.makeText(ActivityChangePassword.this, "Password change successful!", Toast.LENGTH_SHORT).show();
+                                                    finish();
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
@@ -132,6 +133,7 @@ public class ActivityChangePassword extends AppCompatActivity implements View.On
                             if (task.isSuccessful()) {
                                 Log.d("ActivityChangePassword", "Email sent.");
                                 Toast.makeText(ActivityChangePassword.this, "Password reset sent to your email!", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                         }
                     });
