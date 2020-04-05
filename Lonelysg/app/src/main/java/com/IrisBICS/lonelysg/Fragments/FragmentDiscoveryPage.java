@@ -20,7 +20,7 @@ public class FragmentDiscoveryPage extends Fragment implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_discovery, container, false);
+        View v = inflater.inflate(R.layout.fragment_discovery_ui, container, false);
 
         // Defining cards
         allIcon = v.findViewById(R.id.allIcon);

@@ -38,7 +38,7 @@ public class ActivityChangePassword extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_change_password);
+        setContentView(R.layout.activity_change_password_ui);
 
         mAuth = FirebaseAuth.getInstance();
         oldPasswordInput = findViewById(R.id.oldPasswordInput);

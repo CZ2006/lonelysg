@@ -23,7 +23,7 @@ public class FragmentActivities extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_activities, container, false);
+        View v = inflater.inflate(R.layout.fragment_activities_ui, container, false);
 
         requestsIcon = v.findViewById(R.id.requestsIcon);
         requestsIcon.setOnClickListener(this);
