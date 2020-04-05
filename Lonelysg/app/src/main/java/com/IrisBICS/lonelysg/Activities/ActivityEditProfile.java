@@ -40,12 +40,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ActivityEditProfile extends Activity implements View.OnClickListener {
 
     private CircleImageView editProfilePic;
-    private Uri imageUri;
-    private Uri downloadProfileUri;
-    private EditText editName;
-    private EditText editAge;
-    private EditText editOccupation;
-    private EditText editInterest;
+    private Uri imageUri, downloadProfileUri;
+    private EditText editName, editAge, editOccupation, editInterest;
+    private String name, age, occupation, interests, gender;
     private Button confirmButton, cancelButton;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -112,26 +109,13 @@ public class ActivityEditProfile extends Activity implements View.OnClickListene
                     try {
                         JSONObject jsonBody = new JSONObject();
 
-                        if (editName.getText().toString().matches("")) {
-                            jsonBody.put("username", editName.getHint());
-                        }
-                        else{jsonBody.put("username", editName.getText());}
-
-                        if (!dropdownbox.getSelectedItem().toString().matches("Choose your Gender")) {
+                        jsonBody.put("username", name);
+                        jsonBody.put("age", age);
+                        jsonBody.put("occupation", occupation);
+                        jsonBody.put("interests", interests);
+                        if (!gender.matches("Choose your Gender")) {
                             jsonBody.put("gender", dropdownbox.getSelectedItem().toString());
                         }
-                        if (editAge.getText().toString().matches("")) {
-                            jsonBody.put("age", editAge.getHint());
-                        }
-                        else{jsonBody.put("age", editAge.getText());}
-                        if (editOccupation.getText().toString().matches("")) {
-                            jsonBody.put("occupation", editOccupation.getHint());
-                        }
-                        else{jsonBody.put("occupation", editOccupation.getText());}
-                        if (editInterest.getText().toString().matches("")) {
-                            jsonBody.put("interests", editInterest.getHint());
-                        }
-                        else{jsonBody.put("interests", editInterest.getText());}
                         jsonBody.put("image",downloadProfileUri.toString());
                         String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/updateUser/"+userID;
 
@@ -139,11 +123,13 @@ public class ActivityEditProfile extends Activity implements View.OnClickListene
                                 new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
+                                        Toast.makeText(ActivityEditProfile.this, "Profile updated successfully.", Toast.LENGTH_SHORT).show();
                                     }
                                 }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 Log.e("Volley", error.toString());
+                                Toast.makeText(ActivityEditProfile.this, "Profile update failed.", Toast.LENGTH_SHORT).show();
                             }
                         });
                         AppController.getInstance(ActivityEditProfile.this).addToRequestQueue(updateUserRequest);
@@ -159,26 +145,13 @@ public class ActivityEditProfile extends Activity implements View.OnClickListene
         try {
             JSONObject jsonBody = new JSONObject();
 
-            if (editName.getText().toString().matches("")) {
-                jsonBody.put("username", editName.getHint());
-            }
-            else{jsonBody.put("username", editName.getText());}
-
-            if (!dropdownbox.getSelectedItem().toString().matches("Choose your Gender")) {
+            jsonBody.put("username", name);
+            jsonBody.put("age", age);
+            jsonBody.put("occupation", occupation);
+            jsonBody.put("interests", interests);
+            if (!gender.matches("Choose your Gender")) {
                 jsonBody.put("gender", dropdownbox.getSelectedItem().toString());
             }
-            if (editAge.getText().toString().matches("")) {
-                jsonBody.put("age", editAge.getHint());
-            }
-            else{jsonBody.put("age", editAge.getText());}
-            if (editOccupation.getText().toString().matches("")) {
-                jsonBody.put("occupation", editOccupation.getHint());
-            }
-            else{jsonBody.put("occupation", editOccupation.getText());}
-            if (editInterest.getText().toString().matches("")) {
-                jsonBody.put("interests", editInterest.getHint());
-            }
-            else{jsonBody.put("interests", editInterest.getText());}
             String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/updateUser/"+userID;
 
             JsonObjectRequest updateUserRequest = new JsonObjectRequest(Request.Method.PUT, URL, jsonBody,
@@ -269,12 +242,47 @@ public class ActivityEditProfile extends Activity implements View.OnClickListene
                 break;
 
             case R.id.editProfileConfirmButton:
-                if (imageUri != null) {
-                    updateProfileWithPic();
+                name = editName.getText().toString();
+                age = editAge.getText().toString();
+                occupation = editOccupation.getText().toString();
+                interests = editInterest.getText().toString();
+                gender = dropdownbox.getSelectedItem().toString();
+
+                if (name.matches("")){
+                    name = editName.getHint().toString();
                 }
-                else {updateProfileWithoutPic();}
-                Intent i = new Intent (ActivityEditProfile.this, ActivityNavigationBar.class);
-                startActivity(i);
+                if (age.matches("")){
+                    age = editAge.getHint().toString();
+                }
+                if (occupation.matches("")){
+                    occupation = editOccupation.getHint().toString();
+                }
+                if (interests.matches("")){
+                    interests = editInterest.getHint().toString();
+                }
+
+                if (name.matches("Type New Name")){
+                    Toast.makeText(this, "Enter username!", Toast.LENGTH_SHORT).show();
+                }
+                else if ((gender.matches("Choose your Gender")&(user.getGender()==null))){
+                    Toast.makeText(this, "Select gender!", Toast.LENGTH_SHORT).show();
+                }
+                else if (age.matches("Type New Age")){
+                    Toast.makeText(this, "Enter age!", Toast.LENGTH_SHORT).show();
+                }
+                else if (occupation.matches("Type New Occupation")){
+                    Toast.makeText(this, "Enter occupation!", Toast.LENGTH_SHORT).show();
+                }
+                else if (interests.matches("Type New Interest")){
+                    Toast.makeText(this, "Enter interests!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    if (imageUri != null) { updateProfileWithPic(); }
+                    else {updateProfileWithoutPic();}
+                    Intent i = new Intent (ActivityEditProfile.this, ActivityNavigationBar.class);
+                    startActivity(i);
+                }
+
                 break;
 
             case R.id.editProfilePic :
