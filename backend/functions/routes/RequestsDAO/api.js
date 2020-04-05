@@ -53,7 +53,14 @@ router.get("/getPendingRequests/:user", (req,res)=>{
 
 router.post("/sendRequest", (req, res) => {
     let database = req.app.get("database")
-    let ref = database.ref("Requests")
+	let ref = database.ref("Requests")
+	
+	function compare(a, b) {
+        if (a.RequestID > b.RequestID) return 1;
+        if (b.RequestID > a.RequestID) return -1;
+      
+        return 0;
+      }
 
     ref.once("value", function(snapshot){
         var requests = snapshot.val(); 
@@ -61,7 +68,8 @@ router.post("/sendRequest", (req, res) => {
         var requestsArray = [];
         for (var i in requests){
             requestsArray.push(requests[i]);
-        }
+		}
+		requestsArray.sort(compare);
         newID = requestsArray[requestsArray.length-1].RequestID + 1;
         const newReq = ref.child("Request" + newID) 
         req.body.RequestID = newID; 
@@ -78,6 +86,29 @@ router.delete("/deleteRequest/:RequestID", (req, res) => {
     reqToDel.set({})
 
     res.end("Request deleted.")
+
+})
+
+router.delete("/deleteUserRequests/:user", (req, res) => {
+
+    let database = req.app.get("database")
+    let reqToDel = database.ref("Requests")
+    var user = req.params.user
+
+    reqToDel.once("value", function(snapshot){
+        var requests = snapshot.val()
+        var requestsArray = []
+        for (var i in requests){
+            if (requests.Host==user|requests.Participant==user){
+                requestsArray.push(requests[i]);
+            }
+        }
+        for (var j in requestsArray){
+            j.set({})
+        }
+    })
+
+    res.end("Requests deleted.")
 
 })
 

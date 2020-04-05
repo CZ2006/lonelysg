@@ -136,7 +136,6 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
         }
         if (exists==false){
             sendRequest();
-            finish();
         }
         else{
             Toast.makeText(ActivityIndividualInvitation.this, "Request exists. Wait for host to accept your request.", Toast.LENGTH_SHORT).show();
@@ -156,6 +155,8 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
             JsonObjectRequest sendRequestRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    Toast.makeText(ActivityIndividualInvitation.this,"Request sent successfully.", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -261,7 +262,6 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(ActivityIndividualInvitation.this,"Request sent successfully.", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
             @Override

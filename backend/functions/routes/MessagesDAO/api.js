@@ -77,18 +77,52 @@ router.get("/getChatUsersList/:userID", (req,res)=>{
 router.post("/sendMessage", (req, res) => { 
     let database = req.app.get("database")
     let msgRef = database.ref("Messages")
+
+    function compare(a, b) {
+        if (a.MessageID > b.MessageID) return 1;
+        if (b.MessageID > a.MessageID) return -1;
+      
+        return 0;
+      }
     
     msgRef.once("value", function(snapshot){
         var messages = snapshot.val();
         var newID = 0;
+        var messagesArray = [];
         for (var i in messages){
-            newID++;
+            messagesArray.push(messages[i]);
         }
+        messagesArray.sort(compare);
+        newID = messagesArray[messagesArray.length-1].MessageID + 1;
+
         const newMessage = msgRef.child("Message" + newID) 
         req.body.MessageID = newID; 
         newMessage.set(req.body)
         res.json(req.body); 
     })
+
+})
+
+router.delete("/deleteUserMessages/:user", (req, res) => {
+
+    let database = req.app.get("database")
+    let msgToDel = database.ref("Messages")
+    var user = req.params.user
+
+    msgToDel.once("value", function(snapshot){
+        var messages = snapshot.val()
+        var messagesArray = []
+        for (var i in messages){
+            if (messages.Receiver==user|messages.Sender==user){
+                messagesArray.push(messages[i]);
+            }
+        }
+        for (var j in messagesArray){
+            j.set({})
+        }
+    })
+
+    res.end("Messages deleted.")
 
 })
 

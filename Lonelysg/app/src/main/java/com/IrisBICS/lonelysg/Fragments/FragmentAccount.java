@@ -15,9 +15,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.IrisBICS.lonelysg.Activities.ActivityChangePassword;
 import com.IrisBICS.lonelysg.Activities.ActivityEditProfile;
 import com.IrisBICS.lonelysg.Activities.ActivityLogin;
+import com.IrisBICS.lonelysg.Utils.DeleteUserDialog;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
 import com.IrisBICS.lonelysg.Utils.AppController;
@@ -25,18 +30,19 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FragmentAccount extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class FragmentAccount extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, DeleteUserDialog.DialogListener {
     private TextView profileName, profileGender, profileAge, profileOccupation, profileInterest, profileUsername;
     private Uri imageUri;
     private Spinner settingsIcon;
@@ -47,6 +53,7 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
     private Button editProfile;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private User user= new User();
+    private String currentUser = mAuth.getCurrentUser().getUid();
 
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,8 +76,7 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
         editProfile = v.findViewById(R.id.editProfileButton);
         editProfile.setOnClickListener(this);
 
-        String userID = mAuth.getCurrentUser().getUid();
-        getUserProfile(userID);
+        getUserProfile(currentUser);
 
         return v;
     }
@@ -137,19 +143,7 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
                 startActivity(intent);
                 break;
             case "Delete Account":
-                           /*FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                           user.delete()
-                                   .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                       @Override
-                                       public void onComplete(@NonNull Task<Void> task) {
-                                           if (task.isSuccessful()) {
-                                               Log.d("FragmentAccount", "User account deleted.");
-                                               Toast.makeText(getActivity(), "Your account has been deleted.", Toast.LENGTH_SHORT).show();
-                                               //go back to login page after that
-                                           }
-                                       }
-                                   });*/
+                openDialog();
                 break;
             case "Log Out":
                 FirebaseAuth.getInstance().signOut();
@@ -166,4 +160,101 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
+    public void openDialog(){
+        DeleteUserDialog deleteUserDialog = new DeleteUserDialog();
+        deleteUserDialog.setTargetFragment(FragmentAccount.this,2);
+        deleteUserDialog.show(getActivity().getSupportFragmentManager(), "Delete User Dialog");
+    }
+
+    @Override
+    public void deleteFirebaseUser() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        System.out.println(firebaseUser.getEmail());
+        firebaseUser.delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            System.out.println("Success delete");
+                            deleteUserMessages();
+                            deleteUserRequests();
+                            deleteUserInvitations();
+                            deleteUser();
+                        }
+                    }
+                });
+    }
+
+    private void deleteUser() {
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/deleteInvitation/"+currentUser;
+        StringRequest deleteUserReqest = new StringRequest(com.android.volley.Request.Method.DELETE,URL, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String response) {
+                // response
+                Log.d("FragmentAccount", "User account deleted.");
+                Toast.makeText(getActivity(), "Your account has been deleted.", Toast.LENGTH_SHORT).show();
+            }
+        },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) { }
+                }
+        );
+        AppController.getInstance(this.getContext()).addToRequestQueue(deleteUserReqest);
+    }
+
+    private void deleteUserMessages() {
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/MessagesDAO/deleteUserMessages/"+currentUser;
+        StringRequest deleteMessagesRequest = new StringRequest(com.android.volley.Request.Method.DELETE,URL, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String response) {
+            }
+        },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) { }
+                }
+        );
+        AppController.getInstance(this.getContext()).addToRequestQueue(deleteMessagesRequest);
+    }
+
+    private void deleteUserRequests() {
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/RequestsDAO/deleteUserRequests/"+currentUser;
+        StringRequest deleteRequestsRequest = new StringRequest(com.android.volley.Request.Method.DELETE,URL, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String response) {
+            }
+        },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) { }
+                }
+        );
+        AppController.getInstance(this.getContext()).addToRequestQueue(deleteRequestsRequest);
+    }
+
+    private void deleteUserInvitations() {
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/deleteUserInvitations/"+currentUser;
+        StringRequest deleteInvitationsRequest = new StringRequest(com.android.volley.Request.Method.DELETE,URL, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String response) {
+            }
+        },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) { }
+                }
+        );
+        AppController.getInstance(this.getContext()).addToRequestQueue(deleteInvitationsRequest);
+    }
+
 }
