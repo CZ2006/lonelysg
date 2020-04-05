@@ -157,13 +157,16 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.backButton :
+                intent = new Intent(getApplicationContext(), ActivityUserInvitations.class);
+                startActivity(intent);
                 finish();
                 break;
 
             case R.id.editInvitation :
-                Intent intent = new Intent(getApplicationContext(), ActivityEditInvitation.class);
+                intent = new Intent(getApplicationContext(), ActivityEditInvitation.class);
                 intent.putExtra("invitationID", invitationID);
                 startActivity(intent);
                 finish();

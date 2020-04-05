@@ -109,5 +109,6 @@ public class ActivityUserInvitations extends AppCompatActivity implements View.O
         Intent intent = new Intent(getApplicationContext(), ActivityIndividualUserInvitation.class);
         intent.putExtra("invitationID", userInvitations.get(i).getInvitationID());
         startActivity(intent);
+        finish();
     }
 }
