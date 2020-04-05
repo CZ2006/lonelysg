@@ -113,7 +113,6 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
                 requests.remove(requests.get(clickedPos));
                 requestListAdapter.notifyDataSetChanged();
                 recreate();
-                Toast.makeText(ActivityReceivedRequests.this, "Done!", Toast.LENGTH_LONG).show();
             }
         },
                 new Response.ErrorListener()
