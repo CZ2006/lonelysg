@@ -22,7 +22,7 @@ public class FragmentInvitations extends Fragment implements View.OnClickListene
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_invitations, container, false);
+        final View v = inflater.inflate(R.layout.fragment_invitations_ui, container, false);
 
         createInvitation = v.findViewById(R.id.createInvitation);
         createInvitation.setOnClickListener(this);

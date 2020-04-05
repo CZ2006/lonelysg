@@ -59,7 +59,7 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
 
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_account, container, false);
+        final View v = inflater.inflate(R.layout.fragment_account_ui, container, false);
 
         profileName = v.findViewById(R.id.accountUsername);
         profileAge = v.findViewById(R.id.accountAge);
