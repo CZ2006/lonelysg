@@ -29,6 +29,7 @@
             android:id="@+id/loginStuff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_below="@+id/logo"
             android:layout_marginTop="5dp"
             android:visibility="gone">
@@ -40,7 +41,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="0dp"
                 android:text="Login"
-                android:textColor="@color/backgroundcolor"
+                android:textColor="@color/black"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
@@ -62,7 +63,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="5dp"
                         android:text="EMAIL"
-                        android:textColor="@color/backgroundcolor"
+                        android:textColor="@color/black"
                         android:textSize="20sp" />
 
                     <EditText
@@ -72,9 +73,9 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="0dp"
                         android:layout_marginRight="20dp"
-                        android:background="@drawable/borders"
-                        android:textColor="@color/backgroundcolor"
-                        android:textSize="18dp" />
+                        android:ems="11"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -94,7 +95,7 @@
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:text="PASSWORD"
-                                android:textColor="@color/backgroundcolor"
+                                android:textColor="@color/black"
                                 android:textSize="20sp" />
 
                             <EditText
@@ -104,10 +105,9 @@
                                 android:layout_marginLeft="20dp"
                                 android:layout_marginTop="0dp"
                                 android:layout_marginRight="20dp"
-                                android:background="@drawable/borders"
-                                android:inputType="textPassword"
-                                android:textColor="@color/backgroundcolor"
-                                android:textSize="18dp" />
+                                android:ems="11"
+                                android:hint="Password"
+                                android:inputType="textPassword"/>
 
                         </LinearLayout>
 
@@ -124,11 +124,14 @@
                 android:layout_below="@+id/usernamePasswordInput"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="65dp"
-                android:background="@drawable/borders2"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/borders4"
                 android:paddingLeft="60dp"
                 android:paddingRight="60dp"
                 android:text="SIGN IN"
-                android:textColor="@color/backgroundcolor"
+                android:textColor="@color/black"
                 android:textSize="21sp"
                 android:textStyle="bold" />
 
@@ -145,22 +148,30 @@
 
             <Button
                 android:id="@+id/signUpButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
+                android:layout_width="180dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/borders4"
                 android:text="SIGNUP NOW"
                 android:textSize="15sp"
-                android:textColor="@color/backgroundcolor"/>
+                android:textColor="@color/black"/>
 
             <Button
                 android:id="@+id/forgotPasswordButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="180dp"
+                android:layout_height="30dp"
                 android:layout_alignParentRight="true"
-                android:background="#00000000"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/borders4"
                 android:text="FORGOT PASSWORD"
                 android:textSize="15sp"
-                android:textColor="@color/backgroundcolor"/>
+                android:textColor="@color/black"/>
 
         </RelativeLayout>
 
