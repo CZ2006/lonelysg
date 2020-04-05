@@ -161,7 +161,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
             deleteRequest(requests.get(clickedPos).getRequestID());
             //insert xq send notif
             String notifID = requests.get(clickedPos).getInvitationID()+"_RequestBy_"+participants.get(clickedPos).getUserID();
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendAcceptReqNotif/"+notifID;
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/NotificationsAPI/sendAcceptReqNotif/"+notifID;
             sendNotifToParticipant(URL);
         }
     }
@@ -171,7 +171,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
             deleteRequest(requests.get(clickedPos).getRequestID());
             //insert xq send notif
             String notifID = requests.get(clickedPos).getInvitationID()+"_RequestBy_"+requests.get(clickedPos).getParticipant();
-            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendRejectReqNotif/"+notifID;
+            String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/NotificationsAPI/sendRejectReqNotif/"+notifID;
             sendNotifToParticipant(URL);
         }
     }
