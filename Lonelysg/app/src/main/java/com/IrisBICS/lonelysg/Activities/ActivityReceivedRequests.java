@@ -1,5 +1,6 @@
 package com.IrisBICS.lonelysg.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,12 +13,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.IrisBICS.lonelysg.Adapters.RequestListAdapter;
-import com.IrisBICS.lonelysg.Utils.AppController;
-import com.IrisBICS.lonelysg.Utils.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Models.Invitation;
 import com.IrisBICS.lonelysg.Models.Request;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
+import com.IrisBICS.lonelysg.Utils.AppController;
+import com.IrisBICS.lonelysg.Utils.FirebaseAuthHelper;
 import com.IrisBICS.lonelysg.Utils.RequestActionDialog;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -136,6 +137,12 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
             JsonObjectRequest sendAcceptRequestMessageRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    Intent intent = new Intent(ActivityReceivedRequests.this, ActivityIndividualChat.class);
+                    Bundle extras = new Bundle();
+                    extras.putString("receiver_name", participants.get(clickedPos).getUsername());
+                    extras.putString("receiver_id", participants.get(clickedPos).getUserID());
+                    intent.putExtras(extras);
+                    startActivity(intent);
                 }
             }, new Response.ErrorListener() {
                 @Override
