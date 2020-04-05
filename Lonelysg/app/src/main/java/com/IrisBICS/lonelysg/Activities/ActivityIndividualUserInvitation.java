@@ -49,7 +49,7 @@ public class ActivityIndividualUserInvitation extends AppCompatActivity implemen
 
         Intent receivedIntent = getIntent();
         invitationID = receivedIntent.getStringExtra("invitationID");
-        invitation = new Invitation("","","","","","","",invitationID,"","","",imageUri);
+        invitation = new Invitation("","","","","","","Loading...",invitationID,"","","",imageUri);
 
         back = findViewById(R.id.backButton);
         activityDateTime = findViewById(R.id.activityDateTime);

@@ -295,6 +295,7 @@ public class ActivityInvitations extends AppCompatActivity implements SearchView
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        invitations = invitationsListAdapter.getDisplayedList();
         Intent intent = new Intent(getApplicationContext(), ActivityIndividualInvitation.class);
         intent.putExtra("invitationID", invitations.get(i).getInvitationID());
         startActivity(intent);

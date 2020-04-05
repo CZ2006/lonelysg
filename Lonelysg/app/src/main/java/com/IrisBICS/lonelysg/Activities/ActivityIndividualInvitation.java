@@ -64,7 +64,7 @@ public class ActivityIndividualInvitation extends AppCompatActivity implements O
 
         Intent receivedIntent = getIntent();
         invitationID = receivedIntent.getStringExtra("invitationID");
-        invitation = new Invitation("","","","","","","",invitationID,"","","",imageUri);
+        invitation = new Invitation("","","","","","","Loading...",invitationID,"","","",imageUri);
 
         activityDateTime = findViewById(R.id.activityDateTime);
         activityDesc = findViewById(R.id.activityDesc);
