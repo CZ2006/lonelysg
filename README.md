@@ -11,6 +11,7 @@ Android application built with android studio and firebase. The frontend is prog
 ### Frontend
 
 * UI design
+* Interaction with users
 * Link with backend through API calls
 
 ### Backend
