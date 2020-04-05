@@ -106,19 +106,20 @@ router.post("/sendMessage", (req, res) => {
 router.delete("/deleteUserMessages/:user", (req, res) => {
 
     let database = req.app.get("database")
-    let msgToDel = database.ref("Messages")
+    let ref = database.ref("Messages")
     var user = req.params.user
 
-    msgToDel.once("value", function(snapshot){
+    ref.once("value", function(snapshot){
         var messages = snapshot.val()
         var messagesArray = []
         for (var i in messages){
-            if (messages.Receiver==user|messages.Sender==user){
-                messagesArray.push(messages[i]);
+            if (messages[i].Receiver==user|messages[i].Sender==user){
+                messagesArray.push(messages[i].MessageID);
             }
         }
         for (var j in messagesArray){
-            j.set({})
+            let msgToDel = database.ref('Messages/Message' + messagesArray[j])
+    		msgToDel.set({})
         }
     })
 

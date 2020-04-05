@@ -92,23 +92,24 @@ router.delete("/deleteRequest/:RequestID", (req, res) => {
 router.delete("/deleteUserRequests/:user", (req, res) => {
 
     let database = req.app.get("database")
-    let reqToDel = database.ref("Requests")
+    let ref = database.ref("Requests")
     var user = req.params.user
 
-    reqToDel.once("value", function(snapshot){
+    ref.once("value", function(snapshot){
         var requests = snapshot.val()
         var requestsArray = []
         for (var i in requests){
-            if (requests.Host==user|requests.Participant==user){
-                requestsArray.push(requests[i]);
+            if (requests[i].Host==user|requests[i].Participant==user){
+                requestsArray.push(requests[i].RequestID);
             }
-        }
+		}
         for (var j in requestsArray){
-            j.set({})
-        }
+            let reqToDel = database.ref('Requests/Request' + requestsArray[j])
+    		reqToDel.set({})
+		}
     })
 
-    res.end("Requests deleted.")
+	res.end("Requests deleted.")
 
 })
 
