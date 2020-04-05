@@ -92,7 +92,6 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
             case R.id.signInButton :
                 email = username.getText().toString();
                 String pwd = password.getText().toString();
-                //to do: error handling. for now just assume input will be correct
                 if (!email.isEmpty() && !pwd.isEmpty()) {
                     //FIREBASE LOGIN AUTHENTICATION
                     mAuth.signInWithEmailAndPassword(email, pwd).addOnCompleteListener(ActivityLogin.this, new OnCompleteListener<AuthResult>() {
@@ -108,7 +107,6 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
                                 // If sign in fails, display a message to the user.
                                 Log.w("LoginUI", "signInWithEmail:failure", task.getException());
                                 Toast.makeText(ActivityLogin.this, task.getException().getLocalizedMessage()+ " Please try again.", Toast.LENGTH_SHORT).show();
-//                                Toast.makeText(ActivityLogin.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

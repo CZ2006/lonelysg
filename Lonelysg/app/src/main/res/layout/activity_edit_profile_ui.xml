@@ -142,7 +142,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="36dp"
-                        android:hint="Type New Age here"
+                        android:hint="Type New Age"
                         android:id="@+id/editProfileAge"
                         android:textSize="15sp"
                         android:textColor="#000000"/>

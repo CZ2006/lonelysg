@@ -110,7 +110,7 @@ public class ActivitySignUp extends AppCompatActivity implements View.OnClickLis
                             } else {
                                 // If sign up fails, display a message to the user.
                                 Log.w("MainActivity", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(ActivitySignUp.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ActivitySignUp.this, task.getException().getLocalizedMessage()+ " Please try again.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
