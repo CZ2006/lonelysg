@@ -160,7 +160,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
             getInvitation(requests.get(clickedPos).getInvitationID());
             deleteRequest(requests.get(clickedPos).getRequestID());
             //insert xq send notif
-            String notifID = requests.get(clickedPos).getInvitationID()+"_RequestsBy_"+participants.get(clickedPos).getUserID();
+            String notifID = requests.get(clickedPos).getInvitationID()+"_RequestBy_"+participants.get(clickedPos).getUserID();
             String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendAcceptReqNotif/"+notifID;
             sendNotifToParticipant(URL);
         }
@@ -170,7 +170,7 @@ public class ActivityReceivedRequests extends AppCompatActivity implements Reque
         if (clickedPos!=-1){
             deleteRequest(requests.get(clickedPos).getRequestID());
             //insert xq send notif
-            String notifID = requests.get(clickedPos).getInvitationID()+"_RequestsBy_"+requests.get(clickedPos).getParticipant();
+            String notifID = requests.get(clickedPos).getInvitationID()+"_RequestBy_"+requests.get(clickedPos).getParticipant();
             String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/XQ/sendRejectReqNotif/"+notifID;
             sendNotifToParticipant(URL);
         }
