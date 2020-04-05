@@ -122,7 +122,7 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
 
             case R.id.forgotPasswordButton:
                 email = username.getText().toString();
-                if (email.isEmpty()) { //dk why this isn't showing
+                if (email.isEmpty()) {
                     Toast.makeText(ActivityLogin.this, "Please enter your registered email first.", Toast.LENGTH_SHORT).show();
                 }
                 if (!email.isEmpty()) {
