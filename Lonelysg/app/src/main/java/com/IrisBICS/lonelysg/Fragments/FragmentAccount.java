@@ -22,10 +22,10 @@ import androidx.fragment.app.Fragment;
 import com.IrisBICS.lonelysg.Activities.ActivityChangePassword;
 import com.IrisBICS.lonelysg.Activities.ActivityEditProfile;
 import com.IrisBICS.lonelysg.Activities.ActivityLogin;
-import com.IrisBICS.lonelysg.Utils.DeleteUserDialog;
 import com.IrisBICS.lonelysg.Models.User;
 import com.IrisBICS.lonelysg.R;
 import com.IrisBICS.lonelysg.Utils.AppController;
+import com.IrisBICS.lonelysg.Utils.DeleteUserDialog;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,6 +33,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -93,6 +95,7 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
                             user.setAge(response.getString("age"));
                             user.setOccupation(response.getString("occupation"));
                             user.setInterests(response.getString("interests"));
+                            user.setPassword(response.getString("password"));
                             if (response.has("image")!=false) {
                                 String profilePicUri = response.getString("image");
                                 imageUri = Uri.parse(profilePicUri);
@@ -169,32 +172,43 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
 
     @Override
     public void deleteFirebaseUser() {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         System.out.println(firebaseUser.getEmail());
-        firebaseUser.delete()
+
+        AuthCredential credential = EmailAuthProvider.getCredential(firebaseUser.getEmail(), user.getPassword());
+
+        // Prompt the user to re-provide their sign-in credentials
+        firebaseUser.reauthenticate(credential)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            System.out.println("Success delete");
-                            deleteUserMessages();
-                            deleteUserRequests();
-                            deleteUserInvitations();
-                            deleteUser();
-                        }
+                        firebaseUser.delete()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            System.out.println("Success delete");
+                                            deleteUserMessages();
+                                            deleteUserRequests();
+                                            deleteUserInvitations();
+                                            deleteUser();
+                                            Log.d("FragmentAccount", "User account deleted.");
+                                            Toast.makeText(getActivity(), "Your account has been deleted.", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(getActivity(), ActivityLogin.class);
+                                            startActivity(intent);
+                                        }
+                                    }
+                                });
                     }
                 });
     }
 
     private void deleteUser() {
-        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/InvitationsDAO/deleteInvitation/"+currentUser;
+        String URL = "https://us-central1-lonely-4a186.cloudfunctions.net/app/UsersDAO/deleteUser/"+currentUser;
         StringRequest deleteUserReqest = new StringRequest(com.android.volley.Request.Method.DELETE,URL, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String response) {
-                // response
-                Log.d("FragmentAccount", "User account deleted.");
-                Toast.makeText(getActivity(), "Your account has been deleted.", Toast.LENGTH_SHORT).show();
             }
         },
                 new Response.ErrorListener()
