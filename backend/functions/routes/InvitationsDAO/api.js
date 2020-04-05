@@ -114,20 +114,21 @@ router.delete("/deleteInvitation/:InvitationID", (req, res) => {
 router.delete("/deleteUserInvitations/:user", (req, res) => {
 
     let database = req.app.get("database")
-    let invToDel = database.ref("Invitations")
+    let ref = database.ref("Invitations")
     var user = req.params.user
 
-    invToDel.once("value", function(snapshot){
+    ref.once("value", function(snapshot){
         var invitations = snapshot.val()
         var invitationsArray = []
         for (var i in invitations){
-            if (invitations.Host==user){
-                invitationsArray.push(invitations[i]);
+            if (invitations[i].Host==user){
+                invitationsArray.push(invitations[i].InvitationID);
             }
             
         }
         for (var j in invitationsArray){
-            j.set({})
+            let invToDel = database.ref('Invitations/Invitation' + invitationsArray[j])
+            invToDel.set({})
         }
     })
 
