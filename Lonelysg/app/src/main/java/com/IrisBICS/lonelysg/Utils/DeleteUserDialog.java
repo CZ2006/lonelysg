@@ -5,8 +5,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
+
+import com.IrisBICS.lonelysg.R;
 
 public class DeleteUserDialog extends DialogFragment {
 
@@ -14,13 +18,19 @@ public class DeleteUserDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
+
+        View view = getActivity().getLayoutInflater().inflate(R.layout.delete_user_dialog, null);
+
+        final EditText pwInput = view.findViewById(R.id.pwInput);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Delete User")
-                .setMessage("Do you want to confirm deletion of this account?\n Warning: Account data will be permanently deleted and cannot be restored afterwards.")
+                .setView(view)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        listener.deleteFirebaseUser();
+                        String pw = pwInput.getText().toString();
+                        listener.deleteFirebaseUser(pw);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -42,6 +52,6 @@ public class DeleteUserDialog extends DialogFragment {
     }
 
     public interface DialogListener{
-        void deleteFirebaseUser();
+        void deleteFirebaseUser(String pw);
     }
 }

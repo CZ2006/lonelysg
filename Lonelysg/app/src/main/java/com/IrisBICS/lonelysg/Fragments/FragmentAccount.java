@@ -171,13 +171,11 @@ public class FragmentAccount extends Fragment implements View.OnClickListener, A
     }
 
     @Override
-    public void deleteFirebaseUser() {
+    public void deleteFirebaseUser(String pw) {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        System.out.println(firebaseUser.getEmail());
 
-        AuthCredential credential = EmailAuthProvider.getCredential(firebaseUser.getEmail(), user.getPassword());
+        AuthCredential credential = EmailAuthProvider.getCredential(firebaseUser.getEmail(), pw);
 
-        // Prompt the user to re-provide their sign-in credentials
         firebaseUser.reauthenticate(credential)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

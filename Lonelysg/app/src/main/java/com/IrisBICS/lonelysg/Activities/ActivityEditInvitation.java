@@ -169,7 +169,6 @@ public class ActivityEditInvitation extends AppCompatActivity implements View.On
                                 new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
-                                        System.out.println("updated");
                                     }
                                 }, new Response.ErrorListener() {
                             @Override
